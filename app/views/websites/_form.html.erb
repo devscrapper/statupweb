@@ -1,0 +1,46 @@
+<%= form_for(@website) do |f| %>
+  <% if @website.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@website.errors.count, "error") %> prohibited this website from being saved:</h2>
+
+      <ul>
+      <% @website.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :label %><br>
+    <%= f.text_field :label %>
+  </div>
+  <div class="field">
+    <%= f.label :profil_id_ga %><br>
+    <%= f.text_field :profil_id_ga %>
+  </div>
+  <div class="field">
+    <%= f.label :url_root %><br>
+    <%= f.url_field :url_root %>
+  </div>
+  <div class="field">
+    <%= f.label :count_page %><br>
+    <%= f.number_field :count_page, :min => 0 %>
+  </div>
+    <div class="field">
+      <%= f.label :advertisers %><br>
+      <%= f.select :advertisers, options_for_select(["adsense"], @website.advertisers),  {}, { :multiple => true} %>
+    </div>
+  <div class="field">
+    <%= f.label :schemes %><br>
+    <%= f.select :schemes, options_for_select(["http", "https"], @website.schemes), {}, { :multiple => true} %>
+  </div>
+  <div class="field">
+    <%= f.label :types %><br>
+    <%= f.select :types,  options_for_select(["local", "global", "full"], @website.types ), {}, { :multiple => true} %>
+
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

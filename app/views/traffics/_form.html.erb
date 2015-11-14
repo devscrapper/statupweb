@@ -1,0 +1,218 @@
+<%= form_for(@traffic) do |f| %>
+    <% if @traffic.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@traffic.errors.count, "error") %> prohibited this traffic from being
+            saved:</h2>
+
+          <ul>
+            <% @traffic.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <div class="container">
+      <h2>Define your Traffic Policy</h2>
+
+      <div class="panel-group">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Select Website</div>
+          <div class="panel-body">
+            <%= render "shared/website" %>
+          </div>
+        </div>
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">Select Statistic</div>
+          <div class="panel-body">
+            <h4>
+              <div class="row">
+
+                <div class="col-md-1">
+                  <%= label_tag "default", nil, class: "label label-primary" %>
+                </div>
+                <div class="col-md-1">
+                  <%= f.radio_button :statistic_type, "default", :checked => true %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-1">
+                  <%= label_tag "GA", nil, class: "label label-primary" %>
+                </div>
+                <div class="col-md-1">
+                  <%= f.radio_button :statistic_type, "ga", class: "col-sm-2" %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-1">
+                  <%= label_tag "Custom", nil, class: "label label-primary" %>
+                </div>
+                <div class="col-md-1"><%= f.radio_button :statistic_type, "custom", class: "col-sm-2" %>
+                </div>
+                <div class="col-md-1">
+                  <a data-toggle="collapse" class="btn btn-info" href="#panel_statistics_details">Details</a>
+                </div>
+
+
+              </div>
+            </h4>
+            <div class="row">
+              <div id="panel_statistics_details" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <%= render "shared/custom_statistic" %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">Define Policy</div>
+          <div class="panel-body">
+            <h4>
+              <div class="row">
+
+
+                <div class="col-sm-2">
+                  <%= f.label :monday_start, nil, class: "label label-primary" %>
+                </div>
+                <div class="col-sm-4">
+                  <%= f.date_select :monday_start, class: "form-control" %>
+                </div>
+                <div class="col-sm-2">
+                  <%= f.label :count_weeks, nil, class: "label label-primary" %>
+                </div>
+                <div class="col-sm-1">
+                  <%= f.number_field :count_weeks, class: "form-control" %>
+                </div>
+
+
+              </div>
+              <div class="row">
+
+
+                <div class="col-sm-3">
+                  <%= f.label :change_count_visits_percent, nil, class: "label label-primary" %>
+                </div>
+                <div class="col-sm-1">
+                  <%= f.number_field :change_count_visits_percent, class: "form-control" %>
+                </div>
+                <div class="col-sm-3">
+                  <%= f.label :change_bounce_visits_percent, nil, class: "label label-primary" %>
+                </div>
+                <div class="col-sm-1">
+                  <%= f.number_field :change_bounce_visits_percent, class: "form-control" %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-2">
+                  <%= f.label :direct_medium_percent, nil, class: "label label-primary" %>
+                </div>
+                <div class="col-sm-1">
+                  <%= f.number_field :direct_medium_percent, class: "form-control" %>
+                </div>
+                <div class="col-sm-2">
+                  <%= f.label :organic_medium_percent, nil, class: "label label-primary" %>
+                </div>
+                <div class="col-sm-1">
+                  <%= f.number_field :organic_medium_percent, class: "form-control" %>
+                </div>
+                <div class="col-sm-2">
+                  <%= f.label :referral_medium_percent, nil, class: "label label-primary" %>
+                </div>
+                <div class="col-sm-1">
+                  <%= f.number_field :referral_medium_percent, class: "form-control" %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-2">
+                  <%= f.label :advertising_percent, nil, class: "label label-primary" %>
+                </div>
+                <div class="col-sm-1">
+                  <%= f.number_field :advertising_percent, class: "form-control" %>
+                </div>
+                <div class="col-sm-1">
+                  <a data-toggle="collapse" class="btn btn-info" href="#panel_parameter_policy">Parameters</a>
+                </div>
+              </div>
+              <div class="row">
+                <div id="panel_parameter_policy" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <div class="field">
+                      <%= f.label :max_duration_scraping %><br>
+                      <%= f.number_field :max_duration_scraping %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :min_count_page_advertiser %><br>
+                      <%= f.number_field :min_count_page_advertiser %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :max_count_page_advertiser %><br>
+                      <%= f.number_field :max_count_page_advertiser %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :min_duration_page_advertiser %><br>
+                      <%= f.number_field :min_duration_page_advertiser %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :max_duration_page_advertiser %><br>
+                      <%= f.number_field :max_duration_page_advertiser %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :percent_local_page_advertiser %><br>
+                      <%= f.number_field :percent_local_page_advertiser %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :duration_referral %><br>
+                      <%= f.number_field :duration_referral %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :min_count_page_organic %><br>
+                      <%= f.number_field :min_count_page_organic %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :max_count_page_organic %><br>
+                      <%= f.number_field :max_count_page_organic %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :min_duration_page_organic %><br>
+                      <%= f.number_field :min_duration_page_organic %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :max_duration_page_organic %><br>
+                      <%= f.number_field :max_duration_page_organic %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :min_duration %><br>
+                      <%= f.number_field :min_duration %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :max_duration %><br>
+                      <%= f.number_field :max_duration %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :min_duration_website %><br>
+                      <%= f.number_field :min_duration_website %>
+                    </div>
+                    <div class="field">
+                      <%= f.label :min_pages_website %><br>
+                      <%= f.number_field :min_pages_website %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </h4>
+
+
+            <div class="actions">
+              <%= f.submit %>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+<% end %>
+
+
+

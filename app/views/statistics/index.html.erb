@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Statistics</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>Count visits per day</th>
+      <th>Hourly daily distribution</th>
+      <th>Percent new visit</th>
+      <th>Visit bounce rate</th>
+      <th>Avg time on site</th>
+      <th>Page views per visit</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @statistics.each do |statistic| %>
+      <tr>
+        <td><%= statistic.label %></td>
+        <td><%= statistic.count_visits_per_day %></td>
+        <td><%= statistic.hourly_daily_distribution %></td>
+        <td><%= statistic.percent_new_visit %></td>
+        <td><%= statistic.visit_bounce_rate %></td>
+        <td><%= statistic.avg_time_on_site %></td>
+        <td><%= statistic.page_views_per_visit %></td>
+        <td><%= link_to 'Show', statistic %></td>
+        <td><%= link_to 'Edit', edit_statistic_path(statistic) %></td>
+        <td><%= link_to 'Destroy', statistic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Statistic', new_statistic_path %>

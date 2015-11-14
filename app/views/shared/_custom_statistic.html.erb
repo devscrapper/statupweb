@@ -1,0 +1,51 @@
+<div class="field">
+  <%= label_tag "Choose custom statistic" %><%= select_tag :statistic_selected, options_from_collection_for_select(@statistics, "id", "label", ""), :include_blank => "new custom statistic" %>
+</div>
+<div class="field">
+  <%= label_tag "Define your own custom statistic" %>
+</div>
+<div class="field">
+  <%= label_tag :label %><%= text_field_tag :label, type="text"%>
+</div>
+<div class="field">
+  <%= label_tag :count_visits_per_day %><%= number_field_tag :count_visits_per_day , nil, min: 0 %>
+</div>
+<div class="field">
+  <%= label_tag :"0-1h" %><%= number_field_tag :hourly_daily_distribution0 , nil, min: 0%>
+  <%= label_tag :"1-2h" %><%= number_field_tag :hourly_daily_distribution1 , nil, min: 0%>
+  <%= label_tag :"2-3h" %><%= number_field_tag :hourly_daily_distribution2 , nil, min: 0%>
+  <%= label_tag :"3-4h" %><%= number_field_tag :hourly_daily_distribution3 , nil, min: 0%>
+  <%= label_tag :"4-5h" %><%= number_field_tag :hourly_daily_distribution4 , nil, min: 0%>
+  <%= label_tag :"5-6h" %><%= number_field_tag :hourly_daily_distribution5 , nil, min: 0%>
+  <%= label_tag :"6-7h" %><%= number_field_tag :hourly_daily_distribution6 %>
+  <%= label_tag :"7-8h" %><%= number_field_tag :hourly_daily_distribution7 %>
+  <%= label_tag :"8-9h" %><%= number_field_tag :hourly_daily_distribution8 %>
+  <%= label_tag :"9-10h" %><%= number_field_tag :hourly_daily_distribution9 %>
+  <%= label_tag :"10-11h" %><%= number_field_tag :hourly_daily_distribution10 %>
+  <%= label_tag :"11-12h" %><%= number_field_tag :hourly_daily_distribution11 %>
+  <%= label_tag :"12-13h" %><%= number_field_tag :hourly_daily_distribution12 %>
+  <%= label_tag :"13-14h" %><%= number_field_tag :hourly_daily_distribution13 %>
+  <%= label_tag :"14-15h" %><%= number_field_tag :hourly_daily_distribution14 %>
+  <%= label_tag :"15-16h" %><%= number_field_tag :hourly_daily_distribution15 %>
+  <%= label_tag :"16-17h" %><%= number_field_tag :hourly_daily_distribution16 %>
+  <%= label_tag :"17-18h" %><%= number_field_tag :hourly_daily_distribution17 %>
+  <%= label_tag :"18-19h" %><%= number_field_tag :hourly_daily_distribution18 %>
+  <%= label_tag :"19-20h" %><%= number_field_tag :hourly_daily_distribution19 %>
+  <%= label_tag :"20-21h" %><%= number_field_tag :hourly_daily_distribution20 %>
+  <%= label_tag :"21-22h" %><%= number_field_tag :hourly_daily_distribution21 %>
+  <%= label_tag :"22-23h" %><%= number_field_tag :hourly_daily_distribution22 %>
+  <%= label_tag :"23-24h" %><%= number_field_tag :hourly_daily_distribution23 %>
+
+</div>
+<div class="field">
+  <%= label_tag :percent_new_visit %><%= number_field_tag :percent_new_visit %>
+</div>
+<div class="field">
+  <%= label_tag :visit_bounce_rate %> <%= number_field_tag :visit_bounce_rate %>
+</div>
+<div class="field">
+  <%= label_tag :avg_time_on_site %><%= number_field_tag :avg_time_on_site %>
+</div>
+<div class="field">
+  <%= label_tag :page_views_per_visit %><%= number_field_tag :page_views_per_visit %>
+</div>

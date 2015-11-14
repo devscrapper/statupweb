@@ -1,0 +1,79 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Statistic type:</strong>
+  <%= @rank.statistic_type %>
+</p>
+
+<p>
+  <strong>Monday start:</strong>
+  <%= @rank.monday_start %>
+</p>
+
+<p>
+  <strong>Count weeks:</strong>
+  <%= @rank.count_weeks %>
+</p>
+
+<p>
+  <strong>Keywords:</strong>
+  <%= @rank.keywords %>
+</p>
+
+<p>
+  <strong>Count visits per day:</strong>
+  <%= @rank.count_visits_per_day %>
+</p>
+
+<p>
+  <strong>Website:</strong>
+  <%= @rank.website %>
+</p>
+
+<p>
+  <strong>Statistic:</strong>
+  <%= @rank.statistic %>
+</p>
+
+<p>
+  <strong>Min count page organic:</strong>
+  <%= @rank.min_count_page_organic %>
+</p>
+
+<p>
+  <strong>Max count page organic:</strong>
+  <%= @rank.max_count_page_organic %>
+</p>
+
+<p>
+  <strong>Min duration page organic:</strong>
+  <%= @rank.min_duration_page_organic %>
+</p>
+
+<p>
+  <strong>Max duration page organic:</strong>
+  <%= @rank.max_duration_page_organic %>
+</p>
+
+<p>
+  <strong>Min duration:</strong>
+  <%= @rank.min_duration %>
+</p>
+
+<p>
+  <strong>Max duration:</strong>
+  <%= @rank.max_duration %>
+</p>
+
+<p>
+  <strong>Min duration website:</strong>
+  <%= @rank.min_duration_website %>
+</p>
+
+<p>
+  <strong>Min pages website:</strong>
+  <%= @rank.min_pages_website %>
+</p>
+
+<%= link_to 'Edit', edit_rank_path(@rank) %> |
+<%= link_to 'Back', ranks_path %>

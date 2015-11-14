@@ -1,0 +1,77 @@
+<%= form_for(@rank) do |f| %>
+  <% if @rank.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@rank.errors.count, "error") %> prohibited this rank from being saved:</h2>
+
+      <ul>
+      <% @rank.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :statistic_type %><br>
+    <%= f.text_field :statistic_type %>
+  </div>
+  <div class="field">
+    <%= f.label :monday_start %><br>
+    <%= f.date_select :monday_start %>
+  </div>
+  <div class="field">
+    <%= f.label :count_weeks %><br>
+    <%= f.number_field :count_weeks %>
+  </div>
+  <div class="field">
+    <%= f.label :keywords %><br>
+    <%= f.text_field :keywords %>
+  </div>
+  <div class="field">
+    <%= f.label :count_visits_per_day %><br>
+    <%= f.number_field :count_visits_per_day %>
+  </div>
+  <div class="field">
+    <%= f.label :website %><br>
+    <%= f.number_field :website %>
+  </div>
+  <div class="field">
+    <%= f.label :statistic_id %><br>
+    <%= f.number_field :statistic_id %>
+  </div>
+  <div class="field">
+    <%= f.label :min_count_page_organic %><br>
+    <%= f.number_field :min_count_page_organic %>
+  </div>
+  <div class="field">
+    <%= f.label :max_count_page_organic %><br>
+    <%= f.number_field :max_count_page_organic %>
+  </div>
+  <div class="field">
+    <%= f.label :min_duration_page_organic %><br>
+    <%= f.number_field :min_duration_page_organic %>
+  </div>
+  <div class="field">
+    <%= f.label :max_duration_page_organic %><br>
+    <%= f.number_field :max_duration_page_organic %>
+  </div>
+  <div class="field">
+    <%= f.label :min_duration %><br>
+    <%= f.number_field :min_duration %>
+  </div>
+  <div class="field">
+    <%= f.label :max_duration %><br>
+    <%= f.number_field :max_duration %>
+  </div>
+  <div class="field">
+    <%= f.label :min_duration_website %><br>
+    <%= f.number_field :min_duration_website %>
+  </div>
+  <div class="field">
+    <%= f.label :min_pages_website %><br>
+    <%= f.number_field :min_pages_website %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

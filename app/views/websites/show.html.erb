@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Label:</strong>
+  <%= @website.label %>
+</p>
+
+<p>
+  <strong>Profil id ga:</strong>
+  <%= @website.profil_id_ga %>
+</p>
+
+<p>
+  <strong>Url root:</strong>
+  <%= @website.url_root %>
+</p>
+
+<p>
+  <strong>Count page:</strong>
+  <%= @website.count_page %>
+</p>
+
+<p>
+  <strong>Schemes:</strong>
+  <%= @website.advertisers %>
+</p>
+
+<p>
+  <strong>Schemes:</strong>
+  <%= @website.schemes %>
+</p>
+
+<p>
+  <strong>Types:</strong>
+  <%= @website.types %>
+</p>
+
+<%= link_to 'Edit', edit_website_path(@website) %> |
+<%= link_to 'Back', websites_path %>
