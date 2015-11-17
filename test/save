@@ -1,0 +1,58 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-md-3">
+      <div class="btn-group btn-group-md">
+        <button type="button" class="btn btn-primary" id="new_one">New One</button>
+        <button type="button" class="btn btn-primary" id="select_one">Select One</button>
+
+      </div>
+
+
+    </div>
+    <div class="col-md-6">
+      <div  class="collapse" id="define_website" >
+        <div class="row">
+          <div class=" col-sm-2">
+            <%= label_tag "Label", nil, class: "label label-default" %>
+          </div>
+          <div class=" col-sm-9">
+            <%= text_field_tag :website_label, nil, class: "form-control" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class=" col-sm-2">
+            <%= label_tag "Root url", nil, class: "label label-default" %>
+          </div>
+          <div class=" col-sm-9">
+            <%= url_field_tag :url_root, nil, class: "form-control" %>
+
+          </div>
+          <!--<div class="col-sm-1">-->
+          <!--<button type="button" class="btn btn-warning" id="btn_details">Details</button>-->
+          <!--</div>-->
+        </div>
+        <!--<div class="row">-->
+
+        <!--<div class="panel panel-default " id="panel_details">-->
+        <!--<div class="panel-body">-->
+        <!--<%= label_tag "Profil id ga", nil, class: "label label-default" %> <%= text_field_tag :profil_id_ga, nil, class: "form-control" %>-->
+        <!--<%= label_tag "Count page", nil, class: "label label-default" %> <%= number_field_tag :count_page, nil, class: "form-control", min: 0, value: 0 %>-->
+        <!--<%= label_tag "Schemes", nil, class: "label label-default" %> <%= select_tag :schemes, options_for_select(["http", "https"], ["http"]), class: "form-control", multiple: true %>-->
+        <!--<%= label_tag "Types", nil, class: "label label-default" %> <%= select_tag :types, options_for_select(["local", "global", "full"], ["local", "global"]), class: "form-control", multiple: true %>-->
+        <!--<%= label_tag "Advertisers", nil, class: "label label-default" %> <%= select_tag :advertisers, options_for_select(["adsense"], ["adsense"]), class: "form-control", multiple: true %>-->
+
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+      </div>
+    </div>
+    <div class="col-md-6 "  >
+      <div id="select_website" class="collapse">
+        <%= select_tag :website_selected, options_from_collection_for_select(@websites, "id", "label", ""), class: "form-control", :include_blank => "new website" %>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -26,6 +26,7 @@ class CreateTraffics < ActiveRecord::Migration
       t.integer :max_duration, null: false, default: 10
       t.integer :min_duration_website, null: false, default: 10
       t.integer :min_pages_website, null: false, default: 2
+      t.string :state, null: false, default: :created        # :created, :published, running
 
       t.timestamps null: false
     end

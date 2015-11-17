@@ -1,9 +1,13 @@
+require_relative '../../lib/publication'
+
 class TrafficsController < ApplicationController
   before_action :set_traffic, only: [:show, :edit, :update, :destroy]
+  include Publication
 
   # GET /traffics
   # GET /traffics.json
   def index
+
     @traffics = Traffic.all
   end
 
@@ -103,12 +107,31 @@ class TrafficsController < ApplicationController
 
 
     respond_to do |format|
-      if @traffic.save
-        format.html { redirect_to @traffic, notice: 'Traffic was successfully created.' }
-        format.json { render :show, status: :created, location: @traffic }
-      else
-        format.html { render :new }
-        format.json { render json: @traffic.errors, status: :unprocessable_entity }
+      if params[:commit] == "Later"
+        if @traffic.save
+          format.html { redirect_to traffics_path, notice: 'Traffic was successfully created.' }
+        else
+          format.html { render :new }
+        end
+      end
+      if params[:commit] == "Now"
+        if @traffic.save
+          begin
+            publish(@traffic.to_json)
+
+          rescue Exception => e
+            format.html { redirect_to traffics_path, notice: "Traffic was not published : #{e.message}" }
+
+          else
+            @traffic.update_attribute(:state, :published)
+            format.html { redirect_to traffics_path, notice: 'Traffic was successfully published on scraperbot and enginebot.' }
+
+          end
+
+        else
+          format.html { render :new }
+
+        end
       end
     end
   end
@@ -116,6 +139,9 @@ class TrafficsController < ApplicationController
   # PATCH/PUT /traffics/1
   # PATCH/PUT /traffics/1.json
   def update
+    if params[:commit] == "Now"
+
+    end
     respond_to do |format|
       if @traffic.update(traffic_params)
         format.html { redirect_to @traffic, notice: 'Traffic was successfully updated.' }

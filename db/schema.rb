@@ -81,33 +81,34 @@ ActiveRecord::Schema.define(version: 20151103101005) do
   end
 
   create_table "traffics", force: :cascade do |t|
-    t.integer  "website_id",                                  null: false
-    t.string   "statistic_type",                              null: false
-    t.date     "monday_start",                                null: false
-    t.integer  "count_weeks",                                 null: false
-    t.integer  "change_count_visits_percent",                 null: false
-    t.integer  "change_bounce_visits_percent",                null: false
-    t.integer  "direct_medium_percent",                       null: false
-    t.integer  "organic_medium_percent",                      null: false
-    t.integer  "referral_medium_percent",                     null: false
-    t.integer  "advertising_percent",                         null: false
-    t.integer  "max_duration_scraping",         default: 7,   null: false
-    t.integer  "min_count_page_advertiser",     default: 10,  null: false
-    t.integer  "max_count_page_advertiser",     default: 15,  null: false
-    t.integer  "min_duration_page_advertiser",  default: 60,  null: false
-    t.integer  "max_duration_page_advertiser",  default: 120, null: false
-    t.integer  "percent_local_page_advertiser", default: 80,  null: false
-    t.integer  "duration_referral",             default: 20,  null: false
-    t.integer  "min_count_page_organic",        default: 4,   null: false
-    t.integer  "max_count_page_organic",        default: 6,   null: false
-    t.integer  "min_duration_page_organic",     default: 10,  null: false
-    t.integer  "max_duration_page_organic",     default: 30,  null: false
-    t.integer  "min_duration",                  default: 5,   null: false
-    t.integer  "max_duration",                  default: 10,  null: false
-    t.integer  "min_duration_website",          default: 10,  null: false
-    t.integer  "min_pages_website",             default: 2,   null: false
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.integer  "website_id",                                        null: false
+    t.string   "statistic_type",                                    null: false
+    t.date     "monday_start",                                      null: false
+    t.integer  "count_weeks",                                       null: false
+    t.integer  "change_count_visits_percent",                       null: false
+    t.integer  "change_bounce_visits_percent",                      null: false
+    t.integer  "direct_medium_percent",                             null: false
+    t.integer  "organic_medium_percent",                            null: false
+    t.integer  "referral_medium_percent",                           null: false
+    t.integer  "advertising_percent",                               null: false
+    t.integer  "max_duration_scraping",         default: 7,         null: false
+    t.integer  "min_count_page_advertiser",     default: 10,        null: false
+    t.integer  "max_count_page_advertiser",     default: 15,        null: false
+    t.integer  "min_duration_page_advertiser",  default: 60,        null: false
+    t.integer  "max_duration_page_advertiser",  default: 120,       null: false
+    t.integer  "percent_local_page_advertiser", default: 80,        null: false
+    t.integer  "duration_referral",             default: 20,        null: false
+    t.integer  "min_count_page_organic",        default: 4,         null: false
+    t.integer  "max_count_page_organic",        default: 6,         null: false
+    t.integer  "min_duration_page_organic",     default: 10,        null: false
+    t.integer  "max_duration_page_organic",     default: 30,        null: false
+    t.integer  "min_duration",                  default: 5,         null: false
+    t.integer  "max_duration",                  default: 10,        null: false
+    t.integer  "min_duration_website",          default: 10,        null: false
+    t.integer  "min_pages_website",             default: 2,         null: false
+    t.string   "state",                         default: "created", null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
   end
 
   add_index "traffics", ["website_id"], name: "index_traffics_on_website_id"

@@ -1,3 +1,4 @@
+<h2>Define your Traffic Policy</h2>
 <%= form_for(@traffic) do |f| %>
     <% if @traffic.errors.any? %>
         <div id="error_explanation">
@@ -11,8 +12,8 @@
           </ul>
         </div>
     <% end %>
+
     <div class="container">
-      <h2>Define your Traffic Policy</h2>
 
       <div class="panel-group">
         <div class="panel panel-primary">
@@ -75,6 +76,7 @@
                   <%= f.label :monday_start, nil, class: "label label-primary" %>
                 </div>
                 <div class="col-sm-4">
+                  <!--#TODO à déplacer dans détails de la policy pardefaut c'est calculer automatiquement-->
                   <%= f.date_select :monday_start, class: "form-control" %>
                 </div>
                 <div class="col-sm-2">
@@ -203,7 +205,11 @@
 
 
             <div class="actions">
-              <%= f.submit %>
+              <h5 class="" label label-primary>Would you Publish your Traffic Policy
+                <%= f.submit "Now", class: "btn btn-info", data: {confirm: "Are you sure?"} %>
+                or
+                <%= f.submit "Later", class: "btn btn-info" %>
+              </h5>
             </div>
           </div>
         </div>

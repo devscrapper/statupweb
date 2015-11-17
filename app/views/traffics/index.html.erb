@@ -2,10 +2,10 @@
 
 <h1>Listing Traffics</h1>
 
-<table>
-  <thead>
+<table class="table">
+  <thead class="header-table">
     <tr>
-      <th>Statistic type</th>
+      <th>State</th>
       <th>Website</th>
       <th>Monday start</th>
       <th>Count weeks</th>
@@ -15,29 +15,15 @@
       <th>Organic medium percent</th>
       <th>Referral medium percent</th>
       <th>Advertising percent</th>
-      <th>Max duration scraping</th>
-      <th>Min count page advertiser</th>
-      <th>Max count page advertiser</th>
-      <th>Min duration page advertiser</th>
-      <th>Max duration page advertiser</th>
-      <th>Percent local page advertiser</th>
-      <th>Duration referral</th>
-      <th>Min count page organic</th>
-      <th>Max count page organic</th>
-      <th>Min duration page organic</th>
-      <th>Max duration page organic</th>
-      <th>Min duration</th>
-      <th>Max duration</th>
-      <th>Min duration website</th>
-      <th>Min pages website</th>
+      <th>Statistic type</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
-  <tbody>
+  <tbody >
     <% @traffics.each do |traffic| %>
       <tr>
-        <td><%= traffic.statistic_type %></td>
+        <td><%= traffic.state %></td>
         <td><%= traffic.website_id %></td>
         <td><%= traffic.monday_start %></td>
         <td><%= traffic.count_weeks %></td>
@@ -47,21 +33,7 @@
         <td><%= traffic.organic_medium_percent %></td>
         <td><%= traffic.referral_medium_percent %></td>
         <td><%= traffic.advertising_percent %></td>
-        <td><%= traffic.max_duration_scraping %></td>
-        <td><%= traffic.min_count_page_advertiser %></td>
-        <td><%= traffic.max_count_page_advertiser %></td>
-        <td><%= traffic.min_duration_page_advertiser %></td>
-        <td><%= traffic.max_duration_page_advertiser %></td>
-        <td><%= traffic.percent_local_page_advertiser %></td>
-        <td><%= traffic.duration_referral %></td>
-        <td><%= traffic.min_count_page_organic %></td>
-        <td><%= traffic.max_count_page_organic %></td>
-        <td><%= traffic.min_duration_page_organic %></td>
-        <td><%= traffic.max_duration_page_organic %></td>
-        <td><%= traffic.min_duration %></td>
-        <td><%= traffic.max_duration %></td>
-        <td><%= traffic.min_duration_website %></td>
-        <td><%= traffic.min_pages_website %></td>
+        <td><%= traffic.statistic_type %></td>
         <td><%= link_to 'Show', traffic %></td>
         <td><%= link_to 'Edit', edit_traffic_path(traffic) %></td>
         <td><%= link_to 'Destroy', traffic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
