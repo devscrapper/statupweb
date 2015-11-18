@@ -26,37 +26,34 @@
         <div class="panel panel-primary">
           <div class="panel-heading">Select Statistic</div>
           <div class="panel-body">
-            <h4>
+            <h3>
               <div class="row">
 
                 <div class="col-md-1">
-                  <%= label_tag "default", nil, class: "label label-primary" %>
+                  <%= label_tag "Default", nil, class: "label label-primary" %>
                 </div>
                 <div class="col-md-1">
                   <%= f.radio_button :statistic_type, "default", :checked => true %>
                 </div>
-              </div>
-              <div class="row">
                 <div class="col-md-1">
                   <%= label_tag "GA", nil, class: "label label-primary" %>
                 </div>
                 <div class="col-md-1">
                   <%= f.radio_button :statistic_type, "ga", class: "col-sm-2" %>
                 </div>
-              </div>
-              <div class="row">
+
                 <div class="col-md-1">
                   <%= label_tag "Custom", nil, class: "label label-primary" %>
                 </div>
-                <div class="col-md-1"><%= f.radio_button :statistic_type, "custom", class: "col-sm-2" %>
+                <div class="col-md-1">
+                  <%= f.radio_button :statistic_type, "custom" %>
                 </div>
                 <div class="col-md-1">
                   <a data-toggle="collapse" class="btn btn-info" href="#panel_statistics_details">Details</a>
                 </div>
-
-
               </div>
-            </h4>
+
+            </h3>
             <div class="row">
               <div id="panel_statistics_details" class="panel-collapse collapse">
                 <div class="panel-body">
@@ -70,15 +67,6 @@
           <div class="panel-body">
             <h4>
               <div class="row">
-
-
-                <div class="col-sm-2">
-                  <%= f.label :monday_start, nil, class: "label label-primary" %>
-                </div>
-                <div class="col-sm-4">
-                  <!--#TODO à déplacer dans détails de la policy pardefaut c'est calculer automatiquement-->
-                  <%= f.date_select :monday_start, class: "form-control" %>
-                </div>
                 <div class="col-sm-2">
                   <%= f.label :count_weeks, nil, class: "label label-primary" %>
                 </div>
@@ -138,6 +126,15 @@
               <div class="row">
                 <div id="panel_parameter_policy" class="panel-collapse collapse">
                   <div class="panel-body">
+                    <div class="col-sm-2">
+                      <%= f.label :monday_start, nil, class: "label label-primary" %>
+                    </div>
+                    <div class="col-sm-4">
+
+                      <%= f.date_select :monday_start, default: {day: (Date.today + @traffic.max_duration_scraping).day,
+                                                                 month: (Date.today + @traffic.max_duration_scraping).month,
+                                                                 year: (Date.today + @traffic.max_duration_scraping).year}, class: "form-control" %>
+                    </div>
                     <div class="field">
                       <%= f.label :max_duration_scraping %><br>
                       <%= f.number_field :max_duration_scraping %>
@@ -205,7 +202,7 @@
 
 
             <div class="actions">
-              <h5 class="" label label-primary>Would you Publish your Traffic Policy
+              <h5 class="label label-primary">Would you Publish your Traffic Policy
                 <%= f.submit "Now", class: "btn btn-info", data: {confirm: "Are you sure?"} %>
                 or
                 <%= f.submit "Later", class: "btn btn-info" %>

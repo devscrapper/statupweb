@@ -11,8 +11,13 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
    root 'welcome#index'
-#   get 'traffics/:id/activate'   => 'traffics#activate', as: :activate_traffic
-
+  # put 'traffics/:id/publish'   => 'traffic#publish', as: :publish
+   delete 'traffics/destroy_all', to: 'traffic#destroy_all'
+  resources :traffics do
+    member do
+      patch 'publish'
+    end
+  end
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

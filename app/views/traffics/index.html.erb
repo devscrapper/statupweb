@@ -1,30 +1,32 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Traffics</h1>
+<%= link_to 'New Traffic', new_traffic_path, class: 'btn btn-sm btn-success' %>
+<%= link_to 'Delete all Traffics', traffics_destroy_all_path, class: 'btn btn-sm btn-danger' %>
 
 <table class="table">
   <thead class="header-table">
-    <tr>
-      <th>State</th>
-      <th>Website</th>
-      <th>Monday start</th>
-      <th>Count weeks</th>
-      <th>Change count visits percent</th>
-      <th>Change bounce visits percent</th>
-      <th>Direct medium percent</th>
-      <th>Organic medium percent</th>
-      <th>Referral medium percent</th>
-      <th>Advertising percent</th>
-      <th>Statistic type</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>State</th>
+    <th>Website</th>
+    <th>Monday start</th>
+    <th>Count weeks</th>
+    <th>Change count visits percent</th>
+    <th>Change bounce visits percent</th>
+    <th>Direct medium percent</th>
+    <th>Organic medium percent</th>
+    <th>Referral medium percent</th>
+    <th>Advertising percent</th>
+    <th>Statistic type</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
-  <tbody >
-    <% @traffics.each do |traffic| %>
+  <tbody>
+  <% @traffics.each do |traffic| %>
       <tr>
         <td><%= traffic.state %></td>
-        <td><%= traffic.website_id %></td>
+        <td><%= traffic.website.label %></td>
         <td><%= traffic.monday_start %></td>
         <td><%= traffic.count_weeks %></td>
         <td><%= traffic.change_count_visits_percent %></td>
@@ -34,14 +36,25 @@
         <td><%= traffic.referral_medium_percent %></td>
         <td><%= traffic.advertising_percent %></td>
         <td><%= traffic.statistic_type %></td>
-        <td><%= link_to 'Show', traffic %></td>
-        <td><%= link_to 'Edit', edit_traffic_path(traffic) %></td>
-        <td><%= link_to 'Destroy', traffic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', traffic, class: "btn  btn-sm btn-success" %></td>
+        <td><%= link_to 'Edit', edit_traffic_path(traffic), class: "btn btn-sm btn-primary" %></td>
+        <td>
+          <% case traffic.state
+               when "created"
+                 toto = "btn btn-sm btn-warning active"
+               when "published"
+                 toto = "btn btn-sm btn-warning disabled"
+             end %>
+
+          <%= form_for traffic, as: :post, method: :patch, url: publish_traffic_path(traffic) do |f|
+            f.submit "Publish", class: toto, data: {confirm: "Are you sure?"}
+          end %></td>
+        <td><%= link_to 'Destroy', traffic, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Traffic', new_traffic_path, class: 'btn btn-success' %>
+

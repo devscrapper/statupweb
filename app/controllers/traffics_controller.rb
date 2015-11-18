@@ -1,4 +1,4 @@
-require_relative '../../lib/publication'
+require 'publication'
 
 class TrafficsController < ApplicationController
   before_action :set_traffic, only: [:show, :edit, :update, :destroy]
@@ -117,7 +117,7 @@ class TrafficsController < ApplicationController
       if params[:commit] == "Now"
         if @traffic.save
           begin
-            publish(@traffic.to_json)
+            Publication::publish(@traffic.to_json)
 
           rescue Exception => e
             format.html { redirect_to traffics_path, notice: "Traffic was not published : #{e.message}" }
@@ -132,6 +132,25 @@ class TrafficsController < ApplicationController
           format.html { render :new }
 
         end
+      end
+    end
+  end
+
+  def publish
+    @traffic = Traffic.find(params[:id])
+
+    respond_to do |format|
+      begin
+
+        Publication::publish(@traffic.to_json)
+
+      rescue Exception => e
+        format.html { redirect_to traffics_path, notice: "Traffic was not published : #{e.message}" }
+
+      else
+        @traffic.update_attribute(:state, :published)
+        format.html { redirect_to traffics_path, notice: 'Traffic was successfully published on scraperbot and enginebot.' }
+
       end
     end
   end
@@ -161,6 +180,10 @@ class TrafficsController < ApplicationController
       format.html { redirect_to traffics_url, notice: 'Traffic was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def destroy_all
+    Traffic.delete_all
   end
 
   private
