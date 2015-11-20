@@ -1,5 +1,6 @@
 # encoding: UTF-8
 require_relative "../lib/communication"
+require_relative "../lib/publication"
 
 def send_to_calendar(object, data, where_ip, where_port)
 
@@ -8,9 +9,13 @@ def send_to_calendar(object, data, where_ip, where_port)
   @query.merge!({"data" => data})
 
   begin
-    Information.new(@query).send_to(where_ip, where_port)
+    response = Question.new(@query).ask_to(where_ip, where_port)
+
   rescue Exception => e
     $stderr << e.message
+  else
+    raise response[:error] if response[:state] == :ko
+    response[:data] if response[:state] == :ok and !response[:data].nil?
   end
 end
 
@@ -30,8 +35,8 @@ end
 SCRAPERBOT_HOST = "localhost"
 ENGINEBOT_HOST = "localhost"
 
-SCRAPERBOT_HOST = "192.168.1.85"
-ENGINEBOT_HOST = "192.168.1.85"
+# SCRAPERBOT_HOST = "192.168.1.85"
+# ENGINEBOT_HOST = "192.168.1.85"
 
 SCRAPERBOT_PORT = 9154
 ENGINEBOT_PORT = 9104
@@ -266,23 +271,15 @@ datas = [
 ]
 
 
+while !datas.empty?
 
-datas.each { |data|
-  policy = data[:data]
+  scraperbot, enginebot = datas.shift(2)
 
+  $environement = "development"
 
-  case data[:destination]
-    when :scraperbot
-      #-----------------------------------------------------------------------------------------------------------------------
-      # POLICY SEND TO SCRAPERBOT
-      #-----------------------------------------------------------------------------------------------------------------------
-      send_to_calendar(policy[:policy_type], policy, SCRAPERBOT_HOST, SCRAPERBOT_PORT)
-    #-----------------------------------------------------------------------------------------------------------------------
-    # POLICY SEND TO ENGINEBOT
-    #-----------------------------------------------------------------------------------------------------------------------
-    when :enginebot
-      policy.merge!(param_enginebot)
-      send_to_calendar(policy[:policy_type], policy, ENGINEBOT_HOST, ENGINEBOT_PORT)
-  end
-}
+  Publication.publish({
+                          :scraperbot => scraperbot[:data],
+                          :enginebot => enginebot[:data].merge!(param_enginebot)
+                      })
+end
 

@@ -2,6 +2,49 @@ class Traffic < ActiveRecord::Base
   has_one :custom_statistic, as: :statistic
   belongs_to :website
 
+  validates :website_id, :presence => true
+  validates :statistic_type, :presence => true
+  validates :monday_start, :presence => true
+  validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
+  validates :change_count_visits_percent, :numericality => {:only_integer => true, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
+  validates :change_bounce_visits_percent, :numericality => {:only_integer => true, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
+  validates :direct_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
+  validates :organic_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
+  validates :referral_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
+  validates :advertising_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 10}
+  validates :max_duration_scraping, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 1}
+  validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
+  validates :max_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 15}
+  validates :min_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 60}
+  validates :max_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 120}
+  validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
+  validates :duration_referral, :presence => true, :numericality => {:only_integer => true}
+  validates :min_count_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 4}
+  validates :max_count_page_organic, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 20}
+  validates :min_duration_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
+  validates :max_duration_page_organic, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 40}
+  validates :min_duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 5}
+  validates :max_duration, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 30}
+  validates :min_duration_website, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
+  validates :min_pages_website, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 2}
+
+  validate :monday_start_cannot_be_in_the_past_and_must_be_on_monday,
+           :sum_of_medium_percent_must_equal_to_100
+
+
+  def sum_of_medium_percent_must_equal_to_100
+    if !direct_medium_percent.nil? and
+        !organic_medium_percent.nil? and
+        !referral_medium_percent.nil?
+      errors.add(:base, "Distribution of medium percent must be equal to 100") if direct_medium_percent + organic_medium_percent + referral_medium_percent != 100
+    end
+  end
+
+
+  def monday_start_cannot_be_in_the_past_and_must_be_on_monday
+    errors.add(:monday_start, "must be in the future and #{max_duration_scraping} days before next monday") if monday_start - Date.today <= max_duration_scraping
+    errors.add(:monday_start, "must be on monday") if !monday_start.monday?
+  end
 
   def to_json(*a)
     {

@@ -32,7 +32,6 @@ class TrafficsController < ApplicationController
   # POST /traffics.json
   def create
 
-
     #creation d'un nouveau website
     if params[:website_selected].empty?
       Website.create(label: params[:website_label]) do |w|
@@ -111,10 +110,15 @@ class TrafficsController < ApplicationController
         if @traffic.save
           format.html { redirect_to traffics_path, notice: 'Traffic was successfully created.' }
         else
-          format.html { render :new }
+          format.html {
+            @websites = Website.all
+            @statistics = Statistic.all
+            render :new
+          }
+          format.json { render json: @traffic.errors, status: :unprocessable_entity }
         end
-      end
-      if params[:commit] == "Now"
+
+      elsif params[:commit] == "Now"
         if @traffic.save
           begin
             Publication::publish(@traffic.to_json)
@@ -129,7 +133,12 @@ class TrafficsController < ApplicationController
           end
 
         else
-          format.html { render :new }
+          format.html {
+            @websites = Website.all
+            @statistics = Statistic.all
+            render :new
+          }
+          format.json { render json: @traffic.errors, status: :unprocessable_entity }
 
         end
       end

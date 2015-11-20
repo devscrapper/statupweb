@@ -84,13 +84,13 @@ ActiveRecord::Schema.define(version: 20151103101005) do
     t.integer  "website_id",                                        null: false
     t.string   "statistic_type",                                    null: false
     t.date     "monday_start",                                      null: false
-    t.integer  "count_weeks",                                       null: false
-    t.integer  "change_count_visits_percent",                       null: false
-    t.integer  "change_bounce_visits_percent",                      null: false
-    t.integer  "direct_medium_percent",                             null: false
-    t.integer  "organic_medium_percent",                            null: false
-    t.integer  "referral_medium_percent",                           null: false
-    t.integer  "advertising_percent",                               null: false
+    t.integer  "count_weeks",                   default: 0,         null: false
+    t.integer  "change_count_visits_percent",   default: 0,         null: false
+    t.integer  "change_bounce_visits_percent",  default: 0,         null: false
+    t.integer  "direct_medium_percent",         default: 0,         null: false
+    t.integer  "organic_medium_percent",        default: 0,         null: false
+    t.integer  "referral_medium_percent",       default: 0,         null: false
+    t.integer  "advertising_percent",           default: 0,         null: false
     t.integer  "max_duration_scraping",         default: 7,         null: false
     t.integer  "min_count_page_advertiser",     default: 10,        null: false
     t.integer  "max_count_page_advertiser",     default: 15,        null: false

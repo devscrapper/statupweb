@@ -4,6 +4,6 @@ class Website < ActiveRecord::Base
   serialize :advertisers, Array
   has_many :traffics
   has_many :ranks
-
+  validates :label , :presence => true
   validates :count_page, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0}
 end

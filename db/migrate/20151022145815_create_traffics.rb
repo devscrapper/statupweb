@@ -4,13 +4,13 @@ class CreateTraffics < ActiveRecord::Migration
       t.belongs_to :website, index: true, null: false
       t.string :statistic_type, null: false
       t.date :monday_start, null: false
-      t.integer :count_weeks, null: false
-      t.integer :change_count_visits_percent, null: false
-      t.integer :change_bounce_visits_percent, null: false
-      t.integer :direct_medium_percent, null: false
-      t.integer :organic_medium_percent, null: false
-      t.integer :referral_medium_percent, null: false
-      t.integer :advertising_percent, null: false
+      t.integer :count_weeks, null: false , default: 0
+      t.integer :change_count_visits_percent, null: false, default: 0
+      t.integer :change_bounce_visits_percent, null: false, default: 0
+      t.integer :direct_medium_percent, null: false, default: 0
+      t.integer :organic_medium_percent, null: false, default: 0
+      t.integer :referral_medium_percent, null: false, default: 0
+      t.integer :advertising_percent, null: false, default: 0
       t.integer :max_duration_scraping, null: false, default: 7
       t.integer :min_count_page_advertiser, null: false, default: 10
       t.integer :max_count_page_advertiser, null: false, default: 15
