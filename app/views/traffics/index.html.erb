@@ -2,7 +2,7 @@
 
 <h1>Listing Traffics</h1>
 <%= link_to 'New Traffic', new_traffic_path, class: 'btn btn-sm btn-success' %>
-<%= link_to 'Delete all Traffics', traffics_destroy_all_path, class: 'btn btn-sm btn-danger' %>
+<%= button_tag 'Delete all Traffics', action: destroy_all_traffics_path %>
 
 <table class="table">
   <thead class="header-table">

@@ -25,7 +25,8 @@ module Publication
 
       rescue Exception => e
         # impossible de publier la policy vers scraperbot
-        raise "No connection could be made because the target machine : scraperbot actively refused it on #{scraperbot_host}:#{scraperbot_port}"
+        raise "not save on scraperbot calendar (#{scraperbot_host}:#{scraperbot_port})"
+
       else
 
         begin
@@ -44,11 +45,13 @@ module Publication
                              scraperbot_host, scraperbot_port)
 
           rescue Exception => e
-            #l'annulation a échoué
+            #l'annulation a Ã©chouÃ©
             # il faut alerte qu'il y a incsistance entre scraperbot et enginebot
-            raise "scraperbot and enginebot are unconsistant"
+            raise "not save on enginebot calendar (#{enginebot_host}:#{enginebot_port})"
+
           else
-            raise "No connection could be made because the target machine : enginebot actively refused it on #{enginebot_host}:#{enginebot_port}"
+            raise "not save on enginebot calendar (#{enginebot_host}:#{enginebot_port}) and delete on scraperbot calendar (#{scraperbot_host}:#{scraperbot_port})"
+
           end
         else
         end
@@ -64,11 +67,16 @@ module Publication
     @query.merge!({"data" => data})
 
     begin
-      Information.new(@query).send_to(where_ip, where_port)
-    rescue Exception => e
-      $stderr << e.message
-      raise e.message
-    end
+       response = Question.new(@query).ask_to(where_ip, where_port)
+
+     rescue Exception => e
+       $stderr << e.message
+       raise e
+     else
+       raise response[:error] if response[:state] == :ko
+       response[:data] if response[:state] == :ok and !response[:data].nil?
+
+     end
   end
 
 

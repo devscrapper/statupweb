@@ -35,7 +35,7 @@ class Parameter
 
     raise "parameter file not found" unless File.exist?(param_file_name)
     begin
-      @environment =  ENV['RACK_ENV']
+      @environment =  ENV['RACK_ENV'] || $environement
     rescue Exception => e
       raise "failed to load environment file #{e.message}"
     end

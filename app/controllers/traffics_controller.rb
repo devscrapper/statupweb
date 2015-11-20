@@ -145,7 +145,7 @@ class TrafficsController < ApplicationController
         Publication::publish(@traffic.to_json)
 
       rescue Exception => e
-        format.html { redirect_to traffics_path, notice: "Traffic was not published : #{e.message}" }
+        format.html { redirect_to traffics_path, notice: "Traffic n°#{params[:id]} was not published : #{e.message}" }
 
       else
         @traffic.update_attribute(:state, :published)

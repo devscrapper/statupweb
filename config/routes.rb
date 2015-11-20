@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
-  get 'welcome/index'
+  match "/traffics/destroy_all", to: "traffics#destroy_all", via: [:post], as: :destroy_all_traffics
+  match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic
 
   resources :ranks
-  resources :traffics
+  resources :traffics do
+    collection do
+      delete :destroy_all_traffics
+    end
+  end
   resources :statistics
   resources :websites
 
@@ -12,12 +17,11 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
    root 'welcome#index'
   # put 'traffics/:id/publish'   => 'traffic#publish', as: :publish
-   delete 'traffics/destroy_all', to: 'traffic#destroy_all'
-  resources :traffics do
-    member do
-      patch 'publish'
-    end
-  end
+
+
+
+
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
