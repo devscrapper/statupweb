@@ -1,0 +1,143 @@
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#website-traffic<%= traffic.id %>">Website</a></li>
+                <% if traffic.statistic_type == "custom" %>
+                    <li><a data-toggle="tab" href="#statistics-traffic<%= traffic.id %>">Statistic</a></li>
+                <% end %>
+                <li><a data-toggle="tab" href="#behaviour-traffic<%= traffic.id %>">Behaviour</a></li>
+              </ul>
+              <div class="tab-content">
+                <div id="website-traffic<%= traffic.id %>" class="tab-pane fade in active">
+
+
+                  <p><%= render partial: 'websites/show', :locals => {:website => traffic.website} %></p>
+                </div>
+                <% if traffic.statistic_type == "custom" %>
+                    <div id="statistics-traffic<%= traffic.id %>" class="tab-pane fade">
+
+
+                      <p>         <%= render partial: 'statistics/show', :locals => {:statistic => CustomStatistic.find_by_policy_id_and_policy_type(traffic.id, "traffic").statistic} %></p>
+                    </div>
+                <% end %>
+                <div id="behaviour-traffic<%= traffic.id %>" class="tab-pane fade">
+                  <p>
+
+                  <div class="col-lg-3">
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Organic search</div>
+                      <div class="panel-body">
+
+                        <p>
+                          <strong>Min count page :</strong><%= traffic.min_count_page_organic %></p>
+
+                        <p>
+                          <strong>Max count page :</strong><%= traffic.max_count_page_organic %></p>
+
+                        <p>
+                          <strong>Min duration page :</strong><%= traffic.min_duration_page_organic %></p>
+
+                        <p>
+                          <strong>Max duration page :</strong><%= traffic.max_duration_page_organic %>
+                        </p>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Advertiser visit</div>
+                      <div class="panel-body">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <p>
+                              <strong>Min count page :</strong>
+                              <%= traffic.min_count_page_advertiser %> </p>
+
+                            <p>
+                              <strong>Max count page :</strong>
+                              <%= traffic.max_count_page_advertiser %></p>
+
+                            <p>
+                              <strong>Min duration page :</strong>
+                              <%= traffic.min_duration_page_advertiser %> </p>
+
+                            <p>
+                              <strong>Max duration page :</strong>
+                              <%= traffic.max_duration_page_advertiser %> </p>
+
+                            <p>
+                              <strong>Percent local page :</strong>
+                              <%= traffic.percent_local_page_advertiser %></p>
+
+                            <p>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Referral visit</div>
+                      <div class="panel-body">
+                        <p><strong>Duration referral :</strong><%= traffic.duration_referral %></p>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Website visit</div>
+                      <div class="panel-body">
+                        <p>
+                          <strong>Max duration scraping :</strong> <%= traffic.max_duration_scraping %><br>
+                        </p>
+
+                        <p>
+                          <strong>Min duration :</strong><%= traffic.min_duration %>  </p>
+
+                        <p>
+                          <strong>Max duration :</strong><%= traffic.max_duration %>
+                        </p>
+
+                        <p>
+                          <strong>Min duration website :</strong><%= traffic.min_duration_website %>  </p>
+
+                        <p>
+                          <strong>Min pages website :</strong><%= traffic.min_pages_website %>
+                        </p>
+
+                      </div>
+                    </div>
+                  </div>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+<p>
+
+</p>
+
+
+
+
+
