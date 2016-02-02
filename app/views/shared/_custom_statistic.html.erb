@@ -1,22 +1,31 @@
-<div class="field">
-  <%= label_tag "Choose custom statistic" %><%= select_tag :statistic_selected, options_from_collection_for_select(@statistics, "id", "label", ""), :include_blank => "new custom statistic" %>
+<div class="row">
+  <div class="col-sm-3"><%= label_tag :label %><%= text_field_tag :website_label, nil, class: "form-control" %> </div>
+  <div class="col-sm-3"><%= label_tag :count_visits_per_day %><%= number_field_tag :count_visits_per_day, nil, min: 0, class: "form-control" %></div>
+  <div class="col-sm-3"><%= label_tag :percent_new_visit %><%= number_field_tag :percent_new_visit, nil, class: "form-control" %> </div>
 </div>
-<div class="field">
-  <%= label_tag "Define your own custom statistic" %>
+<div class="row">
+  <div class="col-sm-3"><%= label_tag :visit_bounce_rate %> <%= number_field_tag :visit_bounce_rate, nil, class: "form-control" %> </div>
+  <div class="col-sm-3"><%= label_tag :avg_time_on_site %><%= number_field_tag :avg_time_on_site, nil, class: "form-control" %></div>
+  <div class="col-sm-3"><%= label_tag :page_views_per_visit %><%= number_field_tag :page_views_per_visit, nil, class: "form-control" %>  </div>
 </div>
-<div class="field">
-  <%= label_tag :label %><%= text_field_tag :label, type="text"%>
+<table class=".table">
+  <tr>
+    <td>0-1h</td>
+    <td><%= number_field_tag :hourly_daily_distribution0, nil, min: 0, class: "" %></td>
+  </tr>
+</table>
+<div class="row">
+  <div class="col-sm-1"> <%= label_tag :"0-1h", nil, class: "label label-primary" %>  </div>
+  <div class="col-sm-1"><%= number_field_tag :hourly_daily_distribution0, nil, min: 0, class: "form-control input-sm" %></div>
 </div>
+<br>
 <div class="field">
-  <%= label_tag :count_visits_per_day %><%= number_field_tag :count_visits_per_day , nil, min: 0 %>
-</div>
-<div class="field">
-  <%= label_tag :"0-1h" %><%= number_field_tag :hourly_daily_distribution0 , nil, min: 0%>
-  <%= label_tag :"1-2h" %><%= number_field_tag :hourly_daily_distribution1 , nil, min: 0%>
-  <%= label_tag :"2-3h" %><%= number_field_tag :hourly_daily_distribution2 , nil, min: 0%>
-  <%= label_tag :"3-4h" %><%= number_field_tag :hourly_daily_distribution3 , nil, min: 0%>
-  <%= label_tag :"4-5h" %><%= number_field_tag :hourly_daily_distribution4 , nil, min: 0%>
-  <%= label_tag :"5-6h" %><%= number_field_tag :hourly_daily_distribution5 , nil, min: 0%>
+  <%= label_tag :"0-1h" %><%= number_field_tag :hourly_daily_distribution0, nil, min: 0 %>
+  <%= label_tag :"1-2h" %><%= number_field_tag :hourly_daily_distribution1, nil, min: 0 %>
+  <%= label_tag :"2-3h" %><%= number_field_tag :hourly_daily_distribution2, nil, min: 0 %>
+  <%= label_tag :"3-4h" %><%= number_field_tag :hourly_daily_distribution3, nil, min: 0 %>
+  <%= label_tag :"4-5h" %><%= number_field_tag :hourly_daily_distribution4, nil, min: 0 %>
+  <%= label_tag :"5-6h" %><%= number_field_tag :hourly_daily_distribution5, nil, min: 0 %>
   <%= label_tag :"6-7h" %><%= number_field_tag :hourly_daily_distribution6 %>
   <%= label_tag :"7-8h" %><%= number_field_tag :hourly_daily_distribution7 %>
   <%= label_tag :"8-9h" %><%= number_field_tag :hourly_daily_distribution8 %>
@@ -36,16 +45,4 @@
   <%= label_tag :"22-23h" %><%= number_field_tag :hourly_daily_distribution22 %>
   <%= label_tag :"23-24h" %><%= number_field_tag :hourly_daily_distribution23 %>
 
-</div>
-<div class="field">
-  <%= label_tag :percent_new_visit %><%= number_field_tag :percent_new_visit %>
-</div>
-<div class="field">
-  <%= label_tag :visit_bounce_rate %> <%= number_field_tag :visit_bounce_rate %>
-</div>
-<div class="field">
-  <%= label_tag :avg_time_on_site %><%= number_field_tag :avg_time_on_site %>
-</div>
-<div class="field">
-  <%= label_tag :page_views_per_visit %><%= number_field_tag :page_views_per_visit %>
 </div>

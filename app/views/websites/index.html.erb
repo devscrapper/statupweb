@@ -1,11 +1,13 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Websites</h1>
+<%= link_to 'New Website', new_website_path, class: 'btn btn-sm btn-success' %>
+<%= button_tag 'Delete all Websites', action: destroy_all_websites_path %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Label</th>
+<table class="table">
+  <thead class="header-table">
+  <tr>
+    <th>Label</th>
       <th>Profil id ga</th>
       <th>Url root</th>
       <th>Count page</th>

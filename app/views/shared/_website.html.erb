@@ -1,82 +1,52 @@
-<div class="row">
-  <div class="col-sm-4">
-    <%= select_tag :website_selected, options_from_collection_for_select(@websites, "id", "label", ""), class: "form-control", :include_blank => "Select one" %>
-  </div>
-  <div class="col-sm-4">
-    <a data-toggle="collapse" class="btn btn-info" href="#panel_define_a_new_one">or Define a new one</a>
-  </div>
-</div>
+
 
 <div class="row">
   <div id="panel_define_a_new_one" class="panel-collapse collapse">
     <div class="panel-body">
-      <h3>
-        <div class="row">
-          <div class="col-sm-1">
-            <%= label_tag "Label", nil, class: "label label-primary" %>
-          </div>
-          <div class="col-sm-3">
-            <%= text_field_tag :website_label, nil, class: "form-control" %>
-          </div>
-          <div class=" col-sm-1">
-            <%= label_tag "Root url", nil, class: "label label-primary" %>
-          </div>
-          <div class=" col-sm-4">
-            <%= url_field_tag :url_root, nil, class: "form-control" %>
-          </div>
-          <div class="col-sm-1">
-            <a data-toggle="collapse" class="btn btn-info" href="#panel_details">Details</a>
-          </div>
-
+      <div class="row">
+        <div class="col-lg-5">
+          <%= label_tag "Label" %>
+          <%= text_field_tag :website_label, nil, class: "form-control" %>
         </div>
-      </h3>
+
+        <div class=" col-lg-5">
+          <%= label_tag "Root url" %>
+          <%= url_field_tag :url_root, "http://", class: "form-control" %>
+        </div>
+
+        <div class="col-lg-2">
+          <a data-toggle="collapse" class="btn btn-info" href="#panel_details">more details</a>
+        </div>
+
+      </div>
+
       <div class="row">
         <div id="panel_details" class="panel-collapse collapse">
           <div class="panel-body">
-            <h3>
-              <div class="row">
-
-                <div class="col-sm-2">
-                  <%= label_tag "Profil id ga", nil, class: "label label-primary" %>
-                </div>
-                <div class="col-sm-2">
-                  <%= text_field_tag :profil_id_ga, nil, class: "form-control" %>
-                </div>
-                <div class="col-sm-2">
-                  <%= label_tag "Count page", nil, class: "label label-primary" %>
-                </div>
-                <div class="col-sm-1">
-                  <%= number_field_tag :count_page, nil, class: "form-control", min: 0, value: 0 %>
-                </div>
-
+            <div class="row">
+              <div class="col-lg-2">
+                <%= label_tag "Profil id ga" %>
+                <%= text_field_tag :profil_id_ga, nil, class: "form-control" %>
               </div>
-              <div class="row">
 
-
-                <div class="col-sm-2">
-                  <%= label_tag "Schemes", nil, class: "label label-primary" %>
-
-                </div>
-                <div class="col-sm-1">
-                  <%= select_tag :schemes, options_for_select(["http", "https"], ["http"]), class: "form-control", multiple: true %>
-                </div>
-                <div class="col-sm-2">
-                  <%= label_tag "Types", nil, class: "label label-primary" %>
-
-                </div>
-                <div class="col-sm-2">
-                  <%= select_tag :types, options_for_select(["local", "global", "full"], ["local", "global"]), class: "form-control", multiple: true %>
-                </div>
-                <div class="col-sm-2">
-                  <%= label_tag "Advertisers", nil, class: "label label-primary" %>
-
-                </div>
-                <div class="col-sm-2">
-                  <%= select_tag :advertisers, options_for_select(["adsense"], ["adsense"]), class: "form-control", multiple: true %>
-                </div>
-
+              <div class="col-lg-2">
+                <%= label_tag "Count page" %>
+                <%= number_field_tag :count_page, nil, class: "form-control input-sm", min: 0, value: 0 %>
               </div>
-            </h3>
+              <div class="col-lg-2">
+                <%= label_tag "Schemes" %>
+                <%= select_tag :schemes, options_for_select(["http", "https"], ["http"]), class: "form-control", multiple: true %>
+              </div>
+              <div class="col-lg-2">
+                <%= label_tag "Types" %>
+                <%= select_tag :types, options_for_select(["local", "global", "full"], ["local", "global"]), class: "form-control", multiple: true %>
+              </div>
+              <div class="col-lg-2">
+                <%= label_tag "Advertisers" %>
+                <%= select_tag :advertisers, options_for_select(["adsense"], ["adsense"]), class: "form-control", multiple: true %>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

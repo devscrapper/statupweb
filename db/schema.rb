@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 20151103101005) do
     t.integer  "organic_medium_percent",        default: 0,         null: false
     t.integer  "referral_medium_percent",       default: 0,         null: false
     t.integer  "advertising_percent",           default: 0,         null: false
-    t.integer  "max_duration_scraping",         default: 7,         null: false
+    t.integer  "max_duration_scraping",         default: 1,         null: false
     t.integer  "min_count_page_advertiser",     default: 10,        null: false
     t.integer  "max_count_page_advertiser",     default: 15,        null: false
     t.integer  "min_duration_page_advertiser",  default: 60,        null: false

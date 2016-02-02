@@ -1,26 +1,35 @@
 Rails.application.routes.draw do
-  match "/traffics/destroy_all", to: "traffics#destroy_all", via: [:post], as: :destroy_all_traffics
-  match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic
 
-  resources :ranks
-  resources :traffics do
+  match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic
+  match '/traffics/:id/unpublish', to: 'traffics#unpublish', via: [:patch], as: :unpublish_traffic
+  #match '/traffics/destroy_all', to:'traffics#destroy_all', via: [:delete], as: :destroy_all_traffic
+  resources :ranks do
     collection do
-      delete :destroy_all_traffics
+      delete :destroy_all
     end
   end
-  resources :statistics
-  resources :websites
+  resources :traffics do
+    collection do
+      delete :destroy_all
+    end
+  end
+  resources :statistics do
+    collection do
+      delete :destroy_all
+    end
+  end
+  resources :websites do
+    collection do
+      delete :destroy_all
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'welcome#index'
+  root 'welcome#index'
   # put 'traffics/:id/publish'   => 'traffic#publish', as: :publish
-
-
-
-
 
 
   # Example of regular route:

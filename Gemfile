@@ -2,8 +2,9 @@ source 'https://rubygems.org'
 
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
-
-
+gem 'rest-client', '~> 1.6.7'
+gem 'momentjs-rails', '>= 2.9.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 gem 'nokogiri', '1.6.7.rc3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

@@ -4,7 +4,20 @@
   <title>Statupweb</title>
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
   <%= csrf_meta_tags %>
+  <style>
+      .table tbody > tr > td.vert-align {
+          vertical-align: middle;
+      }
+  </style>
+  <script>
+      $(document).ready(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+      });
+
+  </script>
+
 </head>
 <body>
 
@@ -30,10 +43,11 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown
             <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li>
-              <%= link_to "Traffics", traffics_path %></li>
+            <li><%= link_to "Traffics", traffics_path %></li>
             <li><%= link_to "Ranks", ranks_path %></li>
             <li role="separator" class="divider"></li>
+            <li><%= link_to "Websites", websites_path %></li>
+            <li><%= link_to "Statistics", statistics_path %></li>
             <li class="dropdown-header">Nav header</li>
             <li><a href="#">Separated link</a></li>
             <li><a href="#">One more separated link</a></li>
@@ -45,7 +59,7 @@
   </div>
 </nav>
 
-<div id="main-container" class="container">
+<div id="main-container" class="container-fluid">
   <%= yield %>
 </div>
 

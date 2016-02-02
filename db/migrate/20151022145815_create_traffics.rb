@@ -11,7 +11,7 @@ class CreateTraffics < ActiveRecord::Migration
       t.integer :organic_medium_percent, null: false, default: 0
       t.integer :referral_medium_percent, null: false, default: 0
       t.integer :advertising_percent, null: false, default: 0
-      t.integer :max_duration_scraping, null: false, default: 7
+      t.integer :max_duration_scraping, null: false, default: 1
       t.integer :min_count_page_advertiser, null: false, default: 10
       t.integer :max_count_page_advertiser, null: false, default: 15
       t.integer :min_duration_page_advertiser, null: false, default: 60

@@ -25,7 +25,9 @@ class WebsitesController < ApplicationController
   # POST /websites.json
   def create
     @website = Website.new(website_params)
-
+    @website.schemes.delete_if { |x| x.empty? }
+    @website.types.delete_if { |x| x.empty? }
+    @website.advertisers.delete_if { |x| x.empty? }
     respond_to do |format|
       if @website.save
         format.html { redirect_to @website, notice: 'Website was successfully created.' }
@@ -40,6 +42,11 @@ class WebsitesController < ApplicationController
   # PATCH/PUT /websites/1
   # PATCH/PUT /websites/1.json
   def update
+    # contraint de laisser un element "" dans le tableu sinon l'enregistrement leve une exception
+    params[:website][:advertisers] = website_params[:advertisers].delete_if { |x| x.empty? } if website_params[:advertisers].size > 1
+    params[:website][:schemes]= website_params[:schemes].delete_if { |x| x.empty? } if website_params[:schemes].size > 1
+    params[:website][:types] = website_params[:types].delete_if { |x| x.empty? } if website_params[:types].size > 1
+
 
     respond_to do |format|
       if @website.update(website_params)
@@ -62,14 +69,18 @@ class WebsitesController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_website
-      @website = Website.find(params[:id])
-    end
+  def destroy_all
+    Website.delete_all
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def website_params
-      params.require(:website).permit( :label, :profil_id_ga, :url_root, :count_page, :schemes => [], :types =>[], :advertisers => [])
-    end
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_website
+    @website = Website.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def website_params
+    params.require(:website).permit(:label, :profil_id_ga, :url_root, :count_page, :schemes => [], :types => [], :advertisers => [])
+  end
 end

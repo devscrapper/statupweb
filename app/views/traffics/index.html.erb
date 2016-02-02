@@ -1,60 +1,100 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Traffics</h1>
-<%= link_to 'New Traffic', new_traffic_path, class: 'btn btn-sm btn-success' %>
-<%= button_tag 'Delete all Traffics', action: destroy_all_traffics_path %>
 
-<table class="table">
-  <thead class="header-table">
-  <tr>
-    <th>State</th>
-    <th>Website</th>
-    <th>Monday start</th>
-    <th>Count weeks</th>
-    <th>Change count visits percent</th>
-    <th>Change bounce visits percent</th>
-    <th>Direct medium percent</th>
-    <th>Organic medium percent</th>
-    <th>Referral medium percent</th>
-    <th>Advertising percent</th>
-    <th>Statistic type</th>
-    <th colspan="3"></th>
-  </tr>
-  </thead>
+<div class="panel panel-default">
+  <div class="panel-heading"><h3>Listing Traffics<span class="badge"><%= Traffic.count %></span></h3></div>
+  <div class="panel-body">
+    <%= link_to 'New Traffic', new_traffic_path, class: 'btn btn-sm btn-default' %>
+    <%= link_to 'Delete all Traffics', destroy_all_traffics_path, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
 
-  <tbody>
-  <% @traffics.each do |traffic| %>
-      <tr>
-        <td><%= traffic.state %></td>
-        <td><%= traffic.website.label %></td>
-        <td><%= traffic.monday_start %></td>
-        <td><%= traffic.count_weeks %></td>
-        <td><%= traffic.change_count_visits_percent %></td>
-        <td><%= traffic.change_bounce_visits_percent %></td>
-        <td><%= traffic.direct_medium_percent %></td>
-        <td><%= traffic.organic_medium_percent %></td>
-        <td><%= traffic.referral_medium_percent %></td>
-        <td><%= traffic.advertising_percent %></td>
-        <td><%= traffic.statistic_type %></td>
-        <td><%= link_to 'Show', traffic, class: "btn  btn-sm btn-success" %></td>
-        <td><%= link_to 'Edit', edit_traffic_path(traffic), class: "btn btn-sm btn-primary" %></td>
-        <td>
-          <% case traffic.state
-               when "created"
-                 toto = "btn btn-sm btn-warning active"
-               when "published"
-                 toto = "btn btn-sm btn-warning disabled"
-             end %>
+    <div class="table-responsive">
+      <table class="table table-hover ">
+        <thead class="header-table">
+        <tr>
+          <th class="text-center">Id</th>
+          <th class="text-center">State</th>
+          <th class="text-left">Website</th>
+          <th class="text-center">Monday start</th>
+          <th class="text-center">Count weeks</th>
+          <th class="text-center">Change count visits (%)</th>
+          <th class="text-center">Change bounce visits (%)</th>
+          <th class="text-center">D/O/R (%)</th>
+          <th class="text-center">Advertising (%)</th>
+          <th class="text-center">Statistic type</th>
+          <th colspan="3"></th>
+        </tr>
+        </thead>
 
-          <%= form_for traffic, as: :post, method: :patch, url: publish_traffic_path(traffic) do |f|
-            f.submit "Publish", class: toto, data: {confirm: "Are you sure?"}
-          end %></td>
-        <td><%= link_to 'Destroy', traffic, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
+        <tbody>
+        <% @traffics.each do |traffic| %>
+            <tr>
+              <td class="text-center vert-align"><%= traffic.id %></td>
+              <td class="text-center vert-align">
+                <% case traffic.state
+                     when "created"
+                       color_state = "label label-default"
+                     when "published"
+                       color_state = "label label-warning"
+                   end %>
+                <span class="<%= color_state %>"><%= traffic.state %></span>
 
-<br>
+              </td>
+              <td class="text-left vert-align">
+                <a href="#" data-toggle="tooltip" data-placement="right" title="<%= traffic.website.url_root %>"><%= traffic.website.label %></a>
+              </td>
+              <td class="text-center vert-align"><%= traffic.monday_start %></td>
+              <td class="text-center vert-align"><%= traffic.count_weeks %></td>
+              <td class="text-center vert-align"><%= traffic.change_count_visits_percent %></td>
+              <td class="text-center vert-align"><%= traffic.change_bounce_visits_percent %></td>
+              <td class="text-center vert-align"><%= traffic.direct_medium_percent %>/<%= traffic.organic_medium_percent %>
+                /<%= traffic.referral_medium_percent %></td>
+              <td class="text-center vert-align"><%= traffic.advertising_percent %></td>
+              <td class="text-center vert-align">
+                <% if traffic.statistic_type == "custom" %>
+                    <a href="#" data-toggle="tooltip" data-placement="right" title="<%= CustomStatistic.find_by_policy_id_and_policy_type(traffic.id, "traffic").statistic.label %>"><%= traffic.statistic_type %></a>
+                <% else %>
+                    <%= traffic.statistic_type %>
+                <% end %>
+              </td>
+              <td>
+                <a data-toggle="collapse" class="btn btn-sm btn-default" href="#panel-show<%= traffic.id %>">Show</a>
+              </td>
+              <td class="text-center vert-align">
+                <%= case traffic.state
+                      when "created"
 
+                        link_to 'Edit', edit_traffic_path(traffic), class: "btn btn-sm btn-default"
+                      when "published"
+                        link_to 'Edit', edit_traffic_path(traffic), class: "btn btn-sm btn-default disabled"
+                    end %>
+              </td>
+              <td class="text-center vert-align">
 
+                <%= case traffic.state
+                      when "created"
+                        form_for traffic, as: :post, method: :patch, url: publish_traffic_path(traffic) do |f|
+                          f.submit "Publish", class: "btn btn-sm btn-warning", data: {confirm: "Are you sure?"}
+                        end
+                      when "published"
+                        form_for traffic, as: :post, method: :patch, url: unpublish_traffic_path(traffic) do |f|
+                          f.submit "Unpublish", class: "btn btn-sm btn-warning", data: {confirm: "Are you sure?"}
+                        end
+                    end %>
+
+              </td>
+              <td class="text-center vert-align"><%= link_to 'Destroy', traffic, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            </tr>
+            <tr>
+              <td colspan="14">
+                <div id="panel-show<%= traffic.id %>" class="panel-collapse collapse">
+                  <%= render partial: 'show', locals: {:traffic => traffic} %>
+                </div>
+              </td>
+
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

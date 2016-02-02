@@ -1,11 +1,13 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Statistics</h1>
+<%= link_to 'New Statistic', new_statistic_path, class: 'btn btn-sm btn-success' %>
+<%= button_tag 'Delete all Statistics', action: destroy_all_statistics_path %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Label</th>
+<table class="table">
+  <thead class="header-table">
+  <tr>
+    <th>Label</th>
       <th>Count visits per day</th>
       <th>Hourly daily distribution</th>
       <th>Percent new visit</th>
@@ -21,7 +23,7 @@
       <tr>
         <td><%= statistic.label %></td>
         <td><%= statistic.count_visits_per_day %></td>
-        <td><%= statistic.hourly_daily_distribution %></td>
+
         <td><%= statistic.percent_new_visit %></td>
         <td><%= statistic.visit_bounce_rate %></td>
         <td><%= statistic.avg_time_on_site %></td>
@@ -34,6 +36,4 @@
   </tbody>
 </table>
 
-<br>
 
-<%= link_to 'New Statistic', new_statistic_path %>

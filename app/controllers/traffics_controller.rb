@@ -1,4 +1,4 @@
-require 'publication'
+require_relative '../../lib/publication'
 
 class TrafficsController < ApplicationController
   before_action :set_traffic, only: [:show, :edit, :update, :destroy]
@@ -22,127 +22,39 @@ class TrafficsController < ApplicationController
     @statistics = Statistic.all
     @traffic = Traffic.new
 
+     @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
   end
 
   # GET /traffics/1/edit
   def edit
+    @websites = Website.all
+    @statistics = Statistic.all
+    @traffic = Traffic.find(params[:id])
+    @website = @traffic.website
+    if @traffic.statistic_type == "custom"
+
+      @statistic = CustomStatistic.find_by_policy_id_and_policy_type(@traffic.id, "traffic")
+    else
+
+    end
+
   end
 
   # POST /traffics
   # POST /traffics.json
   def create
 
-    #creation d'un nouveau website
-    if params[:website_selected].empty?
-      Website.create(label: params[:website_label]) do |w|
-        w.profil_id_ga = params[:profil_id_ga]
-        w.url_root = params[:url_root]
-        w.count_page = params[:count_page]
-        w.schemes = params[:schemes]
-        w.types = params[:types]
-        w.advertisers = params[:advertisers]
-      end
-      #recuperation de l'id du nouveau website
-      params[:traffic][:website_id] = Website.find_by_label(params[:website_label]).id
-
-    else
-      #recuperation de l'id du website selectionné
-      params[:traffic][:website_id] = params[:website_selected]
+    params[:traffic][:website_id] = params[:website_selected]
+    @traffic = Traffic.new(traffic_params)
+    ok = @traffic.save
+    if ok and @traffic.statistic_type == "custom"
+      @statistic = CustomStatistic.new({:policy_type => "traffic",
+                                        :policy_id => @traffic.id,
+                                        :statistic_id => params[:statistic_selected]})
+      ok = ok && @statistic.save
     end
 
-    @traffic = Traffic.create(traffic_params)
-
-    # selection d'une stats customisée
-    if @traffic.statistic_type == "custom"
-
-      # creation d'un enouvelle stats custom
-      if params[:statistic_selected].empty?
-        Statistic.create(label: params[:label]) do |s|
-          s.count_visits_per_day = params[:count_visits_per_day]
-          s.hourly_daily_distribution0 = params[:hourly_daily_distribution0]
-          s.hourly_daily_distribution1 = params[:hourly_daily_distribution1]
-          s.hourly_daily_distribution2 = params[:hourly_daily_distribution2]
-          s.hourly_daily_distribution3 = params[:hourly_daily_distribution3]
-          s.hourly_daily_distribution4 = params[:hourly_daily_distribution4]
-          s.hourly_daily_distribution5 = params[:hourly_daily_distribution5]
-          s.hourly_daily_distribution6 = params[:hourly_daily_distribution6]
-          s.hourly_daily_distribution7 = params[:hourly_daily_distribution7]
-          s.hourly_daily_distribution8 = params[:hourly_daily_distribution8]
-          s.hourly_daily_distribution9 = params[:hourly_daily_distribution9]
-          s.hourly_daily_distribution10 = params[:hourly_daily_distribution10]
-          s.hourly_daily_distribution11 = params[:hourly_daily_distribution11]
-          s.hourly_daily_distribution12 = params[:hourly_daily_distribution12]
-          s.hourly_daily_distribution13 = params[:hourly_daily_distribution13]
-          s.hourly_daily_distribution14 = params[:hourly_daily_distribution14]
-          s.hourly_daily_distribution15 = params[:hourly_daily_distribution15]
-          s.hourly_daily_distribution16 = params[:hourly_daily_distribution16]
-          s.hourly_daily_distribution17 = params[:hourly_daily_distribution17]
-          s.hourly_daily_distribution18 = params[:hourly_daily_distribution18]
-          s.hourly_daily_distribution19 = params[:hourly_daily_distribution19]
-          s.hourly_daily_distribution20 = params[:hourly_daily_distribution20]
-          s.hourly_daily_distribution21 = params[:hourly_daily_distribution21]
-          s.hourly_daily_distribution22 = params[:hourly_daily_distribution22]
-          s.hourly_daily_distribution23 = params[:hourly_daily_distribution23]
-          s.percent_new_visit = params[:percent_new_visit]
-          s.visit_bounce_rate = params[:visit_bounce_rate]
-          s.avg_time_on_site = params[:avg_time_on_site]
-          s.page_views_per_visit = params[:page_views_per_visit]
-        end
-        # recuperation de l'id de la nouvelle stats
-        statistic_id = Statistic.find_by_label(params[:label]).id
-
-      else
-        # recuperation de l'id de statistic séléctionnée
-        statistic_id = params[:statistic_selected]
-      end
-
-      #enregistrement de la stat custom utilisé par Traffic
-      CustomStatistic.create(statistic_id: statistic_id) do |s|
-        s.policy_type = "traffic"
-        s.policy_id = @traffic.id
-      end
-
-    end
-
-
-    respond_to do |format|
-      if params[:commit] == "Later"
-        if @traffic.save
-          format.html { redirect_to traffics_path, notice: 'Traffic was successfully created.' }
-        else
-          format.html {
-            @websites = Website.all
-            @statistics = Statistic.all
-            render :new
-          }
-          format.json { render json: @traffic.errors, status: :unprocessable_entity }
-        end
-
-      elsif params[:commit] == "Now"
-        if @traffic.save
-          begin
-            Publication::publish(@traffic.to_json)
-
-          rescue Exception => e
-            format.html { redirect_to traffics_path, notice: "Traffic was not published : #{e.message}" }
-
-          else
-            @traffic.update_attribute(:state, :published)
-            format.html { redirect_to traffics_path, notice: 'Traffic was successfully published on scraperbot and enginebot.' }
-
-          end
-
-        else
-          format.html {
-            @websites = Website.all
-            @statistics = Statistic.all
-            render :new
-          }
-          format.json { render json: @traffic.errors, status: :unprocessable_entity }
-
-        end
-      end
-    end
+    render_after_create_or_update(ok, "Traffic was successfully created.")
   end
 
   def publish
@@ -151,14 +63,35 @@ class TrafficsController < ApplicationController
     respond_to do |format|
       begin
 
-        Publication::publish(@traffic.to_json)
+        Publication::publish(@traffic.to_hash)
 
       rescue Exception => e
+
         format.html { redirect_to traffics_path, notice: "Traffic n°#{params[:id]} was not published : #{e.message}" }
 
       else
         @traffic.update_attribute(:state, :published)
-        format.html { redirect_to traffics_path, notice: 'Traffic was successfully published on scraperbot and enginebot.' }
+        format.html { redirect_to traffics_path, notice: 'Traffic was successfully published to enginebot.' }
+
+      end
+    end
+  end
+
+  def unpublish
+    @traffic = Traffic.find(params[:id])
+
+    respond_to do |format|
+      begin
+
+        Publication::delete(@traffic.id)
+
+      rescue Exception => e
+
+        format.html { redirect_to traffics_path, notice: "Traffic n°#{params[:id]} was not unpublished : #{e.message}" }
+
+      else
+        @traffic.update_attribute(:state, :created)
+        format.html { redirect_to traffics_path, notice: 'Traffic was successfully unpublished to enginebot.' }
 
       end
     end
@@ -167,32 +100,65 @@ class TrafficsController < ApplicationController
   # PATCH/PUT /traffics/1
   # PATCH/PUT /traffics/1.json
   def update
-    if params[:commit] == "Now"
+    params[:traffic][:website_id] = params[:website_selected]
+    @traffic = Traffic.find_by_id(params[:id])
+    ok = @traffic.update(traffic_params)
+    if ok and @traffic.statistic_type == "custom"
+
+      unless @statistic = CustomStatistic.find_by_policy_id_and_policy_type(@traffic.id, "traffic")
+        @statistic = CustomStatistic.new({:policy_type => "traffic",
+                                          :policy_id => @traffic.id,
+                                          :statistic_id => params[:statistic_selected]})
+        ok = ok && @statistic.save
+
+      else
+        @statistic.update_attribute(:statistic_id, params[:statistic_selected])
+
+      end
+
+    else
+      CustomStatistic.where(policy_id: @traffic.id, policy_type: "traffic").delete_all
 
     end
-    respond_to do |format|
-      if @traffic.update(traffic_params)
-        format.html { redirect_to @traffic, notice: 'Traffic was successfully updated.' }
-        format.json { render :show, status: :ok, location: @traffic }
-      else
-        format.html { render :edit }
-        format.json { render json: @traffic.errors, status: :unprocessable_entity }
-      end
-    end
+    render_after_create_or_update(ok, "Traffic was successfully update.")
   end
+
 
   # DELETE /traffics/1
   # DELETE /traffics/1.json
   def destroy
-    @traffic.destroy
+    begin
+      @traffic.destroy
+
+    rescue Exception => e
+      notice = e.message
+    else
+      notice = 'Traffic was successfully destroyed.'
+    end
+
     respond_to do |format|
-      format.html { redirect_to traffics_url, notice: 'Traffic was successfully destroyed.' }
+      format.html { redirect_to traffics_url, notice: notice }
       format.json { head :no_content }
     end
   end
 
   def destroy_all
-    Traffic.delete_all
+
+    begin
+      Traffic.all.each { |traffic| traffic.destroy }
+
+    rescue Exception => e
+      notice = e.message
+
+    else
+      notice = 'all Traffics were successfully destroyed.'
+
+    end
+
+    respond_to do |format|
+      format.html { redirect_to traffics_url, notice: notice }
+      format.json { head :no_content }
+    end
   end
 
   private
@@ -203,7 +169,41 @@ class TrafficsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def traffic_params
-    params.require(:traffic).permit(:statistic_selected, :label, :count_visits_per_day, :hourly_daily_distribution, :percent_new_visit, :visit_bounce_rate, :avg_time_on_site, :statistic_type, :page_views_per_visit, :website_id, :statistic_id, :monday_start, :count_weeks, :change_count_visits_percent, :change_bounce_visits_percent, :direct_medium_percent, :organic_medium_percent, :referral_medium_percent, :advertising_percent, :advertisers, :max_duration_scraping, :min_count_page_advertiser, :max_count_page_advertiser, :min_duration_page_advertiser, :max_duration_page_advertiser, :percent_local_page_advertiser, :duration_referral, :min_count_page_organic, :max_count_page_organic, :min_duration_page_organic, :max_duration_page_organic, :min_duration, :max_duration, :min_duration_website, :min_pages_website)
+    params.require(:traffic).permit(:statistic_selected, :count_visits_per_day, :hourly_daily_distribution, :percent_new_visit, :visit_bounce_rate, :avg_time_on_site, :statistic_type, :page_views_per_visit, :website_id, :statistic_id, :monday_start, :count_weeks, :change_count_visits_percent, :change_bounce_visits_percent, :direct_medium_percent, :organic_medium_percent, :referral_medium_percent, :advertising_percent, :advertisers, :max_duration_scraping, :min_count_page_advertiser, :max_count_page_advertiser, :min_duration_page_advertiser, :max_duration_page_advertiser, :percent_local_page_advertiser, :duration_referral, :min_count_page_organic, :max_count_page_organic, :min_duration_page_organic, :max_duration_page_organic, :min_duration, :max_duration, :min_duration_website, :min_pages_website)
   end
 
+end
+
+def render_after_create_or_update(ok, notice)
+  respond_to do |format|
+    if ok
+      if params[:commit] == "Later"
+        format.html { redirect_to traffics_path, notice: notice }
+
+      end
+
+      if params[:commit] == "Now"
+        begin
+          Publication::publish(@traffic.to_hash)
+
+        rescue Exception => e
+          format.html { redirect_to traffics_path, notice: "Traffic was not published : #{e.message}" }
+
+        else
+          @traffic.update_attribute(:state, :published)
+          format.html { redirect_to traffics_path, notice: 'Traffic was successfully published to enginebot.' }
+
+        end
+      end
+    else
+
+      format.html {
+        @websites = Website.all
+        @statistics = Statistic.all
+        render :new
+      }
+      format.json { render json: @traffic.errors, status: :unprocessable_entity }
+
+    end
+  end
 end
