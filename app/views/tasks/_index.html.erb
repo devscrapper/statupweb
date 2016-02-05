@@ -1,0 +1,37 @@
+<% unless tasks.empty? %>
+<table class="table">
+  <thead class="header-table">
+  <tr>
+    <th>Label</th>
+    <th>state</th>
+    <th>time</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% tasks.each do |task| %>
+      <% case task.state
+           when "start"
+             color_class="active"
+           when "over"
+             color_class="success"
+           when "fail"
+             color_class="warning"
+           else
+             color_class="info"
+         end %>
+
+      <tr class="<%= color_class %>">
+        <td><%= task.label %></td>
+        <td><%= task.state %></td>
+
+        <td><%= task.time %></td>
+
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<%else%>
+    <p>no task</p>
+<%end%>
+

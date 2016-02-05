@@ -36,7 +36,7 @@ module Publication
     end
   end
 
-  def delete(policy_id)
+  def delete(policy_id, policy_type)
     begin
       parameters = Parameter.new(__FILE__)
 
@@ -49,7 +49,7 @@ module Publication
 
       begin
 
-        response = RestClient.delete "http://#{enginebot_host}:#{enginebot_port}/policies/#{policy_id}",
+        response = RestClient.delete "http://#{enginebot_host}:#{enginebot_port}/#{policy_type.pluralize}/#{policy_id}",
                                      :content_type => :json,
                                      :accept => :json
 

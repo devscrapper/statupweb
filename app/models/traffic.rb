@@ -3,6 +3,7 @@ require 'json'
 class Traffic < ActiveRecord::Base
   has_one :custom_statistic
   belongs_to :website
+  has_many :tasks  , foreign_key: "policy_id"
 
   validates :website_id, :presence => true
   validates :statistic_type, :presence => true
@@ -50,7 +51,7 @@ class Traffic < ActiveRecord::Base
     CustomStatistic.where(policy_id: id, policy_type: "traffic").delete_all if statistic_type == "custom"
 
     begin
-      Publication::delete(id)
+      Publication::delete(id, self.class.name.downcase)
 
     rescue Exception => e
       raise "Traffic n°#{id} was not unpublished : #{e.message}"

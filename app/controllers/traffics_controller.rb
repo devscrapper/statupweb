@@ -1,5 +1,6 @@
 require_relative '../../lib/publication'
 
+
 class TrafficsController < ApplicationController
   before_action :set_traffic, only: [:show, :edit, :update, :destroy]
   include Publication
@@ -9,6 +10,7 @@ class TrafficsController < ApplicationController
   def index
 
     @traffics = Traffic.all
+
   end
 
   # GET /traffics/1
@@ -83,7 +85,7 @@ class TrafficsController < ApplicationController
     respond_to do |format|
       begin
 
-        Publication::delete(@traffic.id)
+        Publication::delete(@traffic.id, Traffic.name.downcase)
 
       rescue Exception => e
 
@@ -91,6 +93,7 @@ class TrafficsController < ApplicationController
 
       else
         @traffic.update_attribute(:state, :created)
+        @traffic.tasks.destroy_all
         format.html { redirect_to traffics_path, notice: 'Traffic was successfully unpublished to enginebot.' }
 
       end

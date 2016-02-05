@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151103101005) do
+ActiveRecord::Schema.define(version: 20160205112144) do
 
   create_table "custom_statistics", force: :cascade do |t|
     t.integer  "policy_id"
@@ -78,6 +78,16 @@ ActiveRecord::Schema.define(version: 20151103101005) do
     t.integer  "page_views_per_visit",        null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string   "label",       null: false
+    t.integer  "policy_id",   null: false
+    t.string   "policy_type", null: false
+    t.datetime "time",        null: false
+    t.string   "state",       null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "traffics", force: :cascade do |t|

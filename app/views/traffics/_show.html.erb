@@ -13,6 +13,9 @@
                     <li><a data-toggle="tab" href="#statistics-traffic<%= traffic.id %>">Statistic</a></li>
                 <% end %>
                 <li><a data-toggle="tab" href="#behaviour-traffic<%= traffic.id %>">Behaviour</a></li>
+                <% tasks = traffic.tasks.history("traffic") %>
+                <li><a data-toggle="tab" href="#tasks-traffic<%= traffic.id %>">Tasks<span class="badge"> <%=tasks.size%></span></a></li>
+                <li><a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Ojectives</a></li>
               </ul>
               <div class="tab-content">
                 <div id="website-traffic<%= traffic.id %>" class="tab-pane fade in active">
@@ -31,7 +34,6 @@
                   <p>
 
                   <div class="col-lg-3">
-
                     <div class="panel panel-default">
                       <div class="panel-heading">Organic search</div>
                       <div class="panel-body">
@@ -120,6 +122,13 @@
                     </div>
                   </div>
                   </p>
+                </div>
+                <div id="tasks-traffic<%= traffic.id %>" class="tab-pane fade">
+
+                  <p>         <%= render partial: 'tasks/index', :locals => {:tasks => tasks} %></p>
+                </div>
+                <div id="objectives-traffic<%= traffic.id %>" class="tab-pane fade">
+                  <%= %>
                 </div>
               </div>
             </div>
