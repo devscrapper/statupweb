@@ -13,7 +13,7 @@
                     <li><a data-toggle="tab" href="#statistics-traffic<%= traffic.id %>">Statistic</a></li>
                 <% end %>
                 <li><a data-toggle="tab" href="#behaviour-traffic<%= traffic.id %>">Behaviour</a></li>
-                <% tasks = traffic.tasks.history("traffic") %>
+                <% tasks = traffic.tasks %>
                 <li><a data-toggle="tab" href="#tasks-traffic<%= traffic.id %>">Tasks<span class="badge"> <%=tasks.size%></span></a></li>
                 <% objectives = traffic.objectives %>
                 <li><a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Ojectives<span class="badge"> <%=objectives.size%></span></a></li>
@@ -28,7 +28,7 @@
                     <div id="statistics-traffic<%= traffic.id %>" class="tab-pane fade">
 
 
-                      <p><%= render partial: 'statistics/show', :locals => {:statistic => CustomStatistic.find_by_policy_id_and_policy_type(traffic.id, "traffic").statistic} %></p>
+                      <p><%= render partial: 'statistics/show', :locals => {:statistic => traffic.custom_statistic.statistic} %></p>
                     </div>
                 <% end %>
                 <div id="behaviour-traffic<%= traffic.id %>" class="tab-pane fade">

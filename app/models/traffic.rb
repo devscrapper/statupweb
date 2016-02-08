@@ -1,10 +1,10 @@
 require 'json'
 
 class Traffic < ActiveRecord::Base
-  has_one :custom_statistic
+  has_one :custom_statistic, :as => :policy, dependent: :destroy
+  has_many :tasks, :as => :policy, dependent: :destroy
+  has_many :objectives, :as => :policy, dependent: :destroy
   belongs_to :website
-  has_many :tasks  , foreign_key: "policy_id"
-  has_many :objectives,  -> { where(policy_type: "traffic") } , foreign_key: "policy_id"
 
   validates :website_id, :presence => true
   validates :statistic_type, :presence => true
@@ -48,6 +48,7 @@ class Traffic < ActiveRecord::Base
     return today.next_day(6) if today.tuesday?
     return today.next_day(7) if today.monday?
   end
+
   def destroy
     CustomStatistic.where(policy_id: id, policy_type: "traffic").delete_all if statistic_type == "custom"
 
@@ -122,8 +123,6 @@ class Traffic < ActiveRecord::Base
   end
 
   private
-
-
 
 
 end

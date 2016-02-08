@@ -1,9 +1,5 @@
 class Statistic < ActiveRecord::Base
-  has_many   :traffics
-  has_many :ranks
-
-
-
+ has_many :custom_statistics
 
 def to_hash
   {:hourly_daily_distribution => [hourly_daily_distribution0,

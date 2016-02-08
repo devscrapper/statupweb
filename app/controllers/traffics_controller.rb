@@ -24,8 +24,7 @@ class TrafficsController < ApplicationController
     @websites = Website.all
     @statistics = Statistic.all
     @traffic = Traffic.new
-
-     @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
+    @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
   end
 
   # GET /traffics/1/edit
@@ -34,13 +33,7 @@ class TrafficsController < ApplicationController
     @statistics = Statistic.all
     @traffic = Traffic.find(params[:id])
     @website = @traffic.website
-    if @traffic.statistic_type == "custom"
-
-      @statistic = CustomStatistic.find_by_policy_id_and_policy_type(@traffic.id, "traffic")
-    else
-
-    end
-
+    @statistic = @traffic.custom_statistic if @traffic.statistic_type == "custom"
   end
 
   # POST /traffics
@@ -51,9 +44,7 @@ class TrafficsController < ApplicationController
     @traffic = Traffic.new(traffic_params)
     ok = @traffic.save
     if ok and @traffic.statistic_type == "custom"
-      @statistic = CustomStatistic.new({:policy_type => "traffic",
-                                        :policy_id => @traffic.id,
-                                        :statistic_id => params[:statistic_selected]})
+      @statistic = @traffic.build_custom_statistic({:statistic_id => params[:statistic_selected]})
       ok = ok && @statistic.save
     end
 
@@ -110,10 +101,8 @@ class TrafficsController < ApplicationController
     ok = @traffic.update(traffic_params)
     if ok and @traffic.statistic_type == "custom"
 
-      unless @statistic = CustomStatistic.find_by_policy_id_and_policy_type(@traffic.id, "traffic")
-        @statistic = CustomStatistic.new({:policy_type => "traffic",
-                                          :policy_id => @traffic.id,
-                                          :statistic_id => params[:statistic_selected]})
+      unless @statistic = @traffic.custom_statistic
+        @statistic = @traffic.build_custom_statistic({:statistic_id => params[:statistic_selected]})
         ok = ok && @statistic.save
 
       else
@@ -122,7 +111,7 @@ class TrafficsController < ApplicationController
       end
 
     else
-      CustomStatistic.where(policy_id: @traffic.id, policy_type: "traffic").delete_all
+
 
     end
     render_after_create_or_update(ok, "Traffic was successfully update.")
@@ -205,6 +194,8 @@ def render_after_create_or_update(ok, notice)
       format.html {
         @websites = Website.all
         @statistics = Statistic.all
+        @website = @traffic.website
+        @statistic = @traffic.custom_statistic if @traffic.statistic_type == "custom"
         render :new
       }
       format.json { render json: @traffic.errors, status: :unprocessable_entity }

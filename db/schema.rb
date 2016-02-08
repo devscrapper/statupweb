@@ -25,8 +25,8 @@ ActiveRecord::Schema.define(version: 20160206080921) do
   add_index "custom_statistics", ["statistic_id"], name: "index_custom_statistics_on_statistic_id"
 
   create_table "objectives", force: :cascade do |t|
-    t.integer  "policy_id",            null: false
-    t.string   "policy_type",          null: false
+    t.integer  "policy_id"
+    t.string   "policy_type"
     t.integer  "count_visits",         null: false
     t.integer  "visit_bounce_rate",    null: false
     t.integer  "avg_time_on_site",     null: false
@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 20160206080921) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
+
+  add_index "objectives", ["policy_type", "policy_id"], name: "index_objectives_on_policy_type_and_policy_id"
 
   create_table "ranks", force: :cascade do |t|
     t.string   "statistic_type",                         null: false
@@ -95,13 +97,15 @@ ActiveRecord::Schema.define(version: 20160206080921) do
 
   create_table "tasks", force: :cascade do |t|
     t.string   "label",       null: false
-    t.integer  "policy_id",   null: false
-    t.string   "policy_type", null: false
+    t.integer  "policy_id"
+    t.string   "policy_type"
     t.datetime "time",        null: false
     t.string   "state",       null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "tasks", ["policy_type", "policy_id"], name: "index_tasks_on_policy_type_and_policy_id"
 
   create_table "traffics", force: :cascade do |t|
     t.integer  "website_id",                                        null: false

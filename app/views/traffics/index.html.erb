@@ -51,7 +51,7 @@
               <td class="text-center vert-align"><%= traffic.advertising_percent %></td>
               <td class="text-center vert-align">
                 <% if traffic.statistic_type == "custom" %>
-                    <a href="#" data-toggle="tooltip" data-placement="right" title="<%= CustomStatistic.find_by_policy_id_and_policy_type(traffic.id, "traffic").statistic.label %>"><%= traffic.statistic_type %></a>
+                    <a href="#" data-toggle="tooltip" data-placement="right" title="<%= traffic.custom_statistic.statistic.label %>"><%= traffic.statistic_type %></a>
                 <% else %>
                     <%= traffic.statistic_type %>
                 <% end %>
