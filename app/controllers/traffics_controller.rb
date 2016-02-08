@@ -16,6 +16,7 @@ class TrafficsController < ApplicationController
   # GET /traffics/1
   # GET /traffics/1.json
   def show
+
   end
 
   # GET /traffics/new
@@ -94,6 +95,7 @@ class TrafficsController < ApplicationController
       else
         @traffic.update_attribute(:state, :created)
         @traffic.tasks.destroy_all
+        @traffic.objectives.destroy_all
         format.html { redirect_to traffics_path, notice: 'Traffic was successfully unpublished to enginebot.' }
 
       end

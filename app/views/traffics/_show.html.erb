@@ -15,7 +15,8 @@
                 <li><a data-toggle="tab" href="#behaviour-traffic<%= traffic.id %>">Behaviour</a></li>
                 <% tasks = traffic.tasks.history("traffic") %>
                 <li><a data-toggle="tab" href="#tasks-traffic<%= traffic.id %>">Tasks<span class="badge"> <%=tasks.size%></span></a></li>
-                <li><a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Ojectives</a></li>
+                <% objectives = traffic.objectives %>
+                <li><a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Ojectives<span class="badge"> <%=objectives.size%></span></a></li>
               </ul>
               <div class="tab-content">
                 <div id="website-traffic<%= traffic.id %>" class="tab-pane fade in active">
@@ -27,7 +28,7 @@
                     <div id="statistics-traffic<%= traffic.id %>" class="tab-pane fade">
 
 
-                      <p>         <%= render partial: 'statistics/show', :locals => {:statistic => CustomStatistic.find_by_policy_id_and_policy_type(traffic.id, "traffic").statistic} %></p>
+                      <p><%= render partial: 'statistics/show', :locals => {:statistic => CustomStatistic.find_by_policy_id_and_policy_type(traffic.id, "traffic").statistic} %></p>
                     </div>
                 <% end %>
                 <div id="behaviour-traffic<%= traffic.id %>" class="tab-pane fade">
@@ -124,11 +125,10 @@
                   </p>
                 </div>
                 <div id="tasks-traffic<%= traffic.id %>" class="tab-pane fade">
-
-                  <p>         <%= render partial: 'tasks/index', :locals => {:tasks => tasks} %></p>
+                  <p><%= render partial: 'tasks/index', :locals => {:tasks => tasks} %></p>
                 </div>
                 <div id="objectives-traffic<%= traffic.id %>" class="tab-pane fade">
-                  <%= %>
+                  <p><%= render partial: 'objectives/index', :locals => {:objectives => objectives} %></p>
                 </div>
               </div>
             </div>

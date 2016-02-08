@@ -4,6 +4,7 @@ class Traffic < ActiveRecord::Base
   has_one :custom_statistic
   belongs_to :website
   has_many :tasks  , foreign_key: "policy_id"
+  has_many :objectives,  -> { where(policy_type: "traffic") } , foreign_key: "policy_id"
 
   validates :website_id, :presence => true
   validates :statistic_type, :presence => true

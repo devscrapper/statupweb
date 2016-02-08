@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205112144) do
+ActiveRecord::Schema.define(version: 20160206080921) do
 
   create_table "custom_statistics", force: :cascade do |t|
     t.integer  "policy_id"
@@ -23,6 +23,19 @@ ActiveRecord::Schema.define(version: 20160205112144) do
 
   add_index "custom_statistics", ["policy_type", "policy_id"], name: "index_custom_statistics_on_policy_type_and_policy_id"
   add_index "custom_statistics", ["statistic_id"], name: "index_custom_statistics_on_statistic_id"
+
+  create_table "objectives", force: :cascade do |t|
+    t.integer  "policy_id",            null: false
+    t.string   "policy_type",          null: false
+    t.integer  "count_visits",         null: false
+    t.integer  "visit_bounce_rate",    null: false
+    t.integer  "avg_time_on_site",     null: false
+    t.integer  "page_views_per_visit", null: false
+    t.string   "hourly_distribution",  null: false
+    t.datetime "periodicity",          null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
 
   create_table "ranks", force: :cascade do |t|
     t.string   "statistic_type",                         null: false

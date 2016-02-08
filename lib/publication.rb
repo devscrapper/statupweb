@@ -27,7 +27,7 @@ module Publication
 
       rescue Exception => e
         # impossible de publier la policy vers engine bot
-        raise "not save policy on enginebot calendar (#{enginebot_host}:#{enginebot_port}) :  #{e.message} "
+        raise "#{e.message} : #{e.response}"
 
       else
         raise "not save policy on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
