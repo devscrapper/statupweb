@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :visits
   resources :objectives
   resources :tasks
   match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic

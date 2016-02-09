@@ -4,6 +4,7 @@ class Traffic < ActiveRecord::Base
   has_one :custom_statistic, :as => :policy, dependent: :destroy
   has_many :tasks, :as => :policy, dependent: :destroy
   has_many :objectives, :as => :policy, dependent: :destroy
+  has_many :visits, :as => :policy, dependent: :destroy
   belongs_to :website
 
   validates :website_id, :presence => true

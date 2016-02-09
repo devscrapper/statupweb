@@ -1,0 +1,46 @@
+<% unless visits.empty? %>
+<table class="table">
+  <thead class="header-table">
+  <tr>
+    <th>State</th>
+    <th>Start time</th>
+    <th>Landing url</th>
+    <th>Durations</th>
+    <th>Referrer</th>
+    <th>Advert</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% visits.each do |visit| %>
+
+
+      <tr >
+        <td>
+          <% case visit.state
+               when "created"
+                 color_state = "label label-default"
+               when "schedule"
+                 color_state = "label label-primary"
+               when "start"
+               color_state  = "label label-info"
+               when "success"
+                 color_state  = "label label-success"
+               when "fail"
+                 color_state  = "label label-danger"
+
+             end %>
+          <span class="<%= color_state %>"><%= visit.state %></span></td>
+        <td><%= visit.start_time %></td>
+        <td><%= visit.landing_url %></td>
+        <td><%= visit.durations %></td>
+        <td><%= visit.referrer %></td>
+        <td><%= visit.advert %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<%else%>
+    <p>no visit</p>
+<%end%>
+
