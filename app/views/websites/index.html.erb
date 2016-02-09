@@ -1,39 +1,43 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Websites</h1>
-<%= link_to 'New Website', new_website_path, class: 'btn btn-sm btn-success' %>
-<%= button_tag 'Delete all Websites', action: destroy_all_websites_path %>
+<div class="panel panel-default">
+  <div class="panel-heading"><h3>Listing Websites<span class="badge"><%= Website.count %></span></h3></div>
+  <div class="panel-body">
+    <%= link_to 'New Website', new_website_path, class: 'btn btn-sm btn-default' %>
+    <%= link_to 'Delete all Websites', destroy_all_websites_path, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
 
-<table class="table">
-  <thead class="header-table">
-  <tr>
-    <th>Label</th>
-      <th>Profil id ga</th>
-      <th>Url root</th>
-      <th>Count page</th>
-      <th>Schemes</th>
-      <th>Types</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <div class="table-responsive">
+      <table class="table table-hover ">
+        <thead class="header-table">
 
-  <tbody>
-    <% @websites.each do |website| %>
-      <tr>
-        <td><%= website.label %></td>
-        <td><%= website.profil_id_ga %></td>
-        <td><%= website.url_root %></td>
-        <td><%= website.count_page %></td>
-        <td><%= website.schemes %></td>
-        <td><%= website.types %></td>
-        <td><%= link_to 'Show', website %></td>
-        <td><%= link_to 'Edit', edit_website_path(website) %></td>
-        <td><%= link_to 'Destroy', website, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        <tr>
+          <th>Label</th>
+          <th>Profil id ga</th>
+          <th>Url root</th>
+          <th>Count page</th>
+          <th>Schemes accepted</th>
+          <th>Strategy scraping</th>
+          <th colspan="3"></th>
+        </tr>
+        </thead>
 
-<br>
+        <tbody>
+        <% @websites.each do |website| %>
+            <tr>
+              <td><%= website.label %></td>
+              <td><%= website.profil_id_ga %></td>
+              <td><%= website.url_root %></td>
+              <td><%= website.count_page == 0 ? "All" : website.count_page %></td>
+              <td><%= website.schemes.join(" and ") %></td>
+              <td><%= website.types.join(" and ") %></td>
+              <td><%= link_to 'Show', website %></td>
+              <td><%= link_to 'Edit', edit_website_path(website) %></td>
+              <td><%= link_to 'Destroy', website, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-<%= link_to 'New Website', new_website_path %>
