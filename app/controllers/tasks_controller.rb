@@ -10,6 +10,7 @@ class TasksController < ApplicationController
 
 
     @task = Task.new(task_params)
+    @task.policy_type.capitalize!
 
     respond_to do |format|
       if @task.save
