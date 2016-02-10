@@ -34,8 +34,10 @@ class Traffic < ActiveRecord::Base
   validates :min_pages_website, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 2}
 
   validate :monday_start_cannot_be_in_the_past_and_must_be_on_monday,
-           :sum_of_medium_percent_must_equal_to_100
+           :sum_of_medium_percent_must_equal_to_100,
+           :only_one_policy_for_a_website_by_period
 
+  DELAY_WEEK = 7
 
   def self.next_monday(date)
     today = Date.parse(date) if date.is_a?(String)
@@ -80,50 +82,64 @@ class Traffic < ActiveRecord::Base
     errors.add(:monday_start, "must be on monday") if !monday_start.monday?
   end
 
-  def to_hash
-    policy = {:policy_id => id, :policy_type => self.class.name, :website_id => website_id, :website_label => website.label, :statistics_type => statistic_type,
-              :monday_start => monday_start, #à cause de la policy Traffic (scraping website & organic)
-              :count_weeks => count_weeks,
-              :url_root => website.url_root,
-              :count_page => website.count_page, #à cause de la policy Traffic
-              :schemes => website.schemes, #à cause de la policy Traffic
-              :types => website.types, #à cause de la policy Traffic
-              :max_duration_scraping => max_duration_scraping, # +7  #à cause de la policy Traffic (scraping website & organic)
-              :change_count_visits_percent => change_count_visits_percent, #à cause de la policy Traffic
-              :change_bounce_visits_percent => change_bounce_visits_percent, #à cause de la policy Traffic
-              :direct_medium_percent => direct_medium_percent, #à cause de la policy Traffic
-              :organic_medium_percent => organic_medium_percent, #à cause de la policy Traffic
-              :referral_medium_percent => referral_medium_percent, #à cause de la policy Traffic
-              :advertising_percent => advertising_percent, #à cause de la policy Traffic
-              :advertisers => website.advertisers,
-              :min_count_page_advertiser => min_count_page_advertiser,
-              :max_count_page_advertiser => max_count_page_advertiser,
-              :min_duration_page_advertiser => min_duration_page_advertiser,
-              :max_duration_page_advertiser => max_duration_page_advertiser,
-              :percent_local_page_advertiser => percent_local_page_advertiser,
-              :duration_referral => duration_referral,
-              :min_count_page_organic => min_count_page_organic,
-              :max_count_page_organic => max_count_page_organic,
-              :min_duration_page_organic => min_duration_page_organic,
-              :max_duration_page_organic => max_duration_page_organic,
-              :min_duration => min_duration,
-              :max_duration => max_duration,
-              :min_duration_website => min_duration_website,
-              :min_pages_website => min_pages_website
+  def only_one_policy_for_a_website_by_period
+
+
+    end_date = monday_start + count_weeks * DELAY_WEEK
+    policies = Traffic.select("monday_start, count_weeks").where("website_id =?", website_id)
+    policies.each { |policy|
+      if (policy.monday_start < monday_start and policy.monday_start + policy.count_weeks * DELAY_WEEK < monday_start) or
+          (policy.monday_start > end_date and policy.monday_start + policy.count_weeks * DELAY_WEEK > end_date)
+      else
+        errors.add(:website, "only one policy on same periode")
+        return
+      end
     }
-    case statistic_type
-      when "default"
-
-      when "custom"
-        policy.merge!(CustomStatistic.find_by_policy_id_and_policy_type(id, "traffic").statistic.to_hash)
-      when "ga"
-        policy.merge!({:profil_id_ga => website.profil_id_ga}) # à cause de l'option de statistique = :ga
-
     end
-    policy
-  end
+      def to_hash
+        policy = {:policy_id => id, :policy_type => self.class.name, :website_id => website_id, :website_label => website.label, :statistics_type => statistic_type,
+                  :monday_start => monday_start, #à cause de la policy Traffic (scraping website & organic)
+                  :count_weeks => count_weeks,
+                  :url_root => website.url_root,
+                  :count_page => website.count_page, #à cause de la policy Traffic
+                  :schemes => website.schemes, #à cause de la policy Traffic
+                  :types => website.types, #à cause de la policy Traffic
+                  :max_duration_scraping => max_duration_scraping, # +7  #à cause de la policy Traffic (scraping website & organic)
+                  :change_count_visits_percent => change_count_visits_percent, #à cause de la policy Traffic
+                  :change_bounce_visits_percent => change_bounce_visits_percent, #à cause de la policy Traffic
+                  :direct_medium_percent => direct_medium_percent, #à cause de la policy Traffic
+                  :organic_medium_percent => organic_medium_percent, #à cause de la policy Traffic
+                  :referral_medium_percent => referral_medium_percent, #à cause de la policy Traffic
+                  :advertising_percent => advertising_percent, #à cause de la policy Traffic
+                  :advertisers => website.advertisers,
+                  :min_count_page_advertiser => min_count_page_advertiser,
+                  :max_count_page_advertiser => max_count_page_advertiser,
+                  :min_duration_page_advertiser => min_duration_page_advertiser,
+                  :max_duration_page_advertiser => max_duration_page_advertiser,
+                  :percent_local_page_advertiser => percent_local_page_advertiser,
+                  :duration_referral => duration_referral,
+                  :min_count_page_organic => min_count_page_organic,
+                  :max_count_page_organic => max_count_page_organic,
+                  :min_duration_page_organic => min_duration_page_organic,
+                  :max_duration_page_organic => max_duration_page_organic,
+                  :min_duration => min_duration,
+                  :max_duration => max_duration,
+                  :min_duration_website => min_duration_website,
+                  :min_pages_website => min_pages_website
+        }
+        case statistic_type
+          when "default"
 
-  private
+          when "custom"
+            policy.merge!(custom_statistic.statistic.to_hash)
+          when "ga"
+            policy.merge!({:profil_id_ga => website.profil_id_ga}) # à cause de l'option de statistique = :ga
+
+        end
+        policy
+      end
+
+      private
 
 
-end
+      end
