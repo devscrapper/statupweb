@@ -1,4 +1,4 @@
-<%= form_for(@statistic) do |f| %>
+<%= form_for(@statistic, :html => {:class => "form-horizontal"}) do |f| %>
     <% if @statistic.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@statistic.errors.count, "error") %> prohibited this statistic from being saved:</h2>
@@ -12,57 +12,100 @@
     <% end %>
 
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3"><%= f.label :label %><%= f.text_field :label,  class: "form-control" %> </div>
-        <div class="col-sm-3"><%= f.label :count_visits_per_day %><%= f.number_field :count_visits_per_day,  min: 0, class: "form-control" %></div>
-        <div class="col-sm-3"><%= f.label :percent_new_visit %><%= f.number_field :percent_new_visit,  class: "form-control" %> </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-3"><%= f.label :visit_bounce_rate %> <%= f.number_field :visit_bounce_rate,  class: "form-control" %> </div>
-        <div class="col-sm-3"><%= f.label :avg_time_on_site %><%= f.number_field :avg_time_on_site,  class: "form-control" %></div>
-        <div class="col-sm-3"><%= f.label :page_views_per_visit %><%= f.number_field :page_views_per_visit,  class: "form-control" %>  </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-3"><%= f.label :"hourly_daily_distribution" %></div>
-      </div>
-      <div class="row">
-        <div class="col-sm-1"> <%= f.label :"0-1h" %> <%= f.number_field :hourly_daily_distribution0,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"1-2h" %> <%= f.number_field :hourly_daily_distribution1,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"2-3h" %> <%= f.number_field :hourly_daily_distribution2,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"3-4h" %> <%= f.number_field :hourly_daily_distribution3,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"4-5h" %> <%= f.number_field :hourly_daily_distribution4,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"5-6h" %> <%= f.number_field :hourly_daily_distribution5,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"6-7h" %> <%= f.number_field :hourly_daily_distribution6,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"7-8h" %> <%= f.number_field :hourly_daily_distribution7,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"8-9h" %> <%= f.number_field :hourly_daily_distribution8,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"9-10h" %> <%= f.number_field :hourly_daily_distribution9,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"10-11h" %> <%= f.number_field :hourly_daily_distribution10,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"11-12h" %> <%= f.number_field :hourly_daily_distribution11,  min: 0, class: "form-control" %> </div>
-      </div>
-      <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%= label %></div>
+        <div class="panel-body">
+          <div class="col-lg-4">
+            <div class="form-group">
+              <%= f.label :label, class: "control-label  col-lg-3" %>
+              <div class="col-lg-9">
+                <%= f.text_field :label, class: "form-control", size: 48 %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :count_visits_per_day, class: "control-label  col-lg-3" %>
+              <div class="col-lg-3">
+                <%= f.number_field :count_visits_per_day, class: "form-control", min: 0 %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :percent_new_visit, class: "control-label  col-lg-3" %>
+              <div class="col-lg-2">
+                <%= f.number_field :percent_new_visit, class: "form-control" %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :visit_bounce_rate, class: "control-label  col-lg-3" %>
+              <div class="col-lg-2">
+                <%= f.number_field :visit_bounce_rate, class: "form-control" %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :avg_time_on_site, class: "control-label  col-lg-3" %>
+              <div class="col-lg-3">
+                <%= f.number_field :avg_time_on_site, class: "form-control" %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :page_views_per_visit, class: "control-label  col-lg-3" %>
+              <div class="col-lg-3">
+                <%= f.number_field :page_views_per_visit, class: "form-control" %>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="form-group">
+              <%= f.label "hourly_daily_distribution", class: "control-label  col-lg-3" %>
+              <div class="col-lg-9">
+                <div class="row">
+                  <div class="col-lg-2"> <%= f.label :"0-1h" %> <%= f.number_field :hourly_daily_distribution0, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"1-2h" %> <%= f.number_field :hourly_daily_distribution1, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"2-3h" %> <%= f.number_field :hourly_daily_distribution2, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"3-4h" %> <%= f.number_field :hourly_daily_distribution3, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"4-5h" %> <%= f.number_field :hourly_daily_distribution4, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"5-6h" %> <%= f.number_field :hourly_daily_distribution5, min: 0, class: "form-control" %> </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-2"> <%= f.label :"6-7h" %> <%= f.number_field :hourly_daily_distribution6, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"7-8h" %> <%= f.number_field :hourly_daily_distribution7, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"8-9h" %> <%= f.number_field :hourly_daily_distribution8, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"9-10h" %> <%= f.number_field :hourly_daily_distribution9, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"10-11h" %> <%= f.number_field :hourly_daily_distribution10, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"11-12h" %> <%= f.number_field :hourly_daily_distribution11, min: 0, class: "form-control" %> </div>
+                </div>
+                <div class="row">
 
-        <div class="col-sm-1"> <%= f.label :"12-13h" %> <%= f.number_field :hourly_daily_distribution12,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"13-14h" %> <%= f.number_field :hourly_daily_distribution13,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"14-15h" %> <%= f.number_field :hourly_daily_distribution14,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"15-16h" %> <%= f.number_field :hourly_daily_distribution15,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"16-17h" %> <%= f.number_field :hourly_daily_distribution16,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"17-18h" %> <%= f.number_field :hourly_daily_distribution17,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"18-19h" %> <%= f.number_field :hourly_daily_distribution18,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"19-20h" %> <%= f.number_field :hourly_daily_distribution19,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"20-21h" %> <%= f.number_field :hourly_daily_distribution20,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"21-22h" %> <%= f.number_field :hourly_daily_distribution21,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"22-23h" %> <%= f.number_field :hourly_daily_distribution22,  min: 0, class: "form-control" %> </div>
-        <div class="col-sm-1"> <%= f.label :"23-24h" %> <%= f.number_field :hourly_daily_distribution23,  min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"12-13h" %> <%= f.number_field :hourly_daily_distribution12, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"13-14h" %> <%= f.number_field :hourly_daily_distribution13, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"14-15h" %> <%= f.number_field :hourly_daily_distribution14, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"15-16h" %> <%= f.number_field :hourly_daily_distribution15, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"16-17h" %> <%= f.number_field :hourly_daily_distribution16, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"17-18h" %> <%= f.number_field :hourly_daily_distribution17, min: 0, class: "form-control" %> </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-2"> <%= f.label :"18-19h" %> <%= f.number_field :hourly_daily_distribution18, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"19-20h" %> <%= f.number_field :hourly_daily_distribution19, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"20-21h" %> <%= f.number_field :hourly_daily_distribution20, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"21-22h" %> <%= f.number_field :hourly_daily_distribution21, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"22-23h" %> <%= f.number_field :hourly_daily_distribution22, min: 0, class: "form-control" %> </div>
+                  <div class="col-lg-2"> <%= f.label :"23-24h" %> <%= f.number_field :hourly_daily_distribution23, min: 0, class: "form-control" %> </div>
 
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="form-group">
+          <div class="col-lg-offset-3 col-lg-12">
+            <%= f.submit "Save", class: "btn btn-info" %>
+          </div>
+        </div>
       </div>
 
-
-      <p class="text-primary">
-
-      <div class="actions">
-        <%= f.submit "Create", class: "btn btn-info" %>
-      </div>
-      </p>
     </div>
+
+
 
 <% end %>

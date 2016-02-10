@@ -29,7 +29,7 @@ class StatisticsController < ApplicationController
 
     respond_to do |format|
       if @statistic.save
-        format.html { redirect_to @statistic, notice: 'Statistic was successfully created.' }
+        format.html { redirect_to statistics_path, notice: 'Statistic was successfully created.' }
         format.json { render :show, status: :created, location: @statistic }
       else
         format.html { render :new }
@@ -43,7 +43,7 @@ class StatisticsController < ApplicationController
   def update
     respond_to do |format|
       if @statistic.update(statistic_params)
-        format.html { redirect_to @statistic, notice: 'Statistic was successfully updated.' }
+        format.html { redirect_to statistics_path, notice: 'Statistic was successfully updated.' }
         format.json { render :show, status: :ok, location: @statistic }
       else
         format.html { render :edit }

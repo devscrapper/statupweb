@@ -1,39 +1,44 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Statistics</h1>
-<%= link_to 'New Statistic', new_statistic_path, class: 'btn btn-sm btn-success' %>
-<%= button_tag 'Delete all Statistics', action: destroy_all_statistics_path %>
+<div class="panel panel-default">
+  <div class="panel-heading"><h3>Listing Statistics<span class="badge"><%= Statistic.count %></span></h3></div>
+  <div class="panel-body">
+    <%= link_to 'New Statistic', new_statistic_path, class: 'btn btn-sm btn-default' %>
+    <%= link_to 'Delete all Statistics', destroy_all_statistics_path, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
 
-<table class="table">
-  <thead class="header-table">
+    <div class="table-responsive">
+      <table class="table table-hover ">
+        <thead class="header-table">
+
   <tr>
-    <th>Label</th>
-      <th>Count visits per day</th>
-      <th>Hourly daily distribution</th>
-      <th>Percent new visit</th>
-      <th>Visit bounce rate</th>
-      <th>Avg time on site</th>
-      <th>Page views per visit</th>
-      <th colspan="3"></th>
+    <th class="text-left">Label</th>
+      <th class="text-center">Count visits per day</th>
+      <th class="text-center">Hourly daily distribution</th>
+      <th class="text-center">Percent new visit</th>
+      <th class="text-center">Visit bounce rate</th>
+      <th class="text-center">Avg time on site</th>
+      <th class="text-center">Page views per visit</th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @statistics.each do |statistic| %>
       <tr>
-        <td><%= statistic.label %></td>
-        <td><%= statistic.count_visits_per_day %></td>
-
-        <td><%= statistic.percent_new_visit %></td>
-        <td><%= statistic.visit_bounce_rate %></td>
-        <td><%= statistic.avg_time_on_site %></td>
-        <td><%= statistic.page_views_per_visit %></td>
-        <td><%= link_to 'Show', statistic %></td>
-        <td><%= link_to 'Edit', edit_statistic_path(statistic) %></td>
-        <td><%= link_to 'Destroy', statistic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td class="text-left vert-align"><%= statistic.label %></td>
+        <td class="text-center vert-align"><%= statistic.count_visits_per_day %></td>
+        <td class="text-center vert-align"> todo hourly daily distribution </td>
+        <td class="text-center vert-align"><%= statistic.percent_new_visit %></td>
+        <td class="text-center vert-align"><%= statistic.visit_bounce_rate %></td>
+        <td class="text-center vert-align"><%= statistic.avg_time_on_site %></td>
+        <td class="text-center vert-align"><%= statistic.page_views_per_visit %></td>
+        <td class="text-center vert-align"><%= link_to 'Edit', edit_statistic_path(statistic), class: "btn btn-sm btn-default" %></td>
+        <td class="text-center vert-align"><%= link_to 'Destroy', statistic, method: :delete,class: "btn btn-sm btn-danger", data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-
+    </div>
+  </div>
+</div>
