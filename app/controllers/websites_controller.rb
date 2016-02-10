@@ -25,12 +25,17 @@ class WebsitesController < ApplicationController
   # POST /websites.json
   def create
     @website = Website.new(website_params)
-    @website.schemes.delete_if { |x| x.empty? }
-    @website.types.delete_if { |x| x.empty? }
-    @website.advertisers.delete_if { |x| x.empty? }
+    @website.schemes.delete_if { |x| x.empty? }  if website_params[:schemes].size > 1
+    @website.types.delete_if { |x| x.empty? } if website_params[:types].size > 1
+    @website.advertisers.delete_if { |x| x.empty? }   if website_params[:advertisers].size > 1
+    case params[:count_page_rb]
+      when "all"
+        params[:website][:count_page] = 0
+      when "some"
+    end
     respond_to do |format|
       if @website.save
-        format.html { redirect_to @website, notice: 'Website was successfully created.' }
+        format.html { redirect_to websites_url, notice: 'Website was successfully created.' }
         format.json { render :show, status: :created, location: @website }
       else
         format.html { render :new }
@@ -47,10 +52,15 @@ class WebsitesController < ApplicationController
     params[:website][:schemes]= website_params[:schemes].delete_if { |x| x.empty? } if website_params[:schemes].size > 1
     params[:website][:types] = website_params[:types].delete_if { |x| x.empty? } if website_params[:types].size > 1
 
+    case params[:count_page_rb]
+      when "all"
+        params[:website][:count_page] = 0
+      when "some"
+    end
 
     respond_to do |format|
       if @website.update(website_params)
-        format.html { redirect_to @website, notice: 'Website was successfully updated.' }
+        format.html { redirect_to websites_url, notice: 'Website was successfully updated.' }
         format.json { render :show, status: :ok, location: @website }
       else
         format.html { render :edit }
@@ -81,6 +91,6 @@ class WebsitesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def website_params
-    params.require(:website).permit(:label, :profil_id_ga, :url_root, :count_page, :schemes => [], :types => [], :advertisers => [])
+    params.require(:website).permit(:label, :profil_id_ga, :url_root, :count_page, :count_page_rb, :schemes => [], :types => [], :advertisers => [])
   end
 end

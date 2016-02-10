@@ -11,28 +11,27 @@
         <thead class="header-table">
 
         <tr>
-          <th>Label</th>
-          <th>Profil id ga</th>
-          <th>Url root</th>
-          <th>Count page</th>
-          <th>Schemes accepted</th>
-          <th>Strategy scraping</th>
-          <th colspan="3"></th>
+          <th class="text-left">Label</th>
+          <th class="text-center">Profil id ga</th>
+          <th class="text-left">Url root</th>
+          <th class="text-center">Count page</th>
+          <th class="text-center">Schemes accepted</th>
+          <th class="text-center">Strategy scraping</th>
+          <th colspan="2"></th>
         </tr>
         </thead>
 
         <tbody>
         <% @websites.each do |website| %>
             <tr>
-              <td><%= website.label %></td>
-              <td><%= website.profil_id_ga %></td>
-              <td><%= website.url_root %></td>
-              <td><%= website.count_page == 0 ? "All" : website.count_page %></td>
-              <td><%= website.schemes.join(" and ") %></td>
-              <td><%= website.types.join(" and ") %></td>
-              <td><%= link_to 'Show', website %></td>
-              <td><%= link_to 'Edit', edit_website_path(website) %></td>
-              <td><%= link_to 'Destroy', website, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+              <td class="text-left vert-align"><%= website.label %></td>
+              <td class="text-center vert-align"><%= website.profil_id_ga %></td>
+              <td class="text-left vert-align"><%= website.url_root %></td>
+              <td class="text-center vert-align"><%= website.count_page == 0 ? "All" : website.count_page %></td>
+              <td class="text-center vert-align"><%= website.schemes.join(" and ") %></td>
+              <td class="text-center vert-align"><%= website.types.join(" and ") %></td>
+              <td class="text-center vert-align"><%= link_to 'Edit', edit_website_path(website), class: "btn btn-sm btn-default" %></td>
+              <td class="text-center vert-align"><%= link_to 'Destroy', website, method: :delete,class: "btn btn-sm btn-danger", data: {confirm: 'Are you sure?'} %></td>
             </tr>
         <% end %>
         </tbody>
