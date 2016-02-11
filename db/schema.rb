@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160209091637) do
+ActiveRecord::Schema.define(version: 20160211154412) do
+
+  create_table "activity_servers", force: :cascade do |t|
+    t.string   "label",       null: false
+    t.string   "hostname",    null: false
+    t.string   "state",       null: false
+    t.datetime "time",        null: false
+    t.string   "error_label"
+    t.string   "backtrace"
+    t.datetime "error_time"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "custom_statistics", force: :cascade do |t|
     t.integer  "policy_id"

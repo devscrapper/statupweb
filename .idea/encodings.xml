@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/../../../Ruby193/lib/ruby/gems/1.9.1/gems/rake-10.1.0/lib/rake.rb" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Gemfile" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/controllers/websites_controller.rb" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/shared/_website.html.erb" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/traffics/_form.html.erb" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/config/extern_uri.yml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/config/publication.production.yml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/config/publication.yml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/config/routes.rb" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lib/publication.rb" charset="UTF-8" />
+  </component>
+</project>

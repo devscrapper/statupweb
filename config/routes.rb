@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :activity_servers
   resources :visits
   resources :objectives
   resources :tasks
