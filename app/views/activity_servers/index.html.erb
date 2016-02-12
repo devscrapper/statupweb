@@ -7,41 +7,54 @@
       <table class="table table-hover ">
         <thead class="header-table">
 
-  <tr>
-    <th class="text-left">Label</th>
-      <th class="text-center">Computer</th>
-      <th class="text-center">State</th>
-      <th class="text-center">Last echo</th>
-      <th class="text-center">Last error label</th>
-      <th class="text-center">Last backtrace</th>
-      <th class="text-center">Last error time</th>
-      <th colspan="1"></th>
-    </tr>
-  </thead>
+        <tr>
+          <th class="text-left">Label</th>
+          <th class="text-center">Computer</th>
+          <th class="text-center">State</th>
+          <th class="text-center">Last echo</th>
+          <th class="text-center">Last error label</th>
+          <th class="text-center">Last backtrace</th>
+          <th class="text-center">Last error time</th>
+          <th colspan="1"></th>
+        </tr>
+        </thead>
 
-  <tbody>
-    <% @activity_servers.each do |activity_server| %>
-      <tr>
-        <td class="text-left vert-align"><%= activity_server.label %></td>
-        <td class="text-center vert-align"><%= activity_server.hostname %></td>
-        <td class="text-center vert-align">
-          <% case activity_server.state
-               when "online"
-                 color_state = "label label-success"
-               when "fail"
-                 color_state = "label label-danger"
-             end %>
-          <span class="<%= color_state %>"><%=activity_server.state %></span></td>
-        <td class="text-center vert-align"><%= activity_server.time %></td>
-        <td class="text-center vert-align"><%= activity_server.error_label %></td>
-        <td class="text-center vert-align"><%= activity_server.backtrace %></td>
-        <td class="text-center vert-align"><%= activity_server.error_time %></td>
-
-        <td class="text-center vert-align"><%= link_to 'Clear Error', activity_server, method: :put,class: "btn btn-sm btn-warning", data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        <tbody>
+        <% @activity_servers.each do |activity_server| %>
+            <tr>
+              <td class="text-left vert-align"><%= activity_server.label %></td>
+              <td class="text-center vert-align"><%= activity_server.hostname %></td>
+              <td class="text-center vert-align">
+                <% case activity_server.state
+                     when "online"
+                       color_state = "label label-success"
+                     when "fail"
+                       color_state = "label label-danger"
+                   end %>
+                <span class="<%= color_state %>"><%= activity_server.state %></span></td>
+              <td class="text-center vert-align"><%= activity_server.time.to_date %><br>
+                <%= activity_server.time.hour %>:<%= activity_server.time.min %>:<%= activity_server.time.sec %></td>
+              <td class="text-center vert-align"><%= activity_server.error_label %></td>
+              <td class="text-left vert-align">
+                <table class="">
+                  <% activity_server.backtrace.each { |trace| %>
+                      <tr class="">
+                        <td><%= trace %></td>
+                      </tr>
+                  <% } %>
+                </table>
+              </td>
+              <td class="text-center vert-align">
+                <% if activity_server.error_time.is_a?(Time) %>
+                    <%= activity_server.error_time.to_date %><br>
+                    <%= activity_server.error_time.hour %>:<%= activity_server.error_time.min %>
+                    :<%= activity_server.error_time.sec %>
+                <% end %></td>
+              <td class="text-center vert-align"><%= link_to 'Clear Error', activity_server, method: :put, class: "btn btn-sm btn-warning", data: {confirm: 'Are you sure?'} %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
 
     </div>
   </div>
