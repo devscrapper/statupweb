@@ -21,7 +21,7 @@ test:
     encoding: utf8
     database: statupweb_test
     pool: 5
-    username: eric
+    username: root
     password: Brembo01
     host: localhost
 
