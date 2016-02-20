@@ -13,6 +13,8 @@ class CreateWebsites < ActiveRecord::Migration
       t.string :schemes, null: false, default: ["http", "https"]  # serialisation d'un tableau
       t.string :types, null: false, default: ["local", "global", "full"]  # serialisation d'un tableau
       t.string :advertisers, null: false, default: [""]  # serialisation d'un tableau
+      t.integer :count_organic, null: false, default: -1 # nombre de mot cle trouve pour ce website
+      t.integer :count_referral,null: false, default: -1 # nombrede referral qui pointe sur ce website
       t.timestamps null: false
     end
   end

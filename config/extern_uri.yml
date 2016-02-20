@@ -1,9 +1,15 @@
 development:
-    :enginebot_host: "localhost"
-    :enginebot_port: 9104
+  :saas_keyword_host: localhost
+  :saas_keyword_port: 9251
+  :saas_backlink_host: localhost
+  :saas_backlink_port: 9252
 test:
-    :enginebot_host: "192.168.1.85"
-    :enginebot_port: 9104
+  :saas_keyword_host: 192.168.1.88
+  :saas_keyword_port: 9251
+  :saas_backlink_host: 192.168.1.88
+  :saas_backlink_port: 9252
 production:
-    :enginebot_host: olgadays.synology.me
-    :enginebot_port: 9104
+  :saas_keyword_host: 192.168.1.88
+  :saas_keyword_port: 9251
+  :saas_backlink_host: 192.168.1.88
+  :saas_backlink_port: 9252

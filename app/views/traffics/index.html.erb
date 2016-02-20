@@ -15,7 +15,7 @@
           <th class="text-center">State</th>
           <th class="text-left">Website</th>
           <th class="text-center">Monday start</th>
-          <th class="text-center">Count weeks</th>
+          <th class="text-center">End policy</th>
           <th class="text-center">Change count visits (%)</th>
           <th class="text-center">Change bounce visits (%)</th>
           <th class="text-center">D/O/R (%)</th>
@@ -43,11 +43,10 @@
                 <a href="#" data-toggle="tooltip" data-placement="right" title="<%= traffic.website.url_root %>"><%= traffic.website.label %></a>
               </td>
               <td class="text-center vert-align"><%= traffic.monday_start %></td>
-              <td class="text-center vert-align"><%= traffic.count_weeks %></td>
+              <td class="text-center vert-align"><%= traffic.monday_start + traffic.count_weeks * 7 -1 %></td>
               <td class="text-center vert-align"><%= traffic.change_count_visits_percent %></td>
               <td class="text-center vert-align"><%= traffic.change_bounce_visits_percent %></td>
-              <td class="text-center vert-align"><%= traffic.direct_medium_percent %>/<%= traffic.organic_medium_percent %>
-                /<%= traffic.referral_medium_percent %></td>
+              <td class="text-center vert-align"><%= traffic.direct_medium_percent %>/<%= traffic.organic_medium_percent %>/<%= traffic.referral_medium_percent %></td>
               <td class="text-center vert-align"><%= traffic.advertising_percent %></td>
               <td class="text-center vert-align">
                 <% if traffic.statistic_type == "custom" %>

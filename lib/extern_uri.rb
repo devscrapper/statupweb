@@ -1,11 +1,12 @@
 require_relative "communication"
 require_relative "parameter"
+require 'addressable/uri'
 require 'rest-client'
 require 'json'
 
 module ExternUri
 
-  def objectives_of_policy(policy_id, policy_type)
+  def count_keywords(hostname)
     begin
       parameters = Parameter.new(__FILE__)
 
@@ -13,28 +14,31 @@ module ExternUri
       raise e.message
 
     else
-      enginebot_host = parameters.enginebot_host
-      enginebot_port = parameters.enginebot_port
+      saas_keyword_host = parameters.saas_keyword_host
+      saas_keyword_port = parameters.saas_keyword_port
+
 
       begin
+        hostname = Addressable::URI.parse(hostname).hostname
 
-        #http://localhost:9104/objectives/all/?policy_id=20&policy_type=traffic
-        response = RestClient.get "http://#{enginebot_host}:#{enginebot_port}/objectives/all", :params => {:policy_id => policy_id, :policy_type => policy_type} ,
+        #http://localhost:9251/?action=count&hostname=www.epilation-laser-definitive.info
+        response = RestClient.get "http://#{saas_keyword_host}:#{saas_keyword_port}/?action=count&hostname=#{hostname}",
                                   :content_type => :json,
                                   :accept => :json
 
 
       rescue Exception => e
-        # impossible de recuprer les task d'une policy
-        raise "not get policy tasks on enginebot calendar (#{enginebot_host}:#{enginebot_port}) :  #{e.message} "
+        raise "not get count keyword for hostname #{hostname} (#{saas_keyword_host}:#{saas_keyword_port}) :  #{e.message} "
 
       else
-        raise "not get policy tasks on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
-        response
+        raise "not get count keyword for hostname #{hostname}  (#{saas_keyword_host}:#{saas_keyword_port}) : #{response}" if response.code != 200
+        p response
+        JSON.parse(response)["count"]
+
       end
     end
   end
-  def tasks_of_policy(policy_id, policy_type)
+  def count_referral(policy_id, policy_type)
     begin
       parameters = Parameter.new(__FILE__)
 
@@ -68,7 +72,7 @@ module ExternUri
   private
 
 
-  module_function :tasks_of_policy
-  module_function :objectives_of_policy
+  module_function :count_keywords
+  module_function :count_referral
 
 end

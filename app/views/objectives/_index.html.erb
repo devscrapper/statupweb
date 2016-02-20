@@ -1,0 +1,35 @@
+<% unless objectives.empty? %>
+<table class="table">
+  <thead class="header-table">
+  <tr>
+    <th>Period</th>
+    <th>Count visits</th>
+    <th>Visit bounce rate</th>
+    <th>Avg time on site</th>
+    <th>Page view per visit</th>
+    <th>Hourly distribution</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% objectives.each do |objective| %>
+
+
+      <tr >
+        <td><%= objective.day %></td>
+        <td><%= objective.count_visits %></td>
+
+        <td><%= objective.visit_bounce_rate %></td>
+        <td><%= objective.avg_time_on_site %></td>
+        <td><%= objective.page_views_per_visit %></td>
+        <td><%= objective.hourly_distribution %></td>
+
+
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<%else%>
+    <p>no objective</p>
+<%end%>
+
