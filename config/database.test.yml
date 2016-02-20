@@ -19,6 +19,7 @@ development:
 test:
     adapter: mysql2
     encoding: utf8
+    database: statupweb_test
     pool: 5
     username: root
     password: Brembo01
