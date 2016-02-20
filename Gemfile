@@ -57,7 +57,9 @@ end
 
 group :test, :production do
 # Use mysql as the database for Active Record
-gem 'mysql2'
+#gem 'mysql2'
+gem 'mysql2', '~> 0.3.18'  #ette versionfoctionne avec rails 5 les autres non au 20 fev 2016
 end
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

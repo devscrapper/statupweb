@@ -1,3 +1,4 @@
+require_relative '../jobs/keywords_saas_job'
 class WebsitesController < ApplicationController
   before_action :set_website, only: [:show, :edit, :update, :destroy]
 
