@@ -52,6 +52,7 @@ class WebsitesController < ApplicationController
         format.html { redirect_to websites_url, notice: 'Website was successfully created.' }
         format.json { render :show, status: :created, location: @website }
         KeywordsSaasJob.perform_later @website
+        BacklinksSaasJob.perform_later @website
       else
         format.html { render :new }
         format.json { render json: @website.errors, status: :unprocessable_entity }
@@ -83,7 +84,7 @@ class WebsitesController < ApplicationController
         format.json { render :show, status: :ok, location: @website }
         if check
           KeywordsSaasJob.perform_later(@website)
-          #BaclinksSaasJob.perform_later(@website)
+          BacklinksSaasJob.perform_later @website
         end
       else
         format.html { render :edit }

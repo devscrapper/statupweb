@@ -44,21 +44,25 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-    # Use sqlite3 as the database for Active Record
+  # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
   # Use Capistrano for deployment
   gem 'capistrano-rails', '~> 1.1'
-  gem 'capistrano-rvm'  
+  gem 'capistrano-rvm'
   gem 'capistrano', '~> 3.1'
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-passenger'
   gem 'capistrano-upload-config'
+  gem 'capistrano-rails-db'
 end
 
 group :test, :production do
 # Use mysql as the database for Active Record
 #gem 'mysql2'
-gem 'mysql2', '~> 0.3.18'  #ette versionfoctionne avec rails 5 les autres non au 20 fev 2016
+  gem 'delayed_job_active_record'
+  gem 'delayed_job_web', '~> 1.2', '>= 1.2.10'
+  gem 'daemons', '~> 1.2', '>= 1.2.3'
+  gem 'mysql2', '~> 0.3.18' #ette versionfoctionne avec rails 5 les autres non au 20 fev 2016
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

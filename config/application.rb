@@ -32,5 +32,8 @@ module Statupweb
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     config.autoload_paths << "#{Rails.root}/lib"
+    config.active_job.queue_name_prefix = Rails.env
+    config.active_job.queue_adapter = :delayed_job if ["test", "production"].include?(Rails.env)
+     config.active_job.queue_adapter = :inline if Rails.env == "development"
   end
 end

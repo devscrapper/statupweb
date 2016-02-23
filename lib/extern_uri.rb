@@ -32,40 +32,43 @@ module ExternUri
 
       else
         raise "not get count keyword for hostname #{hostname}  (#{saas_keyword_host}:#{saas_keyword_port}) : #{response}" if response.code != 200
-        p response
+
         JSON.parse(response)["count"]
 
       end
     end
   end
-  def count_referral(policy_id, policy_type)
+  def count_backlinks(hostname)
     begin
-      parameters = Parameter.new(__FILE__)
-
-    rescue Exception => e
-      raise e.message
-
-    else
-      enginebot_host = parameters.enginebot_host
-      enginebot_port = parameters.enginebot_port
-
-      begin
-
-
-        response = RestClient.get "http://#{enginebot_host}:#{enginebot_port}/tasks/all",
-                                  :content_type => :json,
-                                  :accept => :json
-
+        parameters = Parameter.new(__FILE__)
 
       rescue Exception => e
-        # impossible de recuprer les task d'une policy
-        raise "not get policy tasks on enginebot calendar (#{enginebot_host}:#{enginebot_port}) :  #{e.message} "
+        raise e.message
 
       else
-        raise "not get policy tasks on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
-        response
+        saas_backlink_host = parameters.saas_backlink_host
+        saas_backlink_port = parameters.saas_backlink_port
+
+
+        begin
+          hostname = Addressable::URI.parse(hostname).hostname
+
+          #http://localhost:9252/?action=count&hostname=www.epilation-laser-definitive.info
+          response = RestClient.get "http://#{saas_backlink_host}:#{saas_backlink_port}/?action=count&hostname=#{hostname}",
+                                    :content_type => :json,
+                                    :accept => :json
+
+
+        rescue Exception => e
+          raise "not get count backlinks for hostname #{hostname} (#{saas_backlink_host}:#{saas_backlink_port}) :  #{e.message} "
+
+        else
+          raise "not get count backlinks for hostname #{hostname}  (#{saas_backlink_host}:#{saas_backlink_port}) : #{response}" if response.code != 200
+
+          JSON.parse(response)["count"]
+
+        end
       end
-    end
   end
 
 
@@ -73,6 +76,6 @@ module ExternUri
 
 
   module_function :count_keywords
-  module_function :count_referral
+  module_function :count_backlinks
 
 end

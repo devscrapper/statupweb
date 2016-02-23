@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-
+  mount DelayedJobWeb => "/delayed_job" if ["test", "production"].include?(Rails.env)
   resources :activity_servers
   resources :visits
   resources :objectives

@@ -1,7 +1,7 @@
 require_relative '../../lib/extern_uri'
 
 class KeywordsSaasJob < ActiveJob::Base
-  queue_as :default
+  queue_as :keywords
 
 
   rescue_from(Exception) do |exception|
