@@ -13,8 +13,10 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
-!/log/.keep
+#!/log/.keep
 /tmp
 /Gemfile.lock
-/.idea
+.idea
 /config/database.*
+/test
+.gitignore
