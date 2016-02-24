@@ -1,12 +1,9 @@
 development:
     :enginebot_host: "localhost"
-    :scraperbot_port: 9154
     :enginebot_port: 9104
 test:
     :enginebot_host: "192.168.1.85"
-    :scraperbot_port: 9154
     :enginebot_port: 9104
 production:
-    :enginebot_host: olgadays.synology.me
-    :scraperbot_port: 9154
+    :enginebot_host: "192.168.1.85"
     :enginebot_port: 9104
