@@ -50,7 +50,7 @@ class WebsitesController < ApplicationController
                       log
     respond_to do |format|
       if @website.save
-        format.html { redirect_to websites_url, notice: 'Website was successfully created.' }
+        format.html { redirect_to websites_url, notice: "Website #{@website.label} was successfully created." }
         format.json { render :show, status: :created, location: @website }
         KeywordsSaasJob.perform_later @website
         BacklinksSaasJob.perform_later @website
@@ -81,7 +81,7 @@ class WebsitesController < ApplicationController
 
     respond_to do |format|
       if @website.update(website_params)
-        format.html { redirect_to websites_url, notice: 'Website was successfully updated.' }
+        format.html { redirect_to websites_url, notice: "Website #{@website.label} was successfully updated." }
         format.json { render :show, status: :ok, location: @website }
         if check
           KeywordsSaasJob.perform_later(@website)

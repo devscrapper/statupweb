@@ -79,26 +79,35 @@
             </div>
           </div>
           <div class="form-group">
-            <%= f.label "How many keywords find website", class: "control-label  col-lg-3" %>
+            <%= f.label "Is that keywords have found the site", class: "control-label  col-lg-3" %>
             <div class="col-lg-3">
               <% if @website.count_organic == -1 %>
-                  <%= f.label "Never or failed checking", class: " control-label text-uppercase text-nowrap text-danger " %>    <br>
-                  <%= f.label "Will be checked tonight !", class: "small text-primary control-label" %>
-              <% else %>
-                  <%= f.text_field :count_organic, class: "col-lg-2", :disabled => true %>
+                  <%= f.label "Never or failed check-in", class: " control-label text-uppercase text-nowrap text-danger " %>    <br>
+                  <%= f.label "Check-in tonight !", class: "small text-primary control-label" %>
+                  <%= f.label "Or declare now", class: "small text-primary control-label" %>
+                  <%= f.check_box(:count_organic, {class: "control-label"}, 1, -1) %>
+                  <%= f.label "website has keywords", class: "small text-success control-label" %>
+              <% elsif @website.count_organic == 0%>
+                  <%= f.label "None", class: " control-label text-uppercase text-nowrap text-warning " %>
+                  <% else %>
+                  <%= f.label "Some", class: " control-label text-uppercase text-nowrap text-success " %>
               <% end %>
 
             </div>
           </div>
           <div class="form-group">
-            <%= f.label "How many referrals referrer website", class: "control-label  col-lg-3" %>
+            <%= f.label "Is that backlinks have found the site", class: "control-label  col-lg-3" %>
             <div class="col-lg-3">
               <% if @website.count_referral == -1 %>
-                  <%= f.label "Never or failed checking", class: " control-label text-uppercase text-nowrap text-danger " %>    <br>
-                  <%= f.label "Will be checked tonight !", class: "small text-primary control-label" %>
-              <% else %>
-                  <%= f.text_field :count_referral, class: "col-lg-2", :disabled => true %>
-
+                  <%= f.label "Never or failed check-in", class: " control-label text-uppercase text-nowrap text-danger " %>    <br>
+                  <%= f.label "Check-in tonight !", class: "small text-primary control-label" %>
+                  <%= f.label "Or declare now", class: "small text-primary control-label" %>
+                  <%= f.check_box(:count_referral, {class: "control-label"}, 1, -1) %>
+                  <%= f.label "website has backlinks", class: "small text-success control-label" %>
+              <% elsif @website.count_referral == 0%>
+                  <%= f.label "None", class: " control-label text-uppercase text-nowrap text-warning " %>
+                  <% else %>
+                  <%= f.label "Some", class: " control-label text-uppercase text-nowrap text-success " %>
               <% end %>
             </div>
           </div>
