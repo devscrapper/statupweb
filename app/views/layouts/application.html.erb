@@ -41,7 +41,9 @@
         <li><%= link_to "Websites", websites_path %></li>
         <li><%= link_to "Statistics", statistics_path %></li>
         <li><%= link_to "Activity Servers", activity_servers_path %></li>
-        <li><%= link_to "Activity Jobs", "/delayed_job/overview"%></li>
+        <li><%=if ["test", "production"].include?(Rails.env)
+                 link_to "Activity Jobs", "/delayed_job/overview"
+        end%></li>
       </ul>
     </div>
     <!--/.nav-collapse -->
