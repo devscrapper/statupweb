@@ -54,15 +54,16 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-upload-config'
   gem 'capistrano-rails-db'
+  gem 'capistrano3-delayed-job', '~> 1.0'
 end
 
 group :test, :production do
 # Use mysql as the database for Active Record
-#gem 'mysql2'
+
   gem 'delayed_job_active_record'
   gem 'delayed_job_web', '~> 1.2', '>= 1.2.10'
   gem 'daemons', '~> 1.2', '>= 1.2.3'
-  gem 'mysql2', '~> 0.3.18' #ette versionfoctionne avec rails 5 les autres non au 20 fev 2016
+  gem 'mysql2', '~> 0.3.18' #ette versionfoctionne avec rails 4 les autres non au 20 fev 2016
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
