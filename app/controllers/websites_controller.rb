@@ -1,4 +1,5 @@
 require_relative '../jobs/keywords_saas_job'
+require_relative '../jobs/backlinks_saas_job'
 class WebsitesController < ApplicationController
   before_action :set_website, only: [:show, :edit, :update, :destroy]
 
@@ -84,7 +85,7 @@ class WebsitesController < ApplicationController
         format.json { render :show, status: :ok, location: @website }
         if check
           KeywordsSaasJob.perform_later(@website)
-          BacklinksSaasJob.perform_later @website
+          BacklinksSaasJob.perform_later(@website)
         end
       else
         format.html { render :edit }
