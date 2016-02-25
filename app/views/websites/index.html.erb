@@ -17,6 +17,8 @@
           <th class="text-center">Count page</th>
           <th class="text-center">Schemes accepted</th>
           <th class="text-center">Strategy scraping</th>
+          <th class="text-center">Keywords referrer</th>
+          <th class="text-center">Backlinks referrer</th>
           <th colspan="2"></th>
         </tr>
         </thead>
@@ -30,6 +32,8 @@
               <td class="text-center vert-align"><%= website.count_page == 0 ? "All" : website.count_page %></td>
               <td class="text-center vert-align"><%= website.schemes.join(" and ") %></td>
               <td class="text-center vert-align"><%= website.types.join(" and ") %></td>
+              <td class="text-center vert-align"><%= website.count_organic == -1 ? "uncheck" : website.count_organic > 0 %></td>
+              <td class="text-center vert-align"><%= website.count_referral == -1 ? "uncheck" : website.count_referral > 0 %></td>
               <td class="text-center vert-align"><%= link_to 'Edit', edit_website_path(website), class: "btn btn-sm btn-default" %></td>
               <td class="text-center vert-align"><%= link_to 'Destroy', website, method: :delete,class: "btn btn-sm btn-danger", data: {confirm: 'Are you sure?'} %></td>
             </tr>

@@ -64,9 +64,37 @@ module Publication
     end
   end
 
+  def host
+    begin
+      parameters = Parameter.new(__FILE__)
+
+    rescue Exception => e
+      raise e.message
+
+    else
+      parameters.enginebot_host
+    end
+  end
+
+  def port
+    begin
+      parameters = Parameter.new(__FILE__)
+
+    rescue Exception => e
+      raise e.message
+
+    else
+
+      parameters.enginebot_port
+
+    end
+  end
+
   private
 
 
   module_function :publish
   module_function :delete
+  module_function :host
+  module_function :port
 end

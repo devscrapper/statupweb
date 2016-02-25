@@ -52,11 +52,13 @@ class TrafficsController < ApplicationController
   end
 
   def publish
-    @traffic = Traffic.find(params[:id])
+
 
     respond_to do |format|
       begin
+        @traffic = Traffic.find(params[:id])
 
+        raise "monday start is older" if @traffic.monday_start < Date.today
         Publication::publish(@traffic.to_hash)
 
       rescue Exception => e
