@@ -55,6 +55,7 @@ group :development do
   gem 'capistrano-upload-config'
   gem 'capistrano-rails-db'
   gem 'capistrano3-delayed-job', '~> 1.0'
+  #gem 'capistrano-github', '~> 0.1.1'
 end
 
 group :test, :production do

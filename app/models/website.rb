@@ -1,6 +1,7 @@
 require 'addressable/uri'
 
 class Website < ActiveRecord::Base
+  include Addressable
   serialize :schemes, Array
   serialize :types, Array
   serialize :advertisers, Array
@@ -13,7 +14,10 @@ end
 
 def check_url
   begin
-   Addressable::Uri.parse(url_root)
+   uri = URI.parse(url_root)
+   raise if uri.scheme.nil? or
+              uri.hostname.nil? or
+              uri.path.empty?
   rescue
     errors.add(:url_root, " : <#{url_root}> is malformmed")
   else
