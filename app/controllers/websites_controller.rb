@@ -47,7 +47,7 @@ class WebsitesController < ApplicationController
         params[:website][:count_page] = 0
       when "some"
     end
-                      log
+
     respond_to do |format|
       if @website.save
         format.html { redirect_to websites_url, notice: "Website #{@website.label} was successfully created." }
