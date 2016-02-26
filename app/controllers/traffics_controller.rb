@@ -48,7 +48,7 @@ class TrafficsController < ApplicationController
       ok = ok && @statistic.save
     end
 
-    render_after_create_or_update(ok, "Traffic was successfully created.")
+    render_after_create_or_update(ok, "Traffic n°#{@traffic.id} was successfully created.")
   end
 
   def publish
@@ -116,7 +116,7 @@ class TrafficsController < ApplicationController
 
 
     end
-    render_after_create_or_update(ok, "Traffic was successfully update.")
+    render_after_create_or_update(ok, "Traffic n°#{@traffic.id} was successfully update.")
   end
 
 
