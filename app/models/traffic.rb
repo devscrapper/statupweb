@@ -13,7 +13,7 @@ class Traffic < ActiveRecord::Base
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
   validates :change_count_visits_percent, :numericality => {:only_integer => true, :other_than => 0, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
   validates :change_bounce_visits_percent, :numericality => {:only_integer => true, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
-  validates :direct_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 100}
+  validates :direct_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
   validates :organic_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
   validates :referral_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
   validates :advertising_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 10}
