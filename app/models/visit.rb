@@ -9,7 +9,7 @@ class Visit < ActiveRecord::Base
   validates :durations, :presence => true
   validates :referrer, :presence => true
   validates :advert, :presence => true
-  validates :state, :presence => true, inclusion: {in: %w(created scheduled started success fail), message: "%{value} is not a valid state"}
+  validates :state, :presence => true, inclusion: {in: %w(created scheduled outoftime started success fail), message: "%{value} is not a valid state"}
 
 end
 

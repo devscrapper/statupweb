@@ -26,7 +26,7 @@ class VisitsController < ApplicationController
 
     respond_to do |format|
       if @visit.update_attribute(:state, visit_params[:state])
-        format.json { render json: @visit, status: :updated }
+        format.json { render json: @visit, status: :created }
       else
 
         format.json { render json: @visit.errors, status: :unprocessable_entity }

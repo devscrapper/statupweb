@@ -18,5 +18,8 @@
 /Gemfile.lock
 .idea
 /config/database.*
+/config/deploy/*
+/config/extern_uri.*
+/config/publication.*
 /test
 .gitignore
