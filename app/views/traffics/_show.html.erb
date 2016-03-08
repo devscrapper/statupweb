@@ -150,7 +150,7 @@
                           </div>
                           <div id="tasks_<%=date%>" class="panel-collapse collapse">
                             <div class="panel-body">
-                              <%= render partial: 'tasks/index', :locals => {:tasks => traffic.tasks.where("date(time)==?", date)} %>
+                              <%= render partial: 'tasks/index', :locals => {:tasks => traffic.tasks.where("date(time) = ?", date)} %>
                             </div>
                           </div>
                         </div>
