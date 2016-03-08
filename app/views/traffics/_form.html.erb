@@ -2,6 +2,7 @@
 <%= javascript_include_tag 'bootstrap-datetimepicker.js' %> <!-- utiliser pour afficher le calendrier -->
 <script type="text/javascript">
 
+
     function refresh_traffic_source() {
         $.ajax({
             url: "/websites/" + website_selected.selectedIndex,
@@ -108,11 +109,9 @@
 
                       $(function () {
                           $('#datetimepicker1').datetimepicker({
-
+                              disabledHours: true,
                               minDate: <%= Date.today + @traffic.max_duration_scraping%>,
-                              format: 'DD/MM/YYYY',
-                              daysOfWeekDisabled: [0, 2, 3, 4, 5, 6],
-                              inline: false
+                              daysOfWeekDisabled: [0, 2, 3, 4, 5, 6]
                           });
                       });
                   </script>

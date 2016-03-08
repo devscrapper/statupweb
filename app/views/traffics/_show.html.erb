@@ -14,6 +14,7 @@
                 <% end %>
                 <li><a data-toggle="tab" href="#behaviour-traffic<%= traffic.id %>">Behaviour</a></li>
                 <% if ["published"].include?(traffic.state) %>
+
                     <% tasks = traffic.tasks %>
                     <li>
                       <a data-toggle="tab" href="#tasks-traffic<%= traffic.id %>">Tasks<span class="badge"> <%= tasks.size %></span></a>
@@ -22,7 +23,7 @@
                     <li>
                       <a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Ojectives<span class="badge"> <%= objectives.size %></span></a>
                     </li>
-                    <% visits = traffic.visits %>
+                    <% visits = traffic.visits.order(start_time: :desc) %>
                     <li>
                       <a data-toggle="tab" href="#visits-traffic<%= traffic.id %>">Visits<span class="badge"> <%= visits.size %></span></a>
                     </li>
@@ -135,9 +136,30 @@
                   </p>
                 </div>
                 <% if ["published"].include?(traffic.state) %>
-                    <div id="tasks-traffic<%= traffic.id %>" class="tab-pane fade">
-                      <p><%= render partial: 'tasks/index', :locals => {:tasks => tasks} %></p>
+                   <div id="tasks-traffic<%= traffic.id %>" class="tab-pane fade">
+
+                         <% tasks = traffic.tasks.group("date(time)").order(time: :desc).size%>
+
+                    <div class="panel-group" id="accordion">
+                      <% tasks.each { |date, count_tasks| %>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+
+                              <a data-toggle="collapse" data-parent="#accordion" href="#tasks_<%=date%>"><%=date%></a>
+
+                          </div>
+                          <div id="tasks_<%=date%>" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <%= render partial: 'tasks/index', :locals => {:tasks => traffic.tasks.where("date(time)==?", date)} %>
+                            </div>
+                          </div>
+                        </div>
+                      <% } %>
+                      </div>
+
+
                     </div>
+
                     <div id="objectives-traffic<%= traffic.id %>" class="tab-pane fade">
                       <p><%= render partial: 'objectives/index', :locals => {:objectives => objectives} %></p>
                     </div>

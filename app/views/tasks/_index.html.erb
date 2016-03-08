@@ -27,7 +27,7 @@
                 <td class="text-left vert-align"><%= task.label %></td>
                 <td class="text-center vert-align"><span class="<%= color_class %>"><%= task.state %></span></td>
 
-                <td class="text-center vert-align"><%= task.time %></td>
+                <td class="text-center vert-align"><%= task.time.hour %>:<%= task.time.min %></td>
 
               </tr>
           <% end %>
