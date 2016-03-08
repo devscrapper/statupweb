@@ -145,10 +145,10 @@
                         <div class="panel panel-default">
                           <div class="panel-heading">
 
-                              <a data-toggle="collapse" data-parent="#accordion" href="#tasks_<%=date%>"><%=date%></a>
+                              <a data-toggle="collapse" data-parent="#accordion" href="#tasks-traffic<%= traffic.id %>-<%=date%>"><%=date%></a>
 
                           </div>
-                          <div id="tasks_<%=date%>" class="panel-collapse collapse">
+                          <div id="tasks-traffic<%= traffic.id %>-<%=date%>" class="panel-collapse collapse">
                             <div class="panel-body">
                               <%= render partial: 'tasks/index', :locals => {:tasks => traffic.tasks.where("date(time) = ?", date)} %>
                             </div>
