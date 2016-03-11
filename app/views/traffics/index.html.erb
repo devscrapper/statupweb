@@ -40,8 +40,8 @@
 
               </td>
               <td class="text-left vert-align">
-                <a href="#" data-toggle="tooltip" data-placement="right" title="<%= traffic.website.url_root %>"><%= traffic.website.label %></a>
-              </td>
+                <a data-toggle="collapse" class="" href="#panel-show<%= traffic.id %>" ><%= traffic.website.label %></a>
+                   </td>
               <td class="text-center vert-align"><%= traffic.monday_start %></td>
               <td class="text-center vert-align"><%= traffic.monday_start + traffic.count_weeks * 7 -1 %></td>
               <td class="text-center vert-align"><%= traffic.change_count_visits_percent %></td>
@@ -55,9 +55,7 @@
                     <%= traffic.statistic_type %>
                 <% end %>
               </td>
-              <td  class="text-center vert-align">
-                <a data-toggle="collapse" class="btn btn-sm btn-default" href="#panel-show<%= traffic.id %>">Show</a>
-              </td>
+
               <td class="text-center vert-align">
                 <%= case traffic.state
                       when "created"
