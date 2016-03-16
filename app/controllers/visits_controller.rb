@@ -9,11 +9,12 @@ class VisitsController < ApplicationController
     @visit = Visit.new(visit_params)
 
     @visit.policy_type.capitalize!
+
     respond_to do |format|
       if @visit.save
         format.json { render json: @visit, status: :created }
-      else
 
+      else
         format.json { render json: @visit.errors, status: :unprocessable_entity }
 
       end
@@ -25,7 +26,7 @@ class VisitsController < ApplicationController
 
 
     respond_to do |format|
-      if !@visit.nil?
+      if @visit.nil?
         format.json { render json: @visit, status: :not_found }
 
       elsif  @visit.update_attribute(:state, visit_params[:state])

@@ -124,16 +124,24 @@ ActiveRecord::Schema.define(version: 20160223093226) do
   end
 
   create_table "tasks", force: :cascade do |t|
-    t.string   "label",       null: false
+    t.string   "label",         null: false
     t.integer  "policy_id"
     t.string   "policy_type"
-    t.datetime "time",        null: false
-    t.string   "state",       null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "time",          null: false
+    t.string   "state",         null: false
+    t.date     "building_date", null: false
+    t.datetime "date"
+    t.datetime "finish_time"
+    t.string   "task_id",       null: false
+    t.string   "string"
+    t.string   "error_label"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   add_index "tasks", ["policy_type", "policy_id"], name: "index_tasks_on_policy_type_and_policy_id"
+  add_index "tasks", ["string"], name: "index_tasks_on_string"
+  add_index "tasks", ["task_id"], name: "index_tasks_on_task_id"
 
   create_table "traffics", force: :cascade do |t|
     t.integer  "website_id",                                        null: false
