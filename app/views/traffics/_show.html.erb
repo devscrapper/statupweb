@@ -1,9 +1,7 @@
 <div class="container-fluid">
   <div class="row">
-
     <div class="col-lg-12">
       <div class="panel panel-default">
-
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-12">
@@ -14,14 +12,13 @@
                 <% end %>
                 <li><a data-toggle="tab" href="#behaviour-traffic<%= traffic.id %>">Behaviour</a></li>
                 <% if ["published"].include?(traffic.state) %>
-
                     <% tasks = traffic.tasks %>
                     <li>
                       <a data-toggle="tab" href="#tasks-traffic<%= traffic.id %>">Tasks<span class="badge"> <%= tasks.size %></span></a>
                     </li>
                     <% objectives = traffic.objectives %>
                     <li>
-                      <a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Ojectives<span class="badge"> <%= objectives.size %></span></a>
+                      <a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Objectives<span class="badge"> <%= objectives.size %></span></a>
                     </li>
                     <% visits = traffic.visits.order(start_time: :desc) %>
                     <li>
@@ -31,38 +28,28 @@
               </ul>
               <div class="tab-content">
                 <div id="website-traffic<%= traffic.id %>" class="tab-pane fade in active">
-
-
                   <p><%= render partial: 'websites/show', :locals => {:website => traffic.website} %></p>
                 </div>
                 <% if traffic.statistic_type == "custom" %>
                     <div id="statistics-traffic<%= traffic.id %>" class="tab-pane fade">
-
-
                       <p><%= render partial: 'statistics/show', :locals => {:statistic => traffic.custom_statistic.statistic} %></p>
                     </div>
                 <% end %>
                 <div id="behaviour-traffic<%= traffic.id %>" class="tab-pane fade">
                   <p>
-
                   <div class="col-lg-3">
                     <div class="panel panel-default">
                       <div class="panel-heading">Organic search</div>
                       <div class="panel-body">
-
                         <p>
                           <strong>Min count page :</strong><%= traffic.min_count_page_organic %></p>
-
                         <p>
                           <strong>Max count page :</strong><%= traffic.max_count_page_organic %></p>
-
                         <p>
                           <strong>Min duration page :</strong><%= traffic.min_duration_page_organic %></p>
-
                         <p>
                           <strong>Max duration page :</strong><%= traffic.max_duration_page_organic %>
                         </p>
-
                       </div>
                     </div>
                   </div>
@@ -136,25 +123,25 @@
                   </p>
                 </div>
                 <% if ["published"].include?(traffic.state) %>
-                   <div id="tasks-traffic<%= traffic.id %>" class="tab-pane fade">
+                    <div id="tasks-traffic<%= traffic.id %>" class="tab-pane fade">
 
-                         <% tasks = traffic.tasks.group("date(time)").order(time: :desc).size%>
+                      <% tasks = traffic.tasks.group("date(time)").order(time: :desc).size %>
 
-                    <div class="panel-group" id="accordion">
-                      <% tasks.each { |date, count_tasks| %>
-                        <div class="panel panel-default">
-                          <div class="panel-heading">
+                      <div class="panel-group" id="accordion">
+                        <% tasks.each { |date, count_tasks| %>
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
 
-                              <a data-toggle="collapse" data-parent="#accordion" href="#tasks-traffic<%= traffic.id %>-<%=date%>"><%=date%></a>
+                                <a data-toggle="collapse" data-parent="#accordion" href="#tasks-traffic<%= traffic.id %>-<%= date %>"><%= date %></a>
 
-                          </div>
-                          <div id="tasks-traffic<%= traffic.id %>-<%=date%>" class="panel-collapse collapse">
-                            <div class="panel-body">
-                              <%= render partial: 'tasks/index', :locals => {:tasks => traffic.tasks.where("date(time) = ?", date)} %>
+                              </div>
+                              <div id="tasks-traffic<%= traffic.id %>-<%= date %>" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                  <%= render partial: 'tasks/index', :locals => {:tasks => traffic.tasks.where("date(time) = ?", date)} %>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      <% } %>
+                        <% } %>
                       </div>
 
 

@@ -5,7 +5,34 @@ require 'json'
 
 module Publication
 
+  def start(task_label, event_id)
+     begin
+       parameters = Parameter.new(__FILE__)
 
+     rescue Exception => e
+       raise e.message
+
+     else
+       enginebot_host = parameters.enginebot_host
+       enginebot_port = parameters.enginebot_port
+
+       begin
+
+         response = RestClient.get "http://#{enginebot_host}:#{enginebot_port}/tasks/execute/?id=#{event_id}",
+                                    :content_type => :json,
+                                    :accept => :json
+
+
+       rescue Exception => e
+         # impossible de demander le demarrage la tache vers engine bot
+         raise e.message
+
+       else
+         raise "not start task #{task_label} #{event_id} on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
+         response
+       end
+     end
+   end
   def publish(policy)
     begin
       parameters = Parameter.new(__FILE__)
@@ -27,7 +54,7 @@ module Publication
 
       rescue Exception => e
         # impossible de publier la policy vers engine bot
-        raise "#{e.message} : #{e.response}"
+        raise e.message
 
       else
         raise "not save policy on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
@@ -55,7 +82,7 @@ module Publication
 
       rescue Exception => e
         # impossible de publier la policy vers engine bot
-        raise "not delete policy on enginebot calendar (#{enginebot_host}:#{enginebot_port}) :  #{e.message}"
+        raise e.message
 
       else
         raise "not delete policy on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
@@ -97,4 +124,5 @@ module Publication
   module_function :delete
   module_function :host
   module_function :port
+  module_function :start
 end

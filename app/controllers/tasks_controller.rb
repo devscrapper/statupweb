@@ -1,3 +1,4 @@
+require_relative '../../lib/publication'
 class TasksController < ApplicationController
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
@@ -6,8 +7,9 @@ class TasksController < ApplicationController
   # POST /tasks
   # POST /tasks.json
   def create
-    #TODO pour eviter les doublon lors des relance manuelles par exemple à partir du calendar, prevoir de controler que
-    #TODO la tache est absente pour la creer et sinon de la maj ou de la supprimer.
+    @task = Task.find_by_task_id(params[:task_id])
+    @task.destroy if !@task.nil?
+
     @task = Task.new(task_params)
 
     @task.policy_type.capitalize!
@@ -18,6 +20,30 @@ class TasksController < ApplicationController
 
       else
         format.json { render json: @task.errors, status: :unprocessable_entity }
+
+      end
+    end
+  end
+
+  def start
+    respond_to do |format|
+      begin
+        @task = Task.find(params[:id])
+
+        Publication::start(@task.label, @task.task_id)
+
+      rescue Exception => e
+
+        format.html { redirect_to traffics_path, notice: "Task #{@task.label} was not started : #{e.message}" }
+
+      else
+
+        ok = @task.update_attributes({:state => "restarting",
+                                      :time => Time.now,
+                                      :finish_time => "",
+                                      :error_label => ""})
+
+        format.html { redirect_to traffics_path, notice: "Task #{@task.label} was started by enginebot." }
 
       end
     end

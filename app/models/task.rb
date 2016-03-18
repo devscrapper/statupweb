@@ -4,7 +4,7 @@ class Task < ActiveRecord::Base
   validates :policy_id, :presence => true
   validates :policy_type, :presence => true, inclusion: {in: %w(Traffic Rank), message: "%{value} is not a valid policy type"}
   validates :label, :presence => true
-  validates :state, :presence => true, inclusion: {in: %w(over start init fail), message: "%{value} is not a valid state"}
+  validates :state, :presence => true, inclusion: {in: %w(over start init fail restarting), message: "%{value} is not a valid state"}
   validates :time, :presence => true
   validates :building_date, :presence => true
   validates :task_id, :presence => true

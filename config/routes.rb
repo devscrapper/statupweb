@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :tasks
   match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic
   match '/traffics/:id/unpublish', to: 'traffics#unpublish', via: [:patch], as: :unpublish_traffic
+  match '/tasks/:id/start', to: 'tasks#start', via: [:patch], as: :start_task
 
   #match '/traffics/destroy_all', to:'traffics#destroy_all', via: [:delete], as: :destroy_all_traffic
   resources :ranks do

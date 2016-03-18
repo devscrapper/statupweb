@@ -24,7 +24,6 @@ class VisitsController < ApplicationController
   def update
     @visit = Visit.find_by_id_visit(params[:id])
 
-
     respond_to do |format|
       if @visit.nil?
         format.json { render json: @visit, status: :not_found }
