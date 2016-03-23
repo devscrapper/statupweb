@@ -1,8 +1,8 @@
-<p id="notice"><%= notice %></p>
-
-
 <div class="panel panel-default">
-  <div class="panel-heading"><h3>Listing Traffics<span class="badge"><%= Traffic.count %></span></h3></div>
+  <div class="panel-heading">
+    <h3>Listing Traffics<span class="badge"><%= Traffic.count %></span></h3>
+  </div>
+
   <div class="panel-body">
     <%= link_to 'New Traffic', new_traffic_path, class: 'btn btn-sm btn-default' %>
     <%= link_to 'Delete all Traffics', destroy_all_traffics_path, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
@@ -40,13 +40,14 @@
 
               </td>
               <td class="text-left vert-align">
-                <a data-toggle="collapse" class="" href="#panel-show<%= traffic.id %>" ><%= traffic.website.label %></a>
-                   </td>
+                <a data-toggle="collapse" class="" href="#panel-show<%= traffic.id %>"><%= traffic.website.label %></a>
+              </td>
               <td class="text-center vert-align"><%= traffic.monday_start %></td>
               <td class="text-center vert-align"><%= traffic.monday_start + traffic.count_weeks * 7 -1 %></td>
               <td class="text-center vert-align"><%= traffic.change_count_visits_percent %></td>
               <td class="text-center vert-align"><%= traffic.change_bounce_visits_percent %></td>
-              <td class="text-center vert-align"><%= traffic.direct_medium_percent %>/<%= traffic.organic_medium_percent %>/<%= traffic.referral_medium_percent %></td>
+              <td class="text-center vert-align"><%= traffic.direct_medium_percent %>
+                /<%= traffic.organic_medium_percent %>/<%= traffic.referral_medium_percent %></td>
               <td class="text-center vert-align"><%= traffic.advertising_percent %></td>
               <td class="text-center vert-align">
                 <% if traffic.statistic_type == "custom" %>

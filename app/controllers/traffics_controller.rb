@@ -63,7 +63,7 @@ class TrafficsController < ApplicationController
 
       rescue Exception => e
 
-        format.html { redirect_to traffics_path, notice: "Traffic n°#{params[:id]} was not published : #{e.message}" }
+        format.html { redirect_to traffics_path, alert: "Traffic n°#{params[:id]} was not published : #{e.message}" }
 
       else
         @traffic.update_attribute(:state, :published)
@@ -184,7 +184,7 @@ def render_after_create_or_update(ok, notice)
           Publication::publish(@traffic.to_hash)
 
         rescue Exception => e
-          format.html { redirect_to traffics_path, notice: "Traffic was not published : #{e.message}" }
+          format.html { redirect_to traffics_path, alert: "Traffic was not published : #{e.message}" }
 
         else
           @traffic.update_attribute(:state, :published)

@@ -4,6 +4,8 @@
   <title>Statupweb</title>
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag "http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" %>
+
 
   <%= csrf_meta_tags %>
   <style>
@@ -40,11 +42,11 @@
         <li><%= link_to "Ranks", ranks_path %></li>
         <li><%= link_to "Websites", websites_path %></li>
         <li><%= link_to "Statistics", statistics_path %></li>
-        <li><%= link_to "Calendar", "http://#{Publication::host}:#{Publication::port}/tasks/all" , {:target => '_blank'}%></li>
+        <li><%= link_to "Calendar", "http://#{Publication::host}:#{Publication::port}/tasks/all", {:target => '_blank'} %></li>
         <li><%= link_to "Activity Servers", activity_servers_path %></li>
-        <li><%=if ["test", "production"].include?(Rails.env)
-                 link_to "Activity Jobs", "/delayed_job/overview"
-        end%></li>
+        <li><%= if ["test", "production"].include?(Rails.env)
+                  link_to "Activity Jobs", "/delayed_job/overview"
+                end %></li>
       </ul>
     </div>
     <!--/.nav-collapse -->
@@ -52,6 +54,10 @@
 </nav>
 
 <div id="main-container" class="container-fluid">
+  <% if flash[:notice] %> <%= flash[:notice] %>
+  <% end %>
+  <% if flash[:alert] %> <%= flash[:alert] %>
+  <% end %>
   <%= yield %>
 </div>
 

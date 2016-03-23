@@ -1,0 +1,50 @@
+<script>
+$( document ).ready(function() {
+
+  // hide spinner
+  $(".fa").hide();
+
+
+  // show spinner on AJAX start
+  $(document).ajaxStart(function(){
+    $(".fa").show();
+  });
+
+  // hide spinner on AJAX stop
+  $(document).ajaxStop(function(){
+    $(".fa").hide();
+  });
+
+});
+</script>
+
+
+
+<div class="row">
+  <div class="col-lg-6">
+    <label>shortcuts : </label>
+    <%= link_to prev_day_calendar_path({:current_date => current_date,
+                                        :policy_type => policy_type,
+                                        :policy_id => policy_id}), remote: true do %>
+        <button class="btn btn-sm btn-default">Yesterday</button>
+    <% end %>
+    <%= link_to today_calendar_path({:current_date => current_date,
+                                     :policy_type => policy_type,
+                                     :policy_id => policy_id}), remote: true do %>
+        <button class="btn btn-sm btn-default">Today</button>
+    <% end %>
+
+    <%= link_to next_day_calendar_path({:current_date => current_date,
+                                        :policy_type => policy_type,
+                                        :policy_id => policy_id}), remote: true do %>
+        <button class="btn btn-sm btn-default">Tomorrow</button>
+    <% end %>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-lg-6">
+    <div id="tasks" style="display: none">
+    </div>
+  </div>
+</div>

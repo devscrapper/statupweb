@@ -1,0 +1,90 @@
+<div class="table-responsive" xmlns="http://www.w3.org/1999/html">
+  <table class="table table-hover table-bordered">
+    <thead class="header-table">
+    <tr>
+      <th class="text-center" colspan="3">
+        <% if !@tasks.nil? and !@tasks.empty?
+             count_tasks = @tasks.size
+           else
+             count_tasks = 0
+           end
+        %>
+        Planed tasks<span class="badge"><%= count_tasks %></span> on
+        <%= label_tag :current_date, current_date %>
+        <i class="fa fa-spinner fa-spin" style="font-size:15px"></i>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left col-lg-1">state</th>
+      <th class="text-left col-lg-2">Label</th>
+      <th class="text-left col-lg-2">pre task</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if !@tasks.nil? and !@tasks.empty? %>
+        <% tasks.each do |task| %>
+            <tr>
+              <% case task.state
+                   when "start"
+                     color_class="label label-primary btn-xs"
+                   when "over"
+                     color_class="label label-success btn-xs"
+                   when "fail"
+                     color_class="label label-danger btn-xs"
+                   else
+                     color_class="label label-default btn-xs"
+                 end %>
+
+
+              <td class="text-left vert-align">
+                <span class="<%= color_class %>"><%= task.state %></span>
+                <%= if task.pre_tasks.empty?
+                      link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
+                            execute_calendar_path({:task_id => task.id,
+                                                   :label_id => task.label,
+                                                   :current_date => current_date,
+                                                   :policy_id => policy_id,
+                                                   :policy_type => policy_type}),
+                            remote: true,
+                            data: {confirm: 'Are you sure?'}
+                end %>
+              </td>
+              <td class="text-left vert-align"><%= task.label %></td>
+              <td align="justify" class="text-left vert-align col-lg-2"><%= task.pre_tasks.join(" ") %></td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="3">none task</td>
+        </tr>
+    <% end %>
+    </tbody>
+    <footer>
+      <tr>
+        <th class="text-center" colspan="3">
+          <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-backward"),
+                      prev_day_calendar_path({:current_date => current_date,
+                                              :policy_id => policy_id,
+                                              :policy_type => policy_type}),
+                      remote: true %>
+
+          <%= label_tag :current_date, current_date %>
+
+          <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-forward"),
+                      next_day_calendar_path({:current_date => current_date,
+                                              :policy_id => policy_id,
+                                              :policy_type => policy_type}),
+                      remote: true %>
+        </th>
+      </tr>
+      <tr>
+        <th class="text-left" colspan="3">
+         <div id="notice" ></div>
+         <div id="alert" ></div>
+        </th>
+      </tr>
+    </footer>
+
+  </table>
+</div>
+
