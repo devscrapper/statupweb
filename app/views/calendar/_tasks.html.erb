@@ -38,7 +38,7 @@
 
               <td class="text-left vert-align">
                 <span class="<%= color_class %>"><%= task.state %></span>
-                <%= if task.pre_tasks.empty?
+                <%= if task.pre_tasks.empty? and task.execution_mode == "manual"
                       link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
                             execute_calendar_path({:task_id => task.id,
                                                    :label_id => task.label,

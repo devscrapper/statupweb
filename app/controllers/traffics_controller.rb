@@ -166,7 +166,41 @@ class TrafficsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def traffic_params
-    params.require(:traffic).permit(:statistic_selected, :count_visits_per_day, :hourly_daily_distribution, :percent_new_visit, :visit_bounce_rate, :avg_time_on_site, :statistic_type, :page_views_per_visit, :website_id, :statistic_id, :monday_start, :count_weeks, :change_count_visits_percent, :change_bounce_visits_percent, :direct_medium_percent, :organic_medium_percent, :referral_medium_percent, :advertising_percent, :advertisers, :max_duration_scraping, :min_count_page_advertiser, :max_count_page_advertiser, :min_duration_page_advertiser, :max_duration_page_advertiser, :percent_local_page_advertiser, :duration_referral, :min_count_page_organic, :max_count_page_organic, :min_duration_page_organic, :max_duration_page_organic, :min_duration, :max_duration, :min_duration_website, :min_pages_website)
+    params.require(:traffic).permit(:statistic_selected,
+                                    :count_visits_per_day,
+                                    :hourly_daily_distribution,
+                                    :percent_new_visit,
+                                    :visit_bounce_rate,
+                                    :avg_time_on_site,
+                                    :statistic_type,
+                                    :page_views_per_visit,
+                                    :website_id,
+                                    :statistic_id,
+                                    :monday_start,
+                                    :count_weeks,
+                                    :change_count_visits_percent,
+                                    :change_bounce_visits_percent,
+                                    :direct_medium_percent,
+                                    :organic_medium_percent,
+                                    :referral_medium_percent,
+                                    :advertising_percent,
+                                    :advertisers,
+                                    :max_duration_scraping,
+                                    :min_count_page_advertiser,
+                                    :max_count_page_advertiser,
+                                    :min_duration_page_advertiser,
+                                    :max_duration_page_advertiser,
+                                    :percent_local_page_advertiser,
+                                    :duration_referral,
+                                    :min_count_page_organic,
+                                    :max_count_page_organic,
+                                    :min_duration_page_organic,
+                                    :max_duration_page_organic,
+                                    :min_duration,
+                                    :max_duration,
+                                    :min_duration_website,
+                                    :min_pages_website,
+                                    :execution_mode)
   end
 
 end

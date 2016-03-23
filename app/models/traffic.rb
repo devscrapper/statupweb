@@ -32,6 +32,7 @@ class Traffic < ActiveRecord::Base
   validates :max_duration, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 30}
   validates :min_duration_website, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
   validates :min_pages_website, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 2}
+  validates :execution_mode, :presence => true, inclusion: {in: %w(auto manual), message: "%{value} is not a valid mode"}
 
   validate :monday_start_cannot_be_in_the_past_and_must_be_on_monday,
            :sum_of_medium_percent_must_equal_to_100,
@@ -151,7 +152,8 @@ class Traffic < ActiveRecord::Base
               :min_duration => min_duration,
               :max_duration => max_duration,
               :min_duration_website => min_duration_website,
-              :min_pages_website => min_pages_website
+              :min_pages_website => min_pages_website,
+              :execution_mode => execution_mode
     }
     case statistic_type
       when "default"

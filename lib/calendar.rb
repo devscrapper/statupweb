@@ -9,13 +9,15 @@ module Calendar
     attr_reader :id,
                 :label,
                 :state,
-                :pre_tasks
+                :pre_tasks,
+                :execution_mode
 
     def initialize(task)
       @id = task['id']
       @label = task['label']
       @state = task['state']
       @pre_tasks = task['pre_tasks']
+      @execution_mode = task['execution_mode']
     end
   end
 

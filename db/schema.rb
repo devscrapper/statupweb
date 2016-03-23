@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223093226) do
+ActiveRecord::Schema.define(version: 20160323153834) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(version: 20160223093226) do
     t.string   "state",                         default: "created", null: false
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
+    t.string   "execution_mode",                default: "auto",    null: false
   end
 
   add_index "traffics", ["website_id"], name: "index_traffics_on_website_id"

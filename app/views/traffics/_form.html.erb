@@ -272,6 +272,21 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-lg-2">
+              <div class="panel panel-default">
+                <div class="panel-heading">Execution mode</div>
+                <div class="panel-body">
+                  <p>
+                    <%= label_tag "Auto" %>
+                    <%= f.radio_button :execution_mode, "auto", :checked => true %>
+                    <%= label_tag "Manual" %>
+                    <%= f.radio_button :execution_mode, "manual" %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-lg-12">
               <p class="text-primary">
                 Would you Publish your Traffic Policy
