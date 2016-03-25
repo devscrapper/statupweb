@@ -2,7 +2,7 @@
   <table class="table table-hover table-bordered">
     <thead class="header-table">
     <tr>
-      <th class="text-center" colspan="3">
+      <th class="text-center" colspan="4">
         <% if !@tasks.nil? and !@tasks.empty?
              count_tasks = @tasks.size
            else
@@ -15,9 +15,10 @@
       </th>
     </tr>
     <tr>
-      <th class="text-left col-lg-1">state</th>
+      <th class="text-center col-lg-1">State</th>
+      <th class="text-center col-lg-1">Execute</th>
       <th class="text-left col-lg-2">Label</th>
-      <th class="text-left col-lg-2">pre task</th>
+      <th class="text-left col-lg-2">Pre tasks</th>
     </tr>
     </thead>
     <tbody>
@@ -36,18 +37,21 @@
                  end %>
 
 
-              <td class="text-left vert-align">
+              <td class="text-center vert-align">
                 <span class="<%= color_class %>"><%= task.state %></span>
+
+              </td>
+              <td class="text-center vert-align">
                 <%= if task.pre_tasks.empty? and task.execution_mode == "manual"
-                      link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
-                            execute_calendar_path({:task_id => task.id,
-                                                   :label_id => task.label,
-                                                   :current_date => current_date,
-                                                   :policy_id => policy_id,
-                                                   :policy_type => policy_type}),
-                            remote: true,
-                            data: {confirm: 'Are you sure?'}
-                end %>
+                                      link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
+                                            execute_calendar_path({:task_id => task.id,
+                                                                   :label_id => task.label,
+                                                                   :current_date => current_date,
+                                                                   :policy_id => policy_id,
+                                                                   :policy_type => policy_type}),
+                                            remote: true,
+                                            data: {confirm: 'Are you sure?'}
+                                end %>
               </td>
               <td class="text-left vert-align"><%= task.label %></td>
               <td align="justify" class="text-left vert-align col-lg-2"><%= task.pre_tasks.join(" ") %></td>
@@ -55,13 +59,13 @@
         <% end %>
     <% else %>
         <tr>
-          <td colspan="3">none task</td>
+          <td colspan="4">none task</td>
         </tr>
     <% end %>
     </tbody>
     <footer>
       <tr>
-        <th class="text-center" colspan="3">
+        <th class="text-center" colspan="4">
           <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-backward"),
                       prev_day_calendar_path({:current_date => current_date,
                                               :policy_id => policy_id,
@@ -78,7 +82,7 @@
         </th>
       </tr>
       <tr>
-        <th class="text-left" colspan="3">
+        <th class="text-left" colspan="4">
          <div id="notice" ></div>
          <div id="alert" ></div>
         </th>

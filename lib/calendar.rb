@@ -109,7 +109,7 @@ module Calendar
 
       begin
         #http://localhost:9104/tasks/date/?date=#{date}&policy_type=#{policy_type}&policy_id=#{policy_id}
-        response = RestClient.get "http://#{enginebot_host}:#{enginebot_port}/tasks/date/?date=#{date}&policy_type=#{policy_type}&policy_id=#{policy_id}",
+        response = RestClient.get "http://#{enginebot_host}:#{enginebot_port}/tasks/date/?date=#{date}&policy_type=#{policy_type}&policy_id=#{policy_id}&task_label=true",
                                   :content_type => :json,
                                   :accept => :json
 
@@ -121,12 +121,7 @@ module Calendar
       else
         raise "not get task of day #{date} of policy #{policy_type} #{policy_id} on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
         JSON.parse(response).map { |task|
-          task = Task.new(task)
-          # recherche du label de chaque pre_task
-          unless task.pre_tasks.empty?
-            task.pre_tasks.map! { |pt_id| get_task(pt_id).label }
-          end
-          task
+          Task.new(task)
         }
       end
     end
