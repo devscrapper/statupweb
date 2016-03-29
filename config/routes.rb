@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   match '/calendar/next_day', to: 'calendar#next_day', via: [:get], as: :next_day_calendar
   match '/calendar', to: 'calendar#index', via: [:get], as: :index_calendar
   match '/calendar/execute', to: 'calendar#execute', via: [:get], as: :execute_calendar
+  match '/calendar/day', to: 'calendar#day', via: [:get], as: :day_calendar
 
   #match '/traffics/destroy_all', to:'traffics#destroy_all', via: [:delete], as: :destroy_all_traffic
   resources :ranks do

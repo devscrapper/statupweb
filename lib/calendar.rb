@@ -79,6 +79,34 @@ module Calendar
     end
   end
 
+  def planed_dates(count_date, policy_type, policy_id)
+    begin
+      parameters = Parameter.new(__FILE__)
+
+    rescue Exception => e
+      raise e.message
+
+    else
+      enginebot_host = parameters.enginebot_host
+      enginebot_port = parameters.enginebot_port
+
+      begin
+       # http://localhost:9104/tasks/dates/?count_date=#{count_date}&policy_type=#{policy_type}&policy_id=#{policy_id}
+        response = RestClient.get "http://#{enginebot_host}:#{enginebot_port}/tasks/dates/?count_date=#{count_date}&policy_type=#{policy_type}&policy_id=#{policy_id}",
+                                  :content_type => :json,
+                                  :accept => :json
+
+
+      rescue Exception => e
+        # impossible de demander le demarrage la tache vers engine bot
+        raise e.message
+
+      else
+        raise "not get planed dates #{task_label} #{event_id} on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
+        JSON.parse(response)
+      end
+    end
+  end
   def current_date(date, policy_id, policy_type)
     tasks_of_day(Date.parse(date), policy_id, policy_type)
   end
@@ -130,6 +158,7 @@ module Calendar
 
   private
 
+  module_function :planed_dates
   module_function :get_task
   module_function :current_date
   module_function :today
