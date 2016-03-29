@@ -42,6 +42,9 @@ class Traffic < ActiveRecord::Base
 
   DELAY_WEEK = 7
 
+  # cette données est calculée à la volée à partir du Calednar de engine_bot et n'est jamais stockée
+  attr_accessor :planed_dates
+
   def self.next_monday(date)
     today = Date.parse(date) if date.is_a?(String)
     today = date if date.is_a?(Date)

@@ -1,0 +1,14 @@
+/**
+ * Created by ET00752 on 21/03/2016.
+ */
+
+
+
+$('#tasks' + <%=@policy_id%>).html("<%= escape_javascript(render 'tasks', {tasks: @tasks,
+policy_type: @policy_type,
+policy_id: @policy_id,
+current_date: @current_date}) %>");
+$('#notice').html("<%=@notice%>");
+$('#alert').html("<%=@alert%>");
+$('#tasks' + <%=@policy_id%>).slideDown(350);
+

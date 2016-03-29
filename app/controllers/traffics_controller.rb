@@ -8,9 +8,14 @@ class TrafficsController < ApplicationController
   # GET /traffics
   # GET /traffics.json
   def index
-
     @traffics = Traffic.all
-
+    @traffics.each { |traffic|
+      if traffic.state == "published"
+        traffic.planed_dates = Calendar.planed_dates(30, :traffic, traffic.id)
+      else
+        traffic.planed_dates = []
+      end
+    }
   end
 
   # GET /traffics/1

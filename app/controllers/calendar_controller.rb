@@ -1,6 +1,7 @@
 require_relative '../../lib/calendar'
 class CalendarController < ApplicationController
 
+
   def execute
     begin
       Calendar::execute_task(params['task_label'], params['task_id'])
@@ -15,6 +16,20 @@ class CalendarController < ApplicationController
       @policy_id = params['policy_id']
       @current_date = params['current_date']
     end
+  end
+  def day
+    begin
+      @tasks = Calendar::current_date(params['current_date'], params['policy_id'], params['policy_type'])
+
+    rescue Exception => e
+      @alert = "cannot get day #{params['current_date']} task : #{e.message}"
+    else
+    ensure
+      @policy_type =params['policy_type']
+      @policy_id = params['policy_id']
+      @current_date = Date.parse(params['current_date'])
+    end
+
   end
 
   def prev_day
