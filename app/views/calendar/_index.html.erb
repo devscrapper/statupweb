@@ -39,7 +39,7 @@
                                                             :policy_id => policy_id}), remote: true %> </li>
         <li role="presentation" class="divider"></li>
         <% planed_dates.each { |date| %>
-            <li role="presentation"><%= link_to date, day_calendar_path({:current_date => date,
+            <li role="presentation"><%= link_to Date.parse(date).strftime("%F, %a"), day_calendar_path({:current_date => date,
                                                                          :policy_type => policy_type,
                                                                          :policy_id => policy_id}), remote: true %>  </li>
         <% } %>

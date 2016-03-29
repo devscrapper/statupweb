@@ -9,7 +9,8 @@
              count_tasks = 0
            end
         %>
-        Planed tasks<span class="badge"><%= count_tasks %></span> on
+        Planed tasks <span class="badge"><%= count_tasks %></span> on
+        <%= current_date.strftime("%A") %> the
         <%= label_tag :current_date, current_date %>
         <i class="fa fa-spinner fa-spin" style="font-size:15px"></i>
       </th>

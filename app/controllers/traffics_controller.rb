@@ -11,7 +11,12 @@ class TrafficsController < ApplicationController
     @traffics = Traffic.all
     @traffics.each { |traffic|
       if traffic.state == "published"
-        traffic.planed_dates = Calendar.planed_dates(30, :traffic, traffic.id)
+        begin
+          traffic.planed_dates = Calendar.planed_dates(30, :traffic, traffic.id)
+        rescue Exception => e
+          traffic.planed_dates = []
+
+        end
       else
         traffic.planed_dates = []
       end
