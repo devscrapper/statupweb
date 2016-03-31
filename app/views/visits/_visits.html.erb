@@ -1,0 +1,37 @@
+<% visits.each do |visit| %>
+
+
+          <tr>
+            <td class="text-center">
+              <% case visit.state
+                   when "created"
+                     color_state = "label label-default"
+                   when "scheduled"
+                     color_state = "label label-primary"
+                   when "outoftime"
+                     color_state = "label label-warning"
+                   when "start"
+                     color_state = "label label-info"
+                   when "success"
+                     color_state = "label label-success"
+                   when "fail"
+                     color_state = "label label-danger"
+                   else
+                     color_state = "label label-default"
+                 end %>
+              <span class="<%= color_state %>"><%= visit.state %></span></td>
+            <td class="text-center">
+              <%= if visit.execution_mode == "manual"
+                    link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
+                            publish_visit_path({:visit_id => visit.id_visit}),
+                            remote: true,
+                            data: {confirm: 'Are you sure?'}
+                  end %>
+            </td>
+            <td class="text-center"><%= visit.start_time %></td>
+            <td class="text-left"><%= visit.landing_url %></td>
+            <td class="text-center"><%= visit.durations %></td>
+            <td class="text-center"><%= visit.referrer %></td>
+            <td class="text-center"><%= visit.advert %></td>
+          </tr>
+      <% end %>
