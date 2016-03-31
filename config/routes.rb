@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   mount DelayedJobWeb => "/delayed_job" if ["test", "production"].include?(Rails.env)
   resources :activity_servers
-  resources :visits
   resources :objectives
   resources :tasks
   match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic
@@ -13,7 +12,8 @@ Rails.application.routes.draw do
   match '/calendar', to: 'calendar#index', via: [:get], as: :index_calendar
   match '/calendar/execute', to: 'calendar#execute', via: [:get], as: :execute_calendar
   match '/calendar/day', to: 'calendar#day', via: [:get], as: :day_calendar
-
+  match '/visits/publish', to: 'visits#publish', via: [:get], as: :publish_visit
+  resources :visits
   #match '/traffics/destroy_all', to:'traffics#destroy_all', via: [:delete], as: :destroy_all_traffic
   resources :ranks do
     collection do

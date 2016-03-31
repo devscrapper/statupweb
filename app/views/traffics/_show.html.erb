@@ -12,15 +12,18 @@
                     </li>
                     <% tasks = traffic.tasks %>
                     <li>
-                      <a data-toggle="tab" href="#tasks-traffic<%= traffic.id %>">Tasks <span class="badge"> <%= tasks.size %></span></a>
+                      <a data-toggle="tab" href="#tasks-traffic<%= traffic.id %>">Tasks
+                        <span class="badge"> <%= tasks.size %></span></a>
                     </li>
                     <% objectives = traffic.objectives %>
                     <li>
-                      <a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Objectives <span class="badge"> <%= objectives.size %></span></a>
+                      <a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Objectives
+                        <span class="badge"> <%= objectives.size %></span></a>
                     </li>
                     <% visits = traffic.visits.order(start_time: :desc) %>
                     <li>
-                      <a data-toggle="tab" href="#visits-traffic<%= traffic.id %>">Visits <span class="badge"> <%= visits.size %></span></a>
+                      <a data-toggle="tab" href="#visits-traffic<%= traffic.id %>">Visits
+                        <span class="badge"> <%= visits.size %></span></a>
                     </li>
                     <li><a data-toggle="tab" href="#website-traffic<%= traffic.id %>">Website</a></li>
                 <% else %>
@@ -67,7 +70,8 @@
                       <p><%= render partial: 'objectives/index', :locals => {:objectives => objectives} %></p>
                     </div>
                     <div id="visits-traffic<%= traffic.id %>" class="tab-pane fade">
-                      <p><%= render partial: 'visits/index', :locals => {:visits => visits} %></p>
+                      <p><%= render partial: 'visits/index', :locals => {:visits => visits,
+                                                                         :policy_id => traffic.id} %></p>
                     </div>
                     <div id="calendar-traffic<%= traffic.id %>" class="tab-pane fade  in active">
                       <p><%= render partial: 'calendar/index', :locals => {:current_date => Date.today,

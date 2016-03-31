@@ -10,6 +10,10 @@ class Visit < ActiveRecord::Base
   validates :referrer, :presence => true
   validates :advert, :presence => true
   validates :state, :presence => true, inclusion: {in: %w(created scheduled outoftime started success fail), message: "%{value} is not a valid state"}
+  validates :execution_mode, :presence => true, inclusion: {in: %w(auto manual), message: "%{value} is not a valid mode"}
+  validates :browser_name, :presence => true
+  validates :browser_version, :presence => true
+  validates :operating_system_name, :presence => true
+  validates :operating_system_version, :presence => true
 
 end
-

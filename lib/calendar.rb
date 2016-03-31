@@ -10,7 +10,8 @@ module Calendar
                 :label,
                 :state,
                 :pre_tasks,
-                :execution_mode
+                :execution_mode,
+                :building_date
 
     def initialize(task)
       @id = task['id']
@@ -18,6 +19,7 @@ module Calendar
       @state = task['state']
       @pre_tasks = task['pre_tasks']
       @execution_mode = task['execution_mode']
+      @building_date = task['building_date']
     end
   end
 
