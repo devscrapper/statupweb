@@ -22,13 +22,14 @@ module Scheduler
                                   :content_type => :json,
                                   :accept => :json
 
-
+        p response
+        raise "not published visit #{visit_id} to scheduler (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
       rescue Exception => e
         # impossible de demander le demarrage la tache vers engine bot
         raise e.message
 
       else
-        raise "not published visit #{visit_id} to scheduler (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
+
 
       end
     end

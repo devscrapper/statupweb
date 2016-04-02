@@ -4,6 +4,14 @@ class VisitsController < ApplicationController
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
 
+  def index
+    @visits = Visit.where({:policy_id => params[:policy_id]})
+    @policy_id = params['policy_id']
+  end
+  def refresh
+    @visits = Visit.where({:policy_id => params[:policy_id]})
+    @policy_id = params['policy_id']
+  end
 
   # POST /tasks
   # POST /tasks.json
@@ -45,7 +53,7 @@ class VisitsController < ApplicationController
     else
       @notice = "Scheduler start execution visit #{params['visit_id']}"
     ensure
-      @visits = Visit.all
+      @visits = Visit.where(:policy_id => params[:policy_id])
       @policy_id = params['policy_id']
     end
   end

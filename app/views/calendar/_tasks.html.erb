@@ -3,17 +3,21 @@
     <thead class="header-table">
     <tr>
       <th class="text-center" colspan="5">
-        <% if !@tasks.nil? and !@tasks.empty?
-             count_tasks = @tasks.size
-           else
-             count_tasks = 0
-           end
-        %>
-        Planed tasks <span class="badge"><%= count_tasks %></span> on
-        <%= current_date.strftime("%A") %> the
+        <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-backward"),
+                    prev_day_calendar_path({:current_date => current_date,
+                                            :policy_id => policy_id,
+                                            :policy_type => policy_type}),
+                    remote: true %>
+
         <%= label_tag :current_date, current_date %>
-        <i class="fa fa-spinner fa-spin" style="font-size:15px"></i>
+
+        <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-forward"),
+                    next_day_calendar_path({:current_date => current_date,
+                                            :policy_id => policy_id,
+                                            :policy_type => policy_type}),
+                    remote: true %>
       </th>
+
     </tr>
     <tr>
       <th class="text-center col-lg-1">State</th>
@@ -45,17 +49,17 @@
               </td>
               <td class="text-center vert-align">
                 <%= if task.pre_tasks.empty? and task.execution_mode == "manual"
-                                      link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
-                                            execute_calendar_path({:task_id => task.id,
-                                                                   :label_id => task.label,
-                                                                   :current_date => current_date,
-                                                                   :policy_id => policy_id,
-                                                                   :policy_type => policy_type}),
-                                            remote: true,
-                                            data: {confirm: 'Are you sure?'}
-                                end %>
+                      link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
+                              execute_calendar_path({:task_id => task.id,
+                                                     :label_id => task.label,
+                                                     :current_date => current_date,
+                                                     :policy_id => policy_id,
+                                                     :policy_type => policy_type}),
+                              remote: true,
+                              data: {confirm: 'Are you sure?'}
+                    end %>
               </td>
-              <td><%=task.building_date%></td>
+              <td><%= task.building_date %></td>
               <td class="text-left vert-align"><%= task.label %></td>
               <td align="justify" class="text-left vert-align col-lg-2"><%= task.pre_tasks.join(" ") %></td>
             </tr>
@@ -69,27 +73,18 @@
     <footer>
       <tr>
         <th class="text-center" colspan="5">
-          <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-backward"),
-                      prev_day_calendar_path({:current_date => current_date,
-                                              :policy_id => policy_id,
-                                              :policy_type => policy_type}),
-                      remote: true %>
-
+          <% if !@tasks.nil? and !@tasks.empty?
+               count_tasks = @tasks.size
+             else
+               count_tasks = 0
+             end
+          %>
+          Planed tasks <span class="badge"><%= count_tasks %></span> on
+          <%= current_date.strftime("%A") %> the
           <%= label_tag :current_date, current_date %>
+        </th>
+      </tr>
 
-          <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-forward"),
-                      next_day_calendar_path({:current_date => current_date,
-                                              :policy_id => policy_id,
-                                              :policy_type => policy_type}),
-                      remote: true %>
-        </th>
-      </tr>
-      <tr>
-        <th class="text-left" colspan="5">
-         <div id="notice" ></div>
-         <div id="alert" ></div>
-        </th>
-      </tr>
     </footer>
 
   </table>

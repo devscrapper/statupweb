@@ -1,37 +1,63 @@
-<% visits.each do |visit| %>
+<table class="table">
+  <thead class="header-table">
+  <tr>
+    <th class="text-center">State</th>
+    <th class="text-center">Manual</th>
+    <th class="text-center">Start time</th>
+    <th class="text-left">Landing url</th>
+    <th class="text-center">Durations</th>
+    <th class="text-left">Os</th>
+    <th class="text-left">Browser</th>
+    <th class="text-center">Referrer</th>
+    <th class="text-center">Advert</th>
+  </tr>
+  </thead>
 
 
-          <tr>
-            <td class="text-center">
-              <% case visit.state
-                   when "created"
-                     color_state = "label label-default"
-                   when "scheduled"
-                     color_state = "label label-primary"
-                   when "outoftime"
-                     color_state = "label label-warning"
-                   when "start"
-                     color_state = "label label-info"
-                   when "success"
-                     color_state = "label label-success"
-                   when "fail"
-                     color_state = "label label-danger"
-                   else
-                     color_state = "label label-default"
-                 end %>
-              <span class="<%= color_state %>"><%= visit.state %></span></td>
-            <td class="text-center">
-              <%= if visit.execution_mode == "manual"
-                    link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
-                            publish_visit_path({:visit_id => visit.id_visit}),
-                            remote: true,
-                            data: {confirm: 'Are you sure?'}
-                  end %>
-            </td>
-            <td class="text-center"><%= visit.start_time %></td>
-            <td class="text-left"><%= visit.landing_url %></td>
-            <td class="text-center"><%= visit.durations %></td>
-            <td class="text-center"><%= visit.referrer %></td>
-            <td class="text-center"><%= visit.advert %></td>
-          </tr>
-      <% end %>
+  <tbody>
+  <% visits.each do |visit| %>
+      <tr>
+        <td class="text-center">
+          <% case visit.state
+               when "created"
+                 color_state = "label label-default"
+               when "scheduled"
+                 color_state = "label label-info"
+               when "outoftime"
+                 color_state = "label label-warning"
+               when "started", "published"
+                 color_state = "label label-primary"
+               when "success"
+                 color_state = "label label-success"
+               when "fail"
+                 color_state = "label label-danger"
+               else
+                 color_state = "label label-default"
+             end %>
+          <span class="<%= color_state %>"><%= visit.state %></span></td>
+        <td class="text-center">
+          <%= if visit.state == "created" and visit.execution_mode == "manual"
+                link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
+                        publish_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id}),
+                        remote: true,
+                        data: {confirm: 'Are you sure?'}
+              end %>
+          <%= if ["scheduled", "started", "published"].include?(visit.state)
+                link_to content_tag(:span, "", class: "glyphicon glyphicon-refresh"),
+                        refresh_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id}),
+                        remote: true,
+                        data: {confirm: 'Are you sure?'}
+              end
+          %>
+              </td>
+              <td class="text-center"><%= visit.start_time %></td>
+              <td class="text-left"><%= visit.landing_url %></td>
+              <td class="text-center"><%= visit.durations %></td>
+              <td class="text-left"><%= visit.operating_system_name %>/<%= visit.operating_system_version %></td>
+              <td class="text-left"><%= visit.browser_name %>/<%= visit.browser_version %></td>
+              <td class="text-center"><%= visit.referrer %></td>
+              <td class="text-center"><%= visit.advert %></td>
+              </tr>
+          <% end %>
+          </tbody>
+          </table>

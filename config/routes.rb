@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   match '/calendar/execute', to: 'calendar#execute', via: [:get], as: :execute_calendar
   match '/calendar/day', to: 'calendar#day', via: [:get], as: :day_calendar
   match '/visits/publish', to: 'visits#publish', via: [:get], as: :publish_visit
+  match '/visits/refresh', to: 'visits#refresh', via: [:get], as: :refresh_visit
   resources :visits
   #match '/traffics/destroy_all', to:'traffics#destroy_all', via: [:delete], as: :destroy_all_traffic
   resources :ranks do

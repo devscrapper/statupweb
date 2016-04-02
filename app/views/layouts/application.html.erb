@@ -19,48 +19,63 @@
       });
 
   </script>
+  <script>
+      $(document).ready(function () {
 
+          // hide spinner
+          $(".fa").hide();
+
+
+          // show spinner on AJAX start
+          $(document).ajaxStart(function () {
+              $(".fa").show();
+          });
+
+          // hide spinner on AJAX stop
+          $(document).ajaxStop(function () {
+              $(".fa").hide();
+          });
+
+      });
+  </script>
 </head>
-<body>
-
-<!-- Fixed navbar -->
-<nav class="navbar navbar-default navbar-static-top">
-  <div class="container">
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+<nav class="navbar navbar-fixed-top navbar-inverse">
+  <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <!--<a class="navbar-brand" href="#">Statup Web</a>-->
       <%= link_to 'Statup Web', root_path, class: "navbar-brand" %>
+      <i class="fa fa-spinner fa-spin" style="font-size:20px;color:white"></i>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li><%= link_to "Traffics", traffics_path %></li>
-        <li><%= link_to "Ranks", ranks_path %></li>
-        <li><%= link_to "Websites", websites_path %></li>
-        <li><%= link_to "Statistics", statistics_path %></li>
-        <li><%= link_to "Calendar", "http://#{Publication::host}:#{Publication::port}/tasks/all", {:target => '_blank'} %></li>
-        <li><%= link_to "Activity Servers", activity_servers_path %></li>
-        <li><%= if ["test", "production"].include?(Rails.env)
-                  link_to "Activity Jobs", "/delayed_job/overview"
-                end %></li>
-      </ul>
-    </div>
-    <!--/.nav-collapse -->
+    <ul class="nav navbar-nav">
+      <li><%= link_to "Traffics", traffics_path %></li>
+      <li><%= link_to "Ranks", ranks_path %></li>
+      <li><%= link_to "Websites", websites_path %></li>
+      <li><%= link_to "Statistics", statistics_path %></li>
+      <li><%= link_to "Calendar", "http://#{Publication::host}:#{Publication::port}/tasks/all", {:target => '_blank'} %></li>
+      <li><%= link_to "Activity Servers", activity_servers_path %></li>
+      <li><%= if ["test", "production"].include?(Rails.env)
+                link_to "Activity Jobs", "/delayed_job/overview"
+              end %></li>
+      <li class="text-right">
+        <div id="notice" class="label label-success">
+          <% if flash[:notice] %> <%= flash[:notice] %>
+          <% end %></div>
+        <div id="alert" class="label label-danger">
+          <% if flash[:alert] %> <%= flash[:alert] %>
+          <% end %></div>
+
+
+      </li>
+
+    </ul>
   </div>
 </nav>
 
-<div id="main-container" class="container-fluid">
-  <% if flash[:notice] %> <%= flash[:notice] %>
-  <% end %>
-  <% if flash[:alert] %> <%= flash[:alert] %>
-  <% end %>
+
+<div class="container-fluid">
+  <h3>Fixed Navbar</h3>
   <%= yield %>
 </div>
-
 
 </body>
 </html>

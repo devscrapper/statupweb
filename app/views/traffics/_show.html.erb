@@ -6,6 +6,7 @@
           <div class="row">
             <div class="col-lg-12">
               <ul class="nav nav-tabs">
+
                 <% if ["published"].include?(traffic.state) %>
                     <li class="active">
                       <a data-toggle="tab" href="#calendar-traffic<%= traffic.id %>">Calendar</a>
@@ -20,10 +21,14 @@
                       <a data-toggle="tab" href="#objectives-traffic<%= traffic.id %>">Objectives
                         <span class="badge"> <%= objectives.size %></span></a>
                     </li>
-                    <% visits = traffic.visits.order(start_time: :desc) %>
+
                     <li>
+
                       <a data-toggle="tab" href="#visits-traffic<%= traffic.id %>">Visits
-                        <span class="badge"> <%= visits.size %></span></a>
+
+                        <span class="badge"> <%= traffic.visits.count %>  </span></a>
+
+
                     </li>
                     <li><a data-toggle="tab" href="#website-traffic<%= traffic.id %>">Website</a></li>
                 <% else %>
@@ -70,8 +75,7 @@
                       <p><%= render partial: 'objectives/index', :locals => {:objectives => objectives} %></p>
                     </div>
                     <div id="visits-traffic<%= traffic.id %>" class="tab-pane fade">
-                      <p><%= render partial: 'visits/index', :locals => {:visits => visits,
-                                                                         :policy_id => traffic.id} %></p>
+                      <p><%= render partial: 'visits/index', :locals => {:policy_id => traffic.id} %></p>
                     </div>
                     <div id="calendar-traffic<%= traffic.id %>" class="tab-pane fade  in active">
                       <p><%= render partial: 'calendar/index', :locals => {:current_date => Date.today,
