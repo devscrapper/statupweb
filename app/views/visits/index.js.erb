@@ -1,0 +1,10 @@
+/**
+ * Created by ET00752 on 21/03/2016.
+ */
+
+
+$('#visits' + <%=@policy_id%>).html("<%= escape_javascript(render 'visits', {visits: @visits})%>");
+$('#notice').html("<%=@notice%>");
+$('#alert').html("<%=@alert%>");
+$('#visits' + <%=@policy_id%>).slideDown(350);
+

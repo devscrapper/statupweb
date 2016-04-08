@@ -38,26 +38,34 @@
         <td class="text-center">
           <%= if visit.state == "created" and visit.execution_mode == "manual"
                 link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
-                        publish_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id}),
+                        publish_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
                         remote: true,
                         data: {confirm: 'Are you sure?'}
               end %>
           <%= if ["scheduled", "started", "published"].include?(visit.state)
                 link_to content_tag(:span, "", class: "glyphicon glyphicon-refresh"),
-                        refresh_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id}),
+                        refresh_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
                         remote: true,
                         data: {confirm: 'Are you sure?'}
               end
           %>
-              </td>
-              <td class="text-center"><%= visit.start_time %></td>
-              <td class="text-left"><%= visit.landing_url %></td>
-              <td class="text-center"><%= visit.durations %></td>
-              <td class="text-left"><%= visit.operating_system_name %>/<%= visit.operating_system_version %></td>
-              <td class="text-left"><%= visit.browser_name %>/<%= visit.browser_version %></td>
-              <td class="text-center"><%= visit.referrer %></td>
-              <td class="text-center"><%= visit.advert %></td>
-              </tr>
-          <% end %>
-          </tbody>
-          </table>
+        </td>
+        <td class="text-center"><%= visit.start_time.localtime.to_formatted_s(:db) %></td>
+        <td class="text-left"><%= visit.landing_url %></td>
+        <td class="text-center">
+          <% visit.durations[1..visit.durations.size-2].split(',').map(&:to_i).each_with_index { |duration, i | %>
+              <% if i + 1 <= visit.count_browsed_page %>
+                  <span class="label label-success"><%= duration %> </span>
+              <% else %>
+                  <span class="label label-default"><%= duration %> </span>
+              <% end %>
+          <% } %>
+        </td>
+        <td class="text-left"><%= visit.operating_system_name %>/<%= visit.operating_system_version %></td>
+        <td class="text-left"><%= visit.browser_name %>/<%= visit.browser_version %></td>
+        <td class="text-center"><%= visit.referrer %></td>
+        <td class="text-center"><%= visit.advert %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

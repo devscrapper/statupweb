@@ -5,11 +5,11 @@ class VisitsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_request?
 
   def index
-    @visits = Visit.where({:policy_id => params[:policy_id]})
+    @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
     @policy_id = params['policy_id']
   end
   def refresh
-    @visits = Visit.where({:policy_id => params[:policy_id]})
+    @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
     @policy_id = params['policy_id']
   end
 
@@ -43,6 +43,22 @@ class VisitsController < ApplicationController
     end
   end
 
+  def browsed_page
+    @visit = Visit.find_by_id_visit(params[:visit_id])
+
+    respond_to do |format|
+      if @visit.nil?
+        format.json { render json: @visit, status: :not_found }
+
+      elsif @visit.update_attribute(:count_browsed_page, @visit + 1)
+        format.json { render json: @visit, status: :created }
+
+      else
+        format.json { render json: @visit.errors, status: :unprocessable_entity }
+
+      end
+    end
+  end
 
   def publish
     begin
@@ -53,7 +69,7 @@ class VisitsController < ApplicationController
     else
       @notice = "Scheduler start execution visit #{params['visit_id']}"
     ensure
-      @visits = Visit.where(:policy_id => params[:policy_id])
+      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
     end
   end
@@ -102,6 +118,7 @@ class VisitsController < ApplicationController
                                   :browser_version,
                                   :operating_system_name,
                                   :operating_system_version,
+                                  :count_browsed_page,
                                   :durations => []) #car durations est un array
   end
 end

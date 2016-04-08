@@ -75,9 +75,9 @@
                       <p><%= render partial: 'objectives/index', :locals => {:objectives => objectives} %></p>
                     </div>
                     <div id="visits-traffic<%= traffic.id %>" class="tab-pane fade">
-                      <p><%= render partial: 'visits/index', :locals => {:policy_id => traffic.id} %></p>
+                      <p><%= render partial: 'visits/index', :locals => {:policy_id => traffic.id, :state => "created"} %></p>
                     </div>
-                    <div id="calendar-traffic<%= traffic.id %>" class="tab-pane fade  in active">
+                    <div id="calendar-traffic<%= traffic.id %>" class="tab-pane fade in active">
                       <p><%= render partial: 'calendar/index', :locals => {:current_date => Date.today,
                                                                            :policy_type => :traffic,
                                                                            :policy_id => traffic.id,

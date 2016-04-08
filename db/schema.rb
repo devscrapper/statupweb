@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160331153151) do
+ActiveRecord::Schema.define(version: 20160408071342) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(version: 20160331153151) do
     t.string   "browser_version",          default: "",        null: false
     t.string   "operating_system_name",    default: "",        null: false
     t.string   "operating_system_version", default: "",        null: false
+    t.integer  "count_browsed_page",       default: 0,         null: false
   end
 
   add_index "visits", ["policy_type", "policy_id"], name: "index_visits_on_policy_type_and_policy_id"

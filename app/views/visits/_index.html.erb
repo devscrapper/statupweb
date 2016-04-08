@@ -1,11 +1,41 @@
+<div class="container-fluid">
 
-    <div id="visits<%= policy_id %>" style="">
-    <%=  render 'visits/visits', {visits: Visit.where(:policy_id =>  policy_id)}%>
-    </div>
+<!--created scheduled outoftime started neverstarted success fail-->
+<%= link_to "Created",
+            visits_path({:policy_id => policy_id, :state => "created"}),
+            remote: true,
+            class: "btn btn-sm btn-default" %>
+<%= link_to "Scheduled",
+            visits_path({:policy_id => policy_id, :state => "scheduled"}),
+            remote: true,
+            class: "btn btn-sm btn-info" %>
+<%= link_to "Published",
+            visits_path({:policy_id => policy_id, :state => "published"}),
+            remote: true,
+            class: "btn btn-sm btn-primary" %>
+<%= link_to "Started",
+            visits_path({:policy_id => policy_id, :state => "started"}),
+            remote: true,
+            class: "btn btn-sm btn-primary" %>
+<%= link_to "Success",
+            visits_path({:policy_id => policy_id, :state => "success"}),
+            remote: true,
+            class: "btn btn-sm btn-success" %>
+<%= link_to "Fail",
+            visits_path({:policy_id => policy_id, :state => "fail"}),
+            remote: true,
+            class: "btn btn-sm btn-danger" %>
+<%= link_to "Out of Time",
+            visits_path({:policy_id => policy_id, :state => "outoftime"}),
+            remote: true,
+            class: "btn btn-sm btn-warning" %>
+<%= link_to "Never Started",
+            visits_path({:policy_id => policy_id, :state => "neverstarted"}),
+            remote: true,
+            class: "btn btn-sm btn-warning" %>
 
+<div id="visits<%= policy_id %>" style="">
+<%= render partial: 'visits/visits', :locals => {visits: Visit.where({:policy_id => policy_id, :state => state}).order("start_time desc")} %>
+</div>
 
-
-
-
-
-
+</div>
