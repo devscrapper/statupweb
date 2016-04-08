@@ -1,8 +1,45 @@
+<!--created scheduled outoftime started neverstarted success fail-->
+<%= link_to "Created (#{Visit.where({:policy_id => policy_id, :state => "created"}).count})",
+            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "created"}),
+            remote: true,
+            class: "btn btn-sm btn-default" %>
+<%= link_to "Scheduled (#{Visit.where({:policy_id => policy_id, :state => "scheduled"}).count})",
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "scheduled"}),
+            remote: true,
+            class: "btn btn-sm btn-info" %>
+<%= link_to "Published (#{Visit.where({:policy_id => policy_id, :state => "published"}).count})",
+            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "published"}),
+            remote: true,
+            class: "btn btn-sm btn-primary" %>
+<%= link_to "Started (#{Visit.where({:policy_id => policy_id, :state => "started"}).count})",
+            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "started"}),
+            remote: true,
+            class: "btn btn-sm btn-primary" %>
+<%= link_to "Success (#{Visit.where({:policy_id => policy_id, :state => "success"}).count})",
+            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "success"}),
+            remote: true,
+            class: "btn btn-sm btn-success" %>
+<%= link_to "Fail (#{Visit.where({:policy_id => policy_id, :state => "fail"}).count})",
+            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "fail"}),
+            remote: true,
+            class: "btn btn-sm btn-danger" %>
+<%= link_to "Out of Time (#{Visit.where({:policy_id => policy_id, :state => "outoftime"}).count})",
+            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "outoftime"}),
+            remote: true,
+            class: "btn btn-sm btn-warning" %>
+<%= link_to "Never Started (#{Visit.where({:policy_id => policy_id, :state => "neverstarted"}).count})",
+            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "neverstarted"}),
+            remote: true,
+            class: "btn btn-sm btn-warning" %>
+
+
 <table class="table">
   <thead class="header-table">
   <tr>
     <th class="text-center">State</th>
-    <th class="text-center">Manual</th>
+    <% if execution_mode == "manual" %>
+        <th class="text-center">Manual</th>
+    <% end %>
     <th class="text-center">Start time</th>
     <th class="text-left">Landing url</th>
     <th class="text-center">Durations</th>
@@ -35,25 +72,25 @@
                  color_state = "label label-default"
              end %>
           <span class="<%= color_state %>"><%= visit.state %></span></td>
-        <td class="text-center">
-          <%= if visit.state == "created" and visit.execution_mode == "manual"
-                link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
-                        publish_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
-                        remote: true,
-                        data: {confirm: 'Are you sure?'}
-              end %>
-          <%= if ["scheduled", "started", "published"].include?(visit.state)
-                link_to content_tag(:span, "", class: "glyphicon glyphicon-refresh"),
-                        refresh_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
-                        remote: true,
-                        data: {confirm: 'Are you sure?'}
-              end
-          %>
-        </td>
+        <% if visit.execution_mode == "manual" %>
+            <td class="text-center">
+              <%= if visit.state == "created"
+                    link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
+                            publish_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
+                            remote: true,
+                            data: {confirm: 'Are you sure?'}
+                  elsif ["scheduled", "published", "started"].include?(visit.state)
+                    link_to content_tag(:span, "", class: "glyphicon glyphicon-refresh"),
+                            refresh_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
+                            remote: true,
+                            data: {confirm: 'Are you sure?'}
+                  end %>
+            </td>
+        <% end %>
         <td class="text-center"><%= visit.start_time.localtime.to_formatted_s(:db) %></td>
         <td class="text-left"><%= visit.landing_url %></td>
         <td class="text-center">
-          <% visit.durations[1..visit.durations.size-2].split(',').map(&:to_i).each_with_index { |duration, i | %>
+          <% visit.durations[1..visit.durations.size-2].split(',').map(&:to_i).each_with_index { |duration, i| %>
               <% if i + 1 <= visit.count_browsed_page %>
                   <span class="label label-success"><%= duration %> </span>
               <% else %>

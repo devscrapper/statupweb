@@ -7,6 +7,8 @@ class VisitsController < ApplicationController
   def index
     @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
     @policy_id = params['policy_id']
+    @execution_mode = params['execution_mode']
+
   end
   def refresh
     @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
