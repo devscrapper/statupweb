@@ -13,6 +13,7 @@ class VisitsController < ApplicationController
   def refresh
     @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
     @policy_id = params['policy_id']
+    @execution_mode = params['execution_mode']
   end
 
   # POST /tasks
@@ -73,6 +74,7 @@ class VisitsController < ApplicationController
     ensure
       @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
+      @execution_mode = params['execution_mode']
     end
   end
 
