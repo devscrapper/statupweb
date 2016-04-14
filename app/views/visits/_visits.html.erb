@@ -27,6 +27,10 @@
             visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "outoftime"}),
             remote: true,
             class: "btn btn-sm btn-warning" %>
+<%= link_to "Over Time to Live (#{Visit.where({:policy_id => policy_id, :state => "overttl"}).count})",
+            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "overttl"}),
+            remote: true,
+            class: "btn btn-sm btn-warning" %>
 <%= link_to "Never Started (#{Visit.where({:policy_id => policy_id, :state => "neverstarted"}).count})",
             visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "neverstarted"}),
             remote: true,
@@ -60,7 +64,7 @@
                  color_state = "label label-default"
                when "scheduled"
                  color_state = "label label-info"
-               when "outoftime"
+               when "outoftime", "overttl", "neverstarted"
                  color_state = "label label-warning"
                when "started", "published"
                  color_state = "label label-primary"
