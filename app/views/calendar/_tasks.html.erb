@@ -48,7 +48,8 @@
 
               </td>
               <td class="text-center vert-align">
-                <%= if task.pre_tasks.empty? and task.execution_mode == "manual" and task.state == "init"
+                <%= if task.pre_tasks.empty? and task.execution_mode == "manual" and
+                        (task.state == "init" or (task.state == "over" and task.label == "Publishing_visits"))
                       link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
                               execute_calendar_path({:task_id => task.id,
                                                      :label_id => task.label,
