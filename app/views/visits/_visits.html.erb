@@ -1,6 +1,6 @@
 <!--created scheduled outoftime started neverstarted success fail-->
 <%= link_to "Created (#{Visit.where({:policy_id => policy_id, :state => "created"}).count})",
-            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "created"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "created"}),
             remote: true,
             class: "btn btn-sm btn-default" %>
 <%= link_to "Scheduled (#{Visit.where({:policy_id => policy_id, :state => "scheduled"}).count})",
@@ -8,31 +8,31 @@
             remote: true,
             class: "btn btn-sm btn-info" %>
 <%= link_to "Published (#{Visit.where({:policy_id => policy_id, :state => "published"}).count})",
-            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "published"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "published"}),
             remote: true,
             class: "btn btn-sm btn-primary" %>
 <%= link_to "Started (#{Visit.where({:policy_id => policy_id, :state => "started"}).count})",
-            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "started"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "started"}),
             remote: true,
             class: "btn btn-sm btn-primary" %>
 <%= link_to "Success (#{Visit.where({:policy_id => policy_id, :state => "success"}).count})",
-            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "success"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "success"}),
             remote: true,
             class: "btn btn-sm btn-success" %>
 <%= link_to "Fail (#{Visit.where({:policy_id => policy_id, :state => "fail"}).count})",
-            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "fail"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "fail"}),
             remote: true,
             class: "btn btn-sm btn-danger" %>
 <%= link_to "Out of Time (#{Visit.where({:policy_id => policy_id, :state => "outoftime"}).count})",
-            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "outoftime"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "outoftime"}),
             remote: true,
             class: "btn btn-sm btn-warning" %>
 <%= link_to "Over Time to Live (#{Visit.where({:policy_id => policy_id, :state => "overttl"}).count})",
-            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "overttl"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "overttl"}),
             remote: true,
             class: "btn btn-sm btn-warning" %>
 <%= link_to "Never Started (#{Visit.where({:policy_id => policy_id, :state => "neverstarted"}).count})",
-            visits_path({:execution_mode => execution_mode,:policy_id => policy_id, :state => "neverstarted"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "neverstarted"}),
             remote: true,
             class: "btn btn-sm btn-warning" %>
 
@@ -86,9 +86,13 @@
                   elsif ["scheduled", "published", "started"].include?(visit.state)
                     link_to content_tag(:span, "", class: "glyphicon glyphicon-refresh"),
                             refresh_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
-                            remote: true,
-                            data: {confirm: 'Are you sure?'}
+                            remote: true
                   end %>
+              <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                          delete_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
+                          remote: true,
+                          data: {confirm: 'Are you sure?'}
+              %>
             </td>
         <% end %>
         <td class="text-center"><%= visit.start_time.localtime.to_formatted_s(:db) %></td>

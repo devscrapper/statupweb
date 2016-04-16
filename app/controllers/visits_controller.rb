@@ -46,6 +46,22 @@ class VisitsController < ApplicationController
     end
   end
 
+    # DELETE /traffics/1
+  # DELETE /traffics/1.json
+  def delete
+    begin
+      @visit = Visit.find_by_id_visit(params[:visit_id])
+      @visit.destroy!
+    rescue Exception => e
+      @alert = "Visit #{params['visit_id']} not delete : #{e.message}"
+    else
+      @notice = "Visit #{params['visit_id']}  delete"
+    ensure
+      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
+      @policy_id = params['policy_id']
+      @execution_mode = params['execution_mode']
+    end
+  end
   def browsed_page
     @visit = Visit.find_by_id_visit(params[:visit_id])
 
