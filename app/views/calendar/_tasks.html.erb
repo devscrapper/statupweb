@@ -3,6 +3,11 @@
     <thead class="header-table">
     <tr>
       <th class="text-center" colspan="5">
+        <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-refresh"),
+                    day_calendar_path({:current_date => current_date,
+                                       :policy_id => policy_id,
+                                       :policy_type => policy_type}),
+                    remote: true %>
         <%= link_to content_tag(:span, "", class: "btn btn-sm btn-default glyphicon glyphicon-backward"),
                     prev_day_calendar_path({:current_date => current_date,
                                             :policy_id => policy_id,
@@ -48,8 +53,8 @@
 
               </td>
               <td class="text-center vert-align">
-                <%= if task.pre_tasks.empty? and task.execution_mode == "manual" and
-                        (task.state == "init" or (task.state == "over" and task.label == "Publishing_visits"))
+                <%= if  task.state == "fail" or task.pre_tasks.empty? and task.execution_mode == "manual" and
+                        (["development"].include?(Rails.env) or  (task.state == "init"  or (task.state == "over" and task.label == "Publishing_visits")) )
                       link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
                               execute_calendar_path({:task_id => task.id,
                                                      :label_id => task.label,

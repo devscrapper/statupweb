@@ -2,7 +2,13 @@
 <%= link_to "Created (#{Visit.where({:policy_id => policy_id, :state => "created"}).count})",
             visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "created"}),
             remote: true,
-            class: "btn btn-sm btn-default" %>
+            class: "btn btn-sm btn-default"
+%>
+<%= link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+               delete_all_by_state_path({:policy_id => policy_id, :state => "created"}),
+               remote: true,
+               data: {confirm: 'Are you sure?'}
+   %>
 <%= link_to "Scheduled (#{Visit.where({:policy_id => policy_id, :state => "scheduled"}).count})",
             visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "scheduled"}),
             remote: true,
@@ -41,6 +47,7 @@
   <thead class="header-table">
   <tr>
     <th class="text-center">State</th>
+
     <% if execution_mode == "manual" %>
         <th class="text-center">Manual</th>
     <% end %>

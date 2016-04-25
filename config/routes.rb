@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
+  resources :sea_attacks
   mount DelayedJobWeb => "/delayed_job" if ["test", "production"].include?(Rails.env)
   resources :activity_servers
   resources :objectives
   resources :tasks
   match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic
   match '/traffics/:id/unpublish', to: 'traffics#unpublish', via: [:patch], as: :unpublish_traffic
+  match '/sea_attacks/:id/publish', to: 'sea_attacks#publish', via: [:patch], as: :publish_sea_attack
+  match '/sea_attacks/:id/unpublish', to: 'sea_attacks#unpublish', via: [:patch], as: :unpublish_sea_attack
   match '/tasks/:id/start', to: 'tasks#start', via: [:patch], as: :start_task
   match '/calendar/prev_day', to: 'calendar#prev_day', via: [:get], as: :prev_day_calendar
   match '/calendar/today', to: 'calendar#today', via: [:get], as: :today_calendar
@@ -14,6 +17,7 @@ Rails.application.routes.draw do
   match '/calendar/day', to: 'calendar#day', via: [:get], as: :day_calendar
   match '/visits/publish', to: 'visits#publish', via: [:get], as: :publish_visit
   match '/visits/delete', to: 'visits#delete', via: [:get], as: :delete_visit
+  match '/visits/delete_all_by_state', to: 'visits#delete_all_by_state', via: [:get], as: :delete_all_by_state
   match '/visits/refresh', to: 'visits#refresh', via: [:get], as: :refresh_visit
   match '/visits/:visit_id/browsed_page', to: 'visits#browsed_page', via: [:patch], as: :browsed_page_visit
 
@@ -25,6 +29,11 @@ Rails.application.routes.draw do
     end
   end
   resources :traffics do
+    collection do
+      delete :destroy_all
+    end
+  end
+  resources :sea_attacks do
     collection do
       delete :destroy_all
     end

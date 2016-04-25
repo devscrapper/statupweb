@@ -21,12 +21,14 @@ def check_url
   rescue
     errors.add(:url_root, " : <#{url_root}> is malformmed")
   else
-    begin
-      RestClient.head(url_root)
-    rescue Exception => e
-      errors.add(:url_root, "can join website")
-    else
+    if ["test", "production"].include?(Rails.env)
+      begin
+        RestClient.head(url_root)
+      rescue Exception => e
+        errors.add(:url_root, "can join website")
+      else
 
+      end
     end
   end
 end
