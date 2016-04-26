@@ -5,15 +5,16 @@ class VisitsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_request?
 
   def index
-    @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
+    @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state] || "created"}).order("start_time desc")
     @policy_id = params['policy_id']
     @execution_mode = params['execution_mode']
-
+    @state = params[:state]  || "created"
   end
   def refresh
     @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
     @policy_id = params['policy_id']
     @execution_mode = params['execution_mode']
+    @state = params[:state]
   end
 
   # POST /tasks
@@ -24,7 +25,12 @@ class VisitsController < ApplicationController
     if @visit.nil?
       @visit = Visit.new(visit_params)
 
-      @visit.policy_type.capitalize!
+      if @visit.policy_type == "seaattack"
+        @visit.policy_type = "SeaAttack"
+      else
+        @visit.policy_type.capitalize!
+      end
+
 
       respond_to do |format|
         if @visit.save
@@ -60,6 +66,23 @@ class VisitsController < ApplicationController
       @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
       @execution_mode = params['execution_mode']
+      @state = params[:state]
+    end
+  end
+
+  def delete_all_by_state
+    begin
+      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]})
+      @visits.each {|visit| visit.destroy!}
+    rescue Exception => e
+      @alert = "Visits not delete : #{e.message}"
+    else
+      @notice = "All Visits delete"
+    ensure
+      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
+      @policy_id = params['policy_id']
+      @execution_mode = params['execution_mode']
+      @state = params[:state]
     end
   end
   def browsed_page
@@ -91,9 +114,25 @@ class VisitsController < ApplicationController
       @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
       @execution_mode = params['execution_mode']
+      @state = params[:state]
     end
   end
+  def publish_all
+    begin
+      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]})
+      @visits.each {|visit| Scheduler::publish(visit.id)}
 
+    rescue Exception => e
+      @alert = "Scheduler not start execution visit  : #{e.message}"
+    else
+      @notice = "Scheduler start execution visit}"
+    ensure
+      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
+      @policy_id = params['policy_id']
+      @execution_mode = params['execution_mode']
+      @state = params[:state]
+    end
+  end
   def update
     @visit = Visit.find_by_id_visit(params[:id])
 

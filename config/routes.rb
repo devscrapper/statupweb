@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   match '/calendar/execute', to: 'calendar#execute', via: [:get], as: :execute_calendar
   match '/calendar/day', to: 'calendar#day', via: [:get], as: :day_calendar
   match '/visits/publish', to: 'visits#publish', via: [:get], as: :publish_visit
+  match '/visits/publish_all', to: 'visits#publish_all', via: [:get], as: :publish_all
   match '/visits/delete', to: 'visits#delete', via: [:get], as: :delete_visit
   match '/visits/delete_all_by_state', to: 'visits#delete_all_by_state', via: [:get], as: :delete_all_by_state
   match '/visits/refresh', to: 'visits#refresh', via: [:get], as: :refresh_visit
