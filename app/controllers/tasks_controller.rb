@@ -12,7 +12,11 @@ class TasksController < ApplicationController
 
     @task = Task.new(task_params)
 
-    @task.policy_type.capitalize!
+    if @task.policy_type == "seaattack"
+      @task.policy_type = "SeaAttack"
+    else
+      @task.policy_type.capitalize!
+    end
 
     respond_to do |format|
       if @task.save

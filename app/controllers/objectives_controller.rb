@@ -8,7 +8,12 @@ class ObjectivesController < ApplicationController
    def create
      @objective = Objective.new(objective_params)
 
-     @objective.policy_type.capitalize!
+
+     if @objective.policy_type == "seaattack"
+       @objective.policy_type = "SeaAttack"
+     else
+       @objective.policy_type.capitalize!
+     end
      respond_to do |format|
        if @objective.save
          format.json { render json: @objective, status: :created }

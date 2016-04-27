@@ -1,0 +1,279 @@
+<%= javascript_include_tag 'moment' %> <!-- utiliser pour afficher le calendrier -->
+<%= javascript_include_tag 'bootstrap-datetimepicker.js' %> <!-- utiliser pour afficher le calendrier -->
+<script type="text/javascript">
+
+
+    function refresh_sea_attack_source() {
+        $.ajax({
+            url: "/websites/" + website_selected.selectedIndex,
+            type: "GET",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                if (data.count_organic <= 0)
+                    sea_attack_organic_medium_percent.disabled = true;
+                else
+                    sea_attack_organic_medium_percent.disabled = false;
+
+            },
+            error: function (data) {
+                sea_attack_organic_medium_percent.disabled = true;
+            }
+        })
+    }
+    $(document).ready(function () {
+        refresh_sea_attack_source();
+    });
+    $('select#website_selected').on('change', function () {
+        refresh_sea_attack_source();
+    })
+    ;
+</script>
+
+<%= form_for(@sea_attack) do |f| %>
+    <% if @sea_attack.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@sea_attack.errors.count, "error") %> prohibited this sea_attack from being saved:</h2>
+
+          <ul>
+            <% @sea_attack.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="container-fluid">
+      <div class="panel panel-default">
+        <div class="panel-heading"><b><%= label %></b></div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-2">
+              <p>
+
+                <%= label_tag "Website" %>
+                <%= select_tag :website_selected,
+                               options_from_collection_for_select(@websites, "id", "label", @website.nil? ? "0" : @website.id),
+                               class: "form-control",
+                               :include_blank => "Select one" %>
+
+              </p>
+
+              <p>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">Statistic</div>
+                <div class="panel-body">
+                  <p>
+                    <%= label_tag "Default" %>
+                    <%= f.radio_button :statistic_type, "default", :checked => true, onClick: "statistic_selected.disabled=true;" %>
+                    <%= label_tag "Custom" %>
+                    <%= f.radio_button :statistic_type, "custom", onClick: "statistic_selected.disabled=false;" %>
+                  </p>
+
+                  <p>
+                    <%= select_tag :statistic_selected,
+                                   options_from_collection_for_select(@statistics, "id", "label", @statistic.nil? ? "0" : @statistic.statistic_id),
+                                   class: "form-control",
+                                   :include_blank => "Select one",
+                                   :disabled => @sea_attack.statistic_type == "custom" ? false : true %>
+                  </p>
+                </div>
+              </div>
+              </p>
+            </div>
+
+            <div class="col-lg-2">
+              <div class="panel panel-default">
+                <div class="panel-heading">Planification</div>
+                <div class="panel-body">
+                  <p>
+                    <%= f.label :monday_start %>
+
+                  <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                      <%= f.text_field :monday_start, class: "form-control" %>
+                      <span class="input-group-addon">
+                                           <span class="glyphicon glyphicon-calendar"></span>
+                                       </span>
+                    </div>
+                  </div>
+                  <script type="text/javascript">
+
+                      $(function () {
+                          $('#datetimepicker1').datetimepicker({
+                              disabledHours: true,
+                              minDate: <%= Date.today + @sea_attack.max_duration_scraping%>,
+                              daysOfWeekDisabled: [0, 2, 3, 4, 5, 6]
+                          });
+                      });
+                  </script>
+                  </p>
+
+                  <p>
+                    <%= f.label :count_weeks %><%= f.number_field :count_weeks, class: "form-control" %>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-2">
+              <div class="panel panel-default">
+                <div class="panel-heading">Objectives</div>
+                <div class="panel-body">
+                  <p>
+                    <%= f.label "Count visit per day" %>
+                    <%= f.number_field :count_visits_per_day, class: "form-control" %>
+                  </p>
+
+                  <p>
+                    <%= f.label "Keywords" %>
+                    <%= f.text_field :keywords, class: "form-control" %>
+                    <%= f.label "Label Adwords" %>
+                    <%= f.text_field :label_advertising, class: "form-control" %>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">Behaviour <span class="label label-warning">Optional</span></div>
+                <div class="panel-body">
+
+                  <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#behaviour_website">Website visit</a></li>
+                    <li><a data-toggle="tab" href="#behaviour_search">Organic search</a></li>
+                    <li><a data-toggle="tab" href="#behaviour_advertiser">Advertiser visit</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div id="behaviour_website" class="tab-pane fade in active">
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <p>
+                            <%= f.label :max_duration_scraping %>
+                            <%= f.number_field :max_duration_scraping, class: "form-control" %>
+                          </p>
+
+                          <p>
+                            <%= f.label :min_duration %>
+                            <%= f.number_field :min_duration, class: "form-control" %>
+                          </p>
+                        </div>
+                        <div class="col-lg-4">
+                          <p>
+                            <%= f.label :max_duration %>
+                            <%= f.number_field :max_duration, class: "form-control" %>
+
+                          </p>
+
+                          <p>
+                            <%= f.label :min_duration_website %>
+                            <%= f.number_field :min_duration_website, class: "form-control" %>
+                          </p>
+                        </div>
+                        <div class="col-lg-4">
+                          <p>
+                            <%= f.label :min_pages_website %>
+                            <%= f.number_field :min_pages_website, class: "form-control" %>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="behaviour_search" class="tab-pane fade">
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <p><%= f.label :min_count_page_organic %>
+                            <%= f.number_field :min_count_page_organic, class: "form-control" %>
+                          </p>
+
+                          <p>
+
+                            <%= f.label :max_count_page_organic %>
+                            <%= f.number_field :max_count_page_organic, class: "form-control" %>
+                          </p>
+                        </div>
+                        <div class="col-lg-6">
+                          <p>
+
+                            <%= f.label :min_duration_page_organic %>
+                            <%= f.number_field :min_duration_page_organic, class: "form-control" %>
+                          </p>
+
+                          <p>
+
+
+                            <%= f.label :max_duration_page_organic %>
+                            <%= f.number_field :max_duration_page_organic, class: "form-control" %>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="behaviour_advertiser" class="tab-pane fade ">
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <p><%= f.label :min_count_page_advertiser %>
+                            <%= f.number_field :min_count_page_advertiser, class: "form-control" %> </p>
+
+                          <p><%= f.label :max_count_page_advertiser %>
+                            <%= f.number_field :max_count_page_advertiser, class: "form-control" %></p>
+                        </div>
+                        <div class="col-lg-4">
+                          <%= f.label :min_duration_page_advertiser %>
+                          <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
+                          <p>
+                            <%= f.label :percent_local_page_advertiser %>
+                            <%= f.number_field :percent_local_page_advertiser, class: "form-control" %>  </p>
+                        </div>
+                        <div class="col-lg-4">
+                          <p>
+                            <%= f.label :min_duration_page_advertiser %>
+                            <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
+
+                          <p>
+                            <%= f.label :max_duration_page_advertiser %>
+                            <%= f.number_field :max_duration_page_advertiser, class: "form-control" %>   </p>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-2">
+              <div class="panel panel-default">
+                <div class="panel-heading">Execution mode</div>
+                <div class="panel-body">
+                  <p>
+                    <%= label_tag "Auto" %>
+                    <%= f.radio_button :execution_mode, "auto", :checked => true %>
+                    <%= label_tag "Manual" %>
+                    <%= f.radio_button :execution_mode, "manual" %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <p class="text-primary">
+                Would you Publish your Sea Attack Policy
+                <%= f.submit "Now", class: "btn btn-info", data: {confirm: "Are you sure?"} %>
+                or
+                <%= f.submit "Later", class: "btn btn-info" %>
+                ?
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+<% end %>
+
+
+

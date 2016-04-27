@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160408071342) do
+ActiveRecord::Schema.define(version: 20160417073850) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -87,6 +87,36 @@ ActiveRecord::Schema.define(version: 20160408071342) do
   end
 
   add_index "ranks", ["website_id"], name: "index_ranks_on_website_id"
+
+  create_table "sea_attacks", force: :cascade do |t|
+    t.integer  "website_id",                                        null: false
+    t.string   "statistic_type",                                    null: false
+    t.date     "monday_start",                                      null: false
+    t.integer  "count_weeks",                   default: 0,         null: false
+    t.integer  "count_visits_per_day",          default: 0,         null: false
+    t.string   "keywords",                                          null: false
+    t.string   "label_advertising",                                 null: false
+    t.integer  "max_duration_scraping",         default: 1,         null: false
+    t.integer  "min_count_page_advertiser",     default: 10,        null: false
+    t.integer  "max_count_page_advertiser",     default: 15,        null: false
+    t.integer  "min_duration_page_advertiser",  default: 60,        null: false
+    t.integer  "max_duration_page_advertiser",  default: 120,       null: false
+    t.integer  "percent_local_page_advertiser", default: 80,        null: false
+    t.integer  "min_count_page_organic",        default: 4,         null: false
+    t.integer  "max_count_page_organic",        default: 6,         null: false
+    t.integer  "min_duration_page_organic",     default: 10,        null: false
+    t.integer  "max_duration_page_organic",     default: 30,        null: false
+    t.integer  "min_duration",                  default: 5,         null: false
+    t.integer  "max_duration",                  default: 10,        null: false
+    t.integer  "min_duration_website",          default: 10,        null: false
+    t.integer  "min_pages_website",             default: 2,         null: false
+    t.string   "execution_mode",                default: "auto",    null: false
+    t.string   "state",                         default: "created", null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+  end
+
+  add_index "sea_attacks", ["website_id"], name: "index_sea_attacks_on_website_id"
 
   create_table "statistics", force: :cascade do |t|
     t.string   "label",                       null: false

@@ -8,6 +8,6 @@ class Objective < ActiveRecord::Base
   validates :page_views_per_visit, :presence => true , :numericality => true
   validates :hourly_distribution, :presence => true
   validates :day, :presence => true
-  validates :policy_type, :presence => true, inclusion: {in: %w(Traffic Rank), message: "%{value} is not a valid policy type"}
+  validates :policy_type, :presence => true, inclusion: {in: %w(Traffic Rank SeaAttack), message: "%{value} is not a valid policy type"}
 
 end
