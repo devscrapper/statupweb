@@ -6,8 +6,12 @@ Rails.application.routes.draw do
   resources :tasks
   match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic
   match '/traffics/:id/unpublish', to: 'traffics#unpublish', via: [:patch], as: :unpublish_traffic
+  match '/traffics/:id/manual', to: 'traffics#manual', via: [:patch], as: :manual_traffic
+  match '/traffics/:id/auto', to: 'traffics#auto', via: [:patch], as: :auto_traffic
   match '/sea_attacks/:id/publish', to: 'sea_attacks#publish', via: [:patch], as: :publish_sea_attack
   match '/sea_attacks/:id/unpublish', to: 'sea_attacks#unpublish', via: [:patch], as: :unpublish_sea_attack
+  match '/sea_attacks/:id/manual', to: 'sea_attacks#manual', via: [:patch], as: :manual_sea_attack
+  match '/sea_attacks/:id/auto', to: 'sea_attacks#auto', via: [:patch], as: :auto_sea_attack
   match '/tasks/:id/start', to: 'tasks#start', via: [:patch], as: :start_task
   match '/calendar/prev_day', to: 'calendar#prev_day', via: [:get], as: :prev_day_calendar
   match '/calendar/today', to: 'calendar#today', via: [:get], as: :today_calendar

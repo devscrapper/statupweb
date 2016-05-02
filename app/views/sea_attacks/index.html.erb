@@ -13,7 +13,7 @@
         <tr>
           <th class="text-center">Id</th>
           <th class="text-center">State</th>
-          <th class="text-center">Manual</th>
+          <th class="text-center">Execution</th>
           <th class="text-left">Website</th>
           <th class="text-center">Monday start</th>
           <th class="text-center">End policy</th>
@@ -38,7 +38,19 @@
 
               </td>
               <td class="text-center vert-align">
-                <%=content_tag(:span, "", class: "btn btn-success btn-xs glyphicon glyphicon-ok") if sea_attack.execution_mode == "manual" %>
+
+                <%= case sea_attack.execution_mode
+                      when "manual"
+                        form_for sea_attack, as: :post, method: :patch, url: auto_sea_attack_path(sea_attack) do |f|
+                          f.submit "M", class: "btn btn-sm btn-danger", data: {confirm: "Change execution to Auto ?"}
+                        end
+
+                      when "auto"
+                        form_for sea_attack, as: :post, method: :patch, url: manual_sea_attack_path(sea_attack) do |f|
+                          f.submit "A", class: "btn btn-sm btn-success", data: {confirm: "Change execution to Manual ?"}
+                        end
+                    end %>
+
               </td>
               <td class="text-left vert-align">
                 <a data-toggle="collapse" class="" href="#panel-show<%= sea_attack.id %>"><%= sea_attack.website.label %></a>

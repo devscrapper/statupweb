@@ -61,6 +61,13 @@ class SeaAttacksController < ApplicationController
     render_after_create_or_update(ok, "SeaAttack n°#{@sea_attack.id} was successfully created.")
   end
 
+  def manual
+    update_execution_mode("manual")
+  end
+  def auto
+    update_execution_mode("auto")
+  end
+
   def publish
 
 
@@ -168,7 +175,26 @@ class SeaAttacksController < ApplicationController
     end
   end
 
+  def update_execution_mode(mode)
+       respond_to do |format|
+         begin
+           @sea_attack = SeaAttack.find(params[:id])
 
+           if @sea_attack.state == "published"
+             Publication::execution_mode("seaattack", @sea_attack.id, mode)
+           end
+
+         rescue Exception => e
+
+           format.html { redirect_to sea_attacks_path, alert: "Execution mode SeaAttack n°#{params[:id]}  not change : #{e.message}" }
+
+         else
+           @sea_attack.update_attribute(:execution_mode, mode)
+           format.html { redirect_to sea_attacks_path, notice: 'Execution mode SeaAttack was successfully change to enginebot.' }
+
+         end
+       end
+  end
 
   def render_after_create_or_update(ok, notice)
     respond_to do |format|
@@ -205,44 +231,46 @@ class SeaAttacksController < ApplicationController
       end
     end
   end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sea_attack
-      @sea_attack = SeaAttack.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def sea_attack_params
-      params.require(:sea_attack).permit(:statistic_selected,
-                                         :count_visits_per_day,
-                                         :keywords,
-                                         :label_advertising,
-                                         :hourly_daily_distribution,
-                                         :percent_new_visit,
-                                         :visit_bounce_rate,
-                                         :avg_time_on_site,
-                                         :statistic_type,
-                                         :page_views_per_visit,
-                                         :website_id,
-                                         :statistic_id,
-                                         :monday_start,
-                                         :count_weeks,
-                                         :count_visits_per_day,
-                                         :max_duration_scraping,
-                                         :min_count_page_advertiser,
-                                         :max_count_page_advertiser,
-                                         :min_duration_page_advertiser,
-                                         :max_duration_page_advertiser,
-                                         :percent_local_page_advertiser,
-                                         :min_count_page_organic,
-                                         :max_count_page_organic,
-                                         :min_duration_page_organic,
-                                         :max_duration_page_organic,
-                                         :min_duration,
-                                         :max_duration,
-                                         :min_duration_website,
-                                         :min_pages_website,
-                                         :execution_mode)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_sea_attack
+    @sea_attack = SeaAttack.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def sea_attack_params
+    params.require(:sea_attack).permit(:statistic_selected,
+                                       :count_visits_per_day,
+                                       :keywords,
+                                       :label_advertising,
+                                       :hourly_daily_distribution,
+                                       :percent_new_visit,
+                                       :visit_bounce_rate,
+                                       :avg_time_on_site,
+                                       :statistic_type,
+                                       :page_views_per_visit,
+                                       :website_id,
+                                       :statistic_id,
+                                       :monday_start,
+                                       :count_weeks,
+                                       :count_visits_per_day,
+                                       :max_duration_scraping,
+                                       :min_count_page_advertiser,
+                                       :max_count_page_advertiser,
+                                       :min_duration_page_advertiser,
+                                       :max_duration_page_advertiser,
+                                       :percent_local_page_advertiser,
+                                       :min_count_page_organic,
+                                       :max_count_page_organic,
+                                       :min_duration_page_organic,
+                                       :max_duration_page_organic,
+                                       :min_duration,
+                                       :max_duration,
+                                       :min_duration_website,
+                                       :min_pages_website,
+                                       :execution_mode)
+  end
 
   private
+
 end

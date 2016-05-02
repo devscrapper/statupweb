@@ -61,6 +61,12 @@ class TrafficsController < ApplicationController
     render_after_create_or_update(ok, "Traffic n°#{@traffic.id} was successfully created.")
   end
 
+  def manual
+    update_execution_mode("manual")
+  end
+  def auto
+    update_execution_mode("auto")
+  end
   def publish
 
 
@@ -215,6 +221,26 @@ class TrafficsController < ApplicationController
 
 end
 
+def update_execution_mode(mode)
+     respond_to do |format|
+       begin
+         @traffic = Traffic.find(params[:id])
+
+         if @traffic.state == "published"
+           Publication::execution_mode("traffic", @traffic.id, mode)
+         end
+
+       rescue Exception => e
+
+         format.html { redirect_to traffics_path, alert: "Execution mode Traffic n°#{params[:id]}  not change : #{e.message}" }
+
+       else
+         @traffic.update_attribute(:execution_mode, mode)
+         format.html { redirect_to traffics_path, notice: 'Execution mode Traffic was successfully change to enginebot.' }
+
+       end
+     end
+end
 def render_after_create_or_update(ok, notice)
   respond_to do |format|
     if ok
