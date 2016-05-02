@@ -42,12 +42,12 @@
                 <%= case sea_attack.execution_mode
                       when "manual"
                         form_for sea_attack, as: :post, method: :patch, url: auto_sea_attack_path(sea_attack) do |f|
-                          f.submit "M", class: "btn btn-sm btn-danger", data: {confirm: "Change execution to Auto ?"}
+                          f.submit "M", class: "btn btn-xs btn-danger", data: {confirm: "Change execution to Auto ?"}
                         end
 
                       when "auto"
                         form_for sea_attack, as: :post, method: :patch, url: manual_sea_attack_path(sea_attack) do |f|
-                          f.submit "A", class: "btn btn-sm btn-success", data: {confirm: "Change execution to Manual ?"}
+                          f.submit "A", class: "btn btn-xs btn-success", data: {confirm: "Change execution to Manual ?"}
                         end
                     end %>
 

@@ -40,7 +40,7 @@
   </script>
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
-<nav class="navbar navbar-fixed-top navbar-inverse">
+<nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
       <%= link_to 'Statup Web', root_path, class: "navbar-brand" %>
@@ -52,7 +52,6 @@
       <li><%= link_to "Ranks", ranks_path %></li>
       <li><%= link_to "Websites", websites_path %></li>
       <li><%= link_to "Statistics", statistics_path %></li>
-      <li><%= link_to "Calendar", "http://#{Publication::host}:#{Publication::port}/tasks/all", {:target => '_blank'} %></li>
       <li><%= link_to "Activity Servers", activity_servers_path %></li>
       <li><%= if ["test", "production"].include?(Rails.env)
                 link_to "Activity Jobs", "/delayed_job/overview"

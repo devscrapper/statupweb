@@ -44,12 +44,12 @@
                 <%= case traffic.execution_mode
                       when "manual"
                         form_for traffic, as: :post, method: :patch, url: auto_traffic_path(traffic) do |f|
-                          f.submit "M", class: "btn btn-sm btn-danger", data: {confirm: "Change execution to Auto ?"}
+                          f.submit "M", class: "btn btn-xs btn-danger", data: {confirm: "Change execution to Auto ?"}
                         end
 
                       when "auto"
                         form_for traffic, as: :post, method: :patch, url: manual_traffic_path(traffic) do |f|
-                          f.submit "A", class: "btn btn-sm btn-success", data: {confirm: "Change execution to Manual ?"}
+                          f.submit "A", class: "btn btn-xs btn-success", data: {confirm: "Change execution to Manual ?"}
                         end
                     end %>
 
