@@ -197,7 +197,7 @@
       </td>
 
       <% if ["created", "scheduled", "published", "success", "fail", "outoftime", "overttl", "neverstarted"].include?(state) %>
-          <td class="text-center"><%= visit.plan_time.localtime.to_formatted_s(:db) %></td>
+          <td class="text-center"><%= visit.plan_time.nil? ?  "unknown" : visit.plan_time.localtime.to_formatted_s(:db) %></td>
       <% end %>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
           <td class="text-center"><%= visit.start_time.nil? ? "unknown" : visit.start_time.localtime.to_formatted_s(:db) %></td>
