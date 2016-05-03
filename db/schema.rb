@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160417073850) do
+ActiveRecord::Schema.define(version: 20160503151025) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -210,21 +210,23 @@ ActiveRecord::Schema.define(version: 20160417073850) do
   create_table "visits", force: :cascade do |t|
     t.integer  "policy_id"
     t.string   "policy_type"
-    t.string   "id_visit",                                     null: false
-    t.datetime "start_time",                                   null: false
-    t.string   "landing_url",                                  null: false
-    t.string   "durations",                                    null: false
-    t.string   "referrer",                                     null: false
-    t.string   "advert",                                       null: false
-    t.string   "state",                    default: "created", null: false
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
-    t.string   "execution_mode",           default: "auto",    null: false
-    t.string   "browser_name",             default: "",        null: false
-    t.string   "browser_version",          default: "",        null: false
-    t.string   "operating_system_name",    default: "",        null: false
-    t.string   "operating_system_version", default: "",        null: false
-    t.integer  "count_browsed_page",       default: 0,         null: false
+    t.string   "id_visit",                                      null: false
+    t.datetime "start_time"
+    t.string   "landing_url",                                   null: false
+    t.string   "actions",                  default: "--- []\n", null: false
+    t.string   "referrer",                                      null: false
+    t.string   "advert",                                        null: false
+    t.string   "state",                    default: "created",  null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.string   "execution_mode",           default: "auto",     null: false
+    t.string   "browser_name",             default: "",         null: false
+    t.string   "browser_version",          default: "",         null: false
+    t.string   "operating_system_name",    default: "",         null: false
+    t.string   "operating_system_version", default: "",         null: false
+    t.integer  "count_browsed_page",       default: 0,          null: false
+    t.datetime "end_time"
+    t.datetime "plan_time"
   end
 
   add_index "visits", ["policy_type", "policy_id"], name: "index_visits_on_policy_type_and_policy_id"

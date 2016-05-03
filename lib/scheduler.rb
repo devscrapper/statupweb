@@ -38,10 +38,6 @@ module Scheduler
 
   private
 
-
-
-  private
-
   module_function :publish
 
 end

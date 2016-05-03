@@ -8,8 +8,9 @@ class VisitsController < ApplicationController
     @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state] || "created"}).order("start_time desc")
     @policy_id = params['policy_id']
     @execution_mode = params['execution_mode']
-    @state = params[:state]  || "created"
+    @state = params[:state] || "created"
   end
+
   def refresh
     @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
     @policy_id = params['policy_id']
@@ -52,7 +53,7 @@ class VisitsController < ApplicationController
     end
   end
 
-    # DELETE /traffics/1
+  # DELETE /traffics/1
   # DELETE /traffics/1.json
   def delete
     begin
@@ -73,7 +74,7 @@ class VisitsController < ApplicationController
   def delete_all_by_state
     begin
       @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]})
-      @visits.each {|visit| visit.destroy!}
+      @visits.each { |visit| visit.destroy! }
     rescue Exception => e
       @alert = "Visits not delete : #{e.message}"
     else
@@ -85,6 +86,7 @@ class VisitsController < ApplicationController
       @state = params[:state]
     end
   end
+
   def browsed_page
     @visit = Visit.find_by_id_visit(params[:visit_id])
 
@@ -102,6 +104,7 @@ class VisitsController < ApplicationController
     end
   end
 
+
   def publish
     begin
       Scheduler::publish(params['visit_id'])
@@ -117,10 +120,11 @@ class VisitsController < ApplicationController
       @state = params[:state]
     end
   end
+
   def publish_all
     begin
       @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]})
-      @visits.each {|visit| Scheduler::publish(visit.id)}
+      @visits.each { |visit| Scheduler::publish(visit.id) }
 
     rescue Exception => e
       @alert = "Scheduler not start execution visit  : #{e.message}"
@@ -133,14 +137,42 @@ class VisitsController < ApplicationController
       @state = params[:state]
     end
   end
-  def update
-    @visit = Visit.find_by_id_visit(params[:id])
+
+  def started
+    @visit = Visit.find_by_id_visit(params[:visit_id])
 
     respond_to do |format|
       if @visit.nil?
         format.json { render json: @visit, status: :not_found }
 
-      elsif @visit.update_attribute(:state, visit_params[:state])
+      elsif @visit.update_attributes({:start_time => Time.now,
+                                      :actions => visit_params[:actions],
+                                      :state => "started"})
+        format.json { render json: @visit, status: :created }
+
+      else
+        format.json { render json: @visit.errors, status: :unprocessable_entity }
+
+      end
+    end
+  end
+
+  def update
+    @visit = Visit.find_by_id_visit(params[:id])
+
+
+    case visit_params[:state]
+      when "success", "fail", "overttl"
+        datas = {:state => visit_params[:state],
+                 :end_time => Time.now}
+      else
+        datas = {:state => visit_params[:state]}
+    end
+    respond_to do |format|
+      if @visit.nil?
+        format.json { render json: @visit, status: :not_found }
+
+      elsif @visit.update_attributes(datas)
         format.json { render json: @visit, status: :created }
 
       else
@@ -168,7 +200,9 @@ class VisitsController < ApplicationController
                                   :policy_type,
                                   :id_visit,
                                   :execution_mode,
+                                  :plan_time,
                                   :start_time,
+                                  :end_time,
                                   :landing_url,
                                   :referrer,
                                   :advert,
@@ -178,6 +212,6 @@ class VisitsController < ApplicationController
                                   :operating_system_name,
                                   :operating_system_version,
                                   :count_browsed_page,
-                                  :durations => []) #car durations est un array
+                                  :actions => []) #car durations est un array
   end
 end
