@@ -208,6 +208,10 @@
     <th class="text-left">Browser</th>
     <th class="text-center">Referrer</th>
     <th class="text-center">Advert</th>
+    <% if ["started", "success", "fail", "overttl"].include?(state) %>
+        <th class="text-center">Geolocation</th>
+    <% end %>
+
   </tr>
 
   </thead>
@@ -290,6 +294,9 @@
       <td class="text-left"><%= visit.browser_name %>/<%= visit.browser_version %></td>
       <td class="text-center"><%= visit.referrer %></td>
       <td class="text-center"><%= visit.advert %></td>
+      <% if ["started", "success", "fail", "overttl"].include?(state) %>
+          <td class="text-center"><%= visit.ip_geo_proxy %></td>
+      <% end %>
       </tr>
   <% end %>
   </tbody>

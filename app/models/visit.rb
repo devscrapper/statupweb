@@ -18,5 +18,6 @@ class Visit < ActiveRecord::Base
   validates :operating_system_name, :presence => true
   validates :operating_system_version, :presence => true
   validates :count_browsed_page, :presence => true
+  validates :ip_geo_proxy, :presence => true
 
 end

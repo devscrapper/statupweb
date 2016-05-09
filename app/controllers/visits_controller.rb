@@ -167,6 +167,7 @@ class VisitsController < ApplicationController
 
       elsif @visit.update_attributes({:start_time => Time.now,
                                       :actions => visit_params[:actions],
+                                      :ip_geo_proxy => visit_params[:ip_geo_proxy],
                                       :state => "started"})
         format.json { render json: @visit, status: :created }
 
@@ -232,6 +233,7 @@ class VisitsController < ApplicationController
                                   :operating_system_name,
                                   :operating_system_version,
                                   :count_browsed_page,
+                                  :ip_geo_proxy,
                                   :actions => []) #car durations est un array
   end
 end
