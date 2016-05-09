@@ -1,13 +1,13 @@
 require 'json'
 
 class Traffic < ActiveRecord::Base
-  has_one :custom_statistic, :as => :policy, dependent: :destroy
-  has_many :tasks, :as => :policy, dependent: :destroy
-  has_many :objectives, :as => :policy, dependent: :destroy
-  has_many :visits, :as => :policy, dependent: :destroy
+  has_one :custom_statistic, as: :policy, dependent: :destroy
+  has_many :tasks, as: :policy, dependent: :destroy
+  has_many :objectives, as: :policy, dependent: :destroy
+  has_many :visits, as: :policy, dependent: :destroy
   belongs_to :website
 
-  validates :website_id, presence: { message: "must be given" }
+  validates :website_id, presence: {message: "must be given"}
   validates :statistic_type, :presence => true
   validates :monday_start, :presence => true
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}

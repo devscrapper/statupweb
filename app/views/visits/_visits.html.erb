@@ -1,128 +1,184 @@
 <!--created scheduled outoftime started neverstarted success fail-->
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "created"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "created"}).count
 %>
 <%= link_to "Created (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "created"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "created"}),
             remote: true,
             class: "btn btn-sm btn-default"
 %>
 <% if state == "created" and count_visits > 0 %>
     <%=
         link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
-                publish_all_path({:policy_id => policy_id, :state => "created"}),
+                publish_all_path({:policy_id => policy_id,
+                                  :policy_type => policy_type,
+                                  :state => "created"}),
                 remote: true,
                 data: {confirm: 'Are you sure?'}
 
     %>
     <%=
         link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-                delete_all_by_state_path({:policy_id => policy_id, :state => "created"}),
+                delete_all_by_state_path({:policy_id => policy_id,
+                                          :policy_type => policy_type,
+                                          :state => "created"}),
                 remote: true,
                 data: {confirm: 'Are you sure?'}
 
     %>
 <% end %>
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "scheduled"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "scheduled"}).count
 %>
 <%= link_to "Scheduled (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "scheduled"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "scheduled"}),
             remote: true,
             class: "btn btn-sm btn-info" %>
 <%= if state == "scheduled" and count_visits > 0
       link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-              delete_all_by_state_path({:policy_id => policy_id, :state => "scheduled"}),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "scheduled"}),
               remote: true,
               data: {confirm: 'Are you sure?'}
     end
 %>
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "published"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "published"}).count
 %>
 <%= link_to "Published (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "published"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "published"}),
             remote: true,
             class: "btn btn-sm btn-primary" %>
 <%= if state == "published" and count_visits > 0
       link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-              delete_all_by_state_path({:policy_id => policy_id, :state => "published"}),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "published"}),
               remote: true,
               data: {confirm: 'Are you sure?'}
     end
 %>
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "started"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "started"}).count
 %>
 <%= link_to "Started (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "started"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "started"}),
             remote: true,
             class: "btn btn-sm btn-primary" %>
 <%= if state == "started" and count_visits > 0
       link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-              delete_all_by_state_path({:policy_id => policy_id, :state => "started"}),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "started"}),
               remote: true,
               data: {confirm: 'Are you sure?'}
     end
 %>
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "success"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "success"}).count
 %>
 <%= link_to "Success (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "success"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "success"}),
             remote: true,
             class: "btn btn-sm btn-success" %>
 <%= if state == "success" and count_visits > 0
       link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-              delete_all_by_state_path({:policy_id => policy_id, :state => "success"}),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "success"}),
               remote: true,
               data: {confirm: 'Are you sure?'}
     end
 %>
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "fail"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "fail"}).count
 %>
 <%= link_to "Fail (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "fail"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "fail"}),
             remote: true,
             class: "btn btn-sm btn-danger" %>
 <%= if state == "fail" and count_visits > 0
       link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-              delete_all_by_state_path({:policy_id => policy_id, :state => "fail"}),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "fail"}),
               remote: true,
               data: {confirm: 'Are you sure?'}
     end
 %>
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "outoftime"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "outoftime"}).count
 %>
 <%= link_to "Out of Time (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "outoftime"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "outoftime"}),
             remote: true,
             class: "btn btn-sm btn-warning" %>
 <%= if state == "outoftime" and count_visits > 0
       link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-              delete_all_by_state_path({:policy_id => policy_id, :state => "outoftime"}),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "outoftime"}),
               remote: true,
               data: {confirm: 'Are you sure?'}
     end
 %>
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "overttl"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "overttl"}).count
 %>
 <%= link_to "Over Time to Live (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "overttl"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "overttl"}),
             remote: true,
             class: "btn btn-sm btn-warning" %>
 <%= if state == "overttl" and count_visits > 0
       link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-              delete_all_by_state_path({:policy_id => policy_id, :state => "overttl"}),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "overttl"}),
               remote: true,
               data: {confirm: 'Are you sure?'}
     end
 %>
-<% count_visits = Visit.where({:policy_id => policy_id, :state => "neverstarted"}).count
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "neverstarted"}).count
 %>
 <%= link_to "Never Started (#{count_visits})",
-            visits_path({:execution_mode => execution_mode, :policy_id => policy_id, :state => "neverstarted"}),
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "neverstarted"}),
             remote: true,
             class: "btn btn-sm btn-warning" %>
 
 <%= if state == "neverstarted" and count_visits > 0
       link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-              delete_all_by_state_path({:policy_id => policy_id, :state => "neverstarted"}),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "neverstarted"}),
               remote: true,
               data: {confirm: 'Are you sure?'}
     end
@@ -181,23 +237,29 @@
         <span class="<%= color_state %>"><%= visit.state %></span>
         <%= if visit.state == "created"
               link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
-                      publish_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
+                      publish_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id,
+                                          :policy_type => policy_type,
+                                          :state => visit.state}),
                       remote: true,
                       data: {confirm: 'Are you sure?'}
             elsif ["scheduled", "published", "started"].include?(visit.state)
               link_to content_tag(:span, "", class: "glyphicon glyphicon-refresh"),
-                      refresh_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
+                      refresh_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id,
+                                          :policy_type => policy_type,
+                                          :state => visit.state}),
                       remote: true
             end %>
         <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
-                    delete_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id, :state => visit.state}),
+                    delete_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id,
+                                       :policy_type => policy_type,
+                                       :state => visit.state}),
                     remote: true,
                     data: {confirm: 'Are you sure?'}
         %>
       </td>
 
       <% if ["created", "scheduled", "published", "success", "fail", "outoftime", "overttl", "neverstarted"].include?(state) %>
-          <td class="text-center"><%= visit.plan_time.nil? ?  "unknown" : visit.plan_time.localtime.to_formatted_s(:db) %></td>
+          <td class="text-center"><%= visit.plan_time.nil? ? "unknown" : visit.plan_time.localtime.to_formatted_s(:db) %></td>
       <% end %>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
           <td class="text-center"><%= visit.start_time.nil? ? "unknown" : visit.start_time.localtime.to_formatted_s(:db) %></td>

@@ -5,15 +5,21 @@ class VisitsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_request?
 
   def index
-    @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state] || "created"}).order("start_time desc")
+    @visits = Visit.where({:policy_id => params[:policy_id],
+                           :policy_type => params[:policy_type],
+                           :state => params[:state] || "created"}).order("start_time desc")
     @policy_id = params['policy_id']
+    @policy_type = params['policy_type']
     @execution_mode = params['execution_mode']
     @state = params[:state] || "created"
   end
 
   def refresh
-    @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
+    @visits = Visit.where({:policy_id => params[:policy_id],
+                           :policy_type => params[:policy_type],
+                           :state => params[:state]}).order("start_time desc")
     @policy_id = params['policy_id']
+    @policy_type = params['policy_type']
     @execution_mode = params['execution_mode']
     @state = params[:state]
   end
@@ -64,8 +70,11 @@ class VisitsController < ApplicationController
     else
       @notice = "Visit #{params['visit_id']}  delete"
     ensure
-      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
+      @visits = Visit.where({:policy_id => params[:policy_id],
+                             :policy_type => params[:policy_type],
+                             :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
+      @policy_type = params['policy_type']
       @execution_mode = params['execution_mode']
       @state = params[:state]
     end
@@ -73,15 +82,20 @@ class VisitsController < ApplicationController
 
   def delete_all_by_state
     begin
-      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]})
+      @visits = Visit.where({:policy_id => params[:policy_id],
+                             :policy_type => params[:policy_type],
+                             :state => params[:state]})
       @visits.each { |visit| visit.destroy! }
     rescue Exception => e
       @alert = "Visits not delete : #{e.message}"
     else
       @notice = "All Visits delete"
     ensure
-      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
+      @visits = Visit.where({:policy_id => params[:policy_id],
+                             :policy_type => params[:policy_type],
+                             :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
+      @policy_type = params['policy_type']
       @execution_mode = params['execution_mode']
       @state = params[:state]
     end
@@ -116,6 +130,7 @@ class VisitsController < ApplicationController
     ensure
       @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
+      @policy_type = params['policy_type']
       @execution_mode = params['execution_mode']
       @state = params[:state]
     end
@@ -123,16 +138,21 @@ class VisitsController < ApplicationController
 
   def publish_all
     begin
-      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]})
-      @visits.each { |visit| Scheduler::publish(visit.id) }
+      @visits = Visit.where({:policy_id => params[:policy_id],
+                             :policy_type => params[:policy_type],
+                             :state => params[:state]})
+      @visits.each { |visit| Scheduler::publish(visit.id_visit) }
 
     rescue Exception => e
       @alert = "Scheduler not start execution visit  : #{e.message}"
     else
       @notice = "Scheduler start execution visit}"
     ensure
-      @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
+      @visits = Visit.where({:policy_id => params[:policy_id],
+                             :policy_type => params[:policy_type],
+                             :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
+      @policy_type = params['policy_type']
       @execution_mode = params['execution_mode']
       @state = params[:state]
     end

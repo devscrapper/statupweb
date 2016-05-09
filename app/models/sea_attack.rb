@@ -1,10 +1,10 @@
 require 'json'
 
 class SeaAttack < ActiveRecord::Base
-  has_one :custom_statistic, :as => :policy, dependent: :destroy
-  has_many :tasks, :as => :policy, dependent: :destroy
-  has_many :objectives, :as => :policy, dependent: :destroy
-  has_many :visits, :as => :policy, dependent: :destroy
+  has_one :custom_statistic, as: :policy, dependent: :destroy
+  has_many :tasks, as: :policy, dependent: :destroy
+  has_many :objectives, as: :policy, dependent: :destroy
+  has_many :visits, as: :policy, dependent: :destroy
   belongs_to :website
 
   validates :website_id, presence: {message: "must be given"}
@@ -25,10 +25,10 @@ class SeaAttack < ActiveRecord::Base
   validates :min_pages_website, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 2}
   validates :execution_mode, :presence => true, inclusion: {in: %w(auto manual), message: "%{value} is not a valid mode"}
   validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
-   validates :max_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 15}
-   validates :min_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 60}
-   validates :max_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 120}
-   validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
+  validates :max_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 15}
+  validates :min_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 60}
+  validates :max_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 120}
+  validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
   validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
   validate :monday_start_cannot_be_in_the_past_and_must_be_on_monday,
            :only_one_policy_for_a_website_by_period
@@ -68,13 +68,6 @@ class SeaAttack < ActiveRecord::Base
   end
 
 
-
-
-
-
-
-
-
   def monday_start_cannot_be_in_the_past_and_must_be_on_monday
     if !monday_start.nil?
       errors.add(:monday_start, "must be in the future and #{max_duration_scraping} days before next monday") if !monday_start.nil? and monday_start - Date.today <= max_duration_scraping
@@ -112,7 +105,7 @@ class SeaAttack < ActiveRecord::Base
               :count_visits_per_day => count_visits_per_day, #à cause de la policy Traffic
               :advertising_percent => 100, #à cause de la policy Traffic
               :advertisers => "adwords",
-              :label_advertising => label_advertising,  #TODO encode e utf8
+              :label_advertising => label_advertising, #TODO encode e utf8
               :min_count_page_advertiser => min_count_page_advertiser,
               :max_count_page_advertiser => max_count_page_advertiser,
               :min_duration_page_advertiser => min_duration_page_advertiser,

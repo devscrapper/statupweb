@@ -5,8 +5,11 @@
 
     <%= render partial: 'visits/visits', :locals => {:execution_mode => execution_mode,
                                                      :policy_id => policy_id,
+                                                     :policy_type => policy_type,
                                                      :state => state,
-                                                     visits: Visit.where({:policy_id => policy_id, :state => state}).order("start_time desc")} %>
+                                                     visits: Visit.where({:policy_id => policy_id,
+                                                                          :policy_type => policy_type,
+                                                                          :state => state}).order("plan_time desc")} %>
   </div>
 
 </div>
