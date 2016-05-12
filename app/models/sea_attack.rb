@@ -101,7 +101,7 @@ class SeaAttack < ActiveRecord::Base
               :count_weeks => count_weeks,
               :keywords => keywords,
               :url_root => website.url_root,
-              :max_duration_scraping => max_duration_scraping, # +7  #à cause de la policy Traffic (scraping website & organic)
+              :max_duration_scraping => 0, # pas de scraping pour realise la policy
               :count_visits_per_day => count_visits_per_day, #à cause de la policy Traffic
               :advertising_percent => 100, #à cause de la policy Traffic
               :advertisers => "adwords",

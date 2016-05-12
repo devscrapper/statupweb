@@ -258,7 +258,6 @@ class SeaAttacksController < ApplicationController
                                        :start_date,
                                        :count_weeks,
                                        :count_visits_per_day,
-                                       :max_duration_scraping,
                                        :min_count_page_advertiser,
                                        :max_count_page_advertiser,
                                        :min_duration_page_advertiser,
