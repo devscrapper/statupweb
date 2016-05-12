@@ -34,7 +34,7 @@ class SeaAttacksController < ApplicationController
     @websites = Website.all
     @statistics = Statistic.all
     @sea_attack = SeaAttack.new
-    @sea_attack.monday_start = SeaAttack.next_monday(Date.today + @sea_attack.max_duration_scraping)
+    @sea_attack.start_date = Date.today.next_day(2) #after tomorrow
   end
 
   # GET /sea_attacks/1/edit
@@ -64,6 +64,7 @@ class SeaAttacksController < ApplicationController
   def manual
     update_execution_mode("manual")
   end
+
   def auto
     update_execution_mode("auto")
   end
@@ -75,7 +76,7 @@ class SeaAttacksController < ApplicationController
       begin
         @sea_attack = SeaAttack.find(params[:id])
 
-        raise "monday start is older" if @sea_attack.monday_start < Date.today
+        raise "start date policy is older" if @sea_attack.start_date < Date.today.next_day(2)
         Publication::publish(@sea_attack.to_hash)
 
       rescue Exception => e
@@ -117,7 +118,10 @@ class SeaAttacksController < ApplicationController
   # PATCH/PUT /sea_attacks/1.json
   def update
     params[:sea_attack][:website_id] = params[:website_selected]
+    params[:sea_attack][:start_date] = Date.parse(params[:sea_attack][:start_date])
+
     @sea_attack = SeaAttack.find_by_id(params[:id])
+
     ok = @sea_attack.update(sea_attack_params)
     if ok and @sea_attack.statistic_type == "custom"
 
@@ -176,24 +180,24 @@ class SeaAttacksController < ApplicationController
   end
 
   def update_execution_mode(mode)
-       respond_to do |format|
-         begin
-           @sea_attack = SeaAttack.find(params[:id])
+    respond_to do |format|
+      begin
+        @sea_attack = SeaAttack.find(params[:id])
 
-           if @sea_attack.state == "published"
-             Publication::execution_mode("seaattack", @sea_attack.id, mode)
-           end
+        if @sea_attack.state == "published"
+          Publication::execution_mode("seaattack", @sea_attack.id, mode)
+        end
 
-         rescue Exception => e
+      rescue Exception => e
 
-           format.html { redirect_to sea_attacks_path, alert: "Execution mode SeaAttack n°#{params[:id]}  not change : #{e.message}" }
+        format.html { redirect_to sea_attacks_path, alert: "Execution mode SeaAttack n°#{params[:id]}  not change : #{e.message}" }
 
-         else
-           @sea_attack.update_attribute(:execution_mode, mode)
-           format.html { redirect_to sea_attacks_path, notice: 'Execution mode SeaAttack was successfully change to enginebot.' }
+      else
+        @sea_attack.update_attribute(:execution_mode, mode)
+        format.html { redirect_to sea_attacks_path, notice: 'Execution mode SeaAttack was successfully change to enginebot.' }
 
-         end
-       end
+      end
+    end
   end
 
   def render_after_create_or_update(ok, notice)
@@ -251,7 +255,7 @@ class SeaAttacksController < ApplicationController
                                        :page_views_per_visit,
                                        :website_id,
                                        :statistic_id,
-                                       :monday_start,
+                                       :start_date,
                                        :count_weeks,
                                        :count_visits_per_day,
                                        :max_duration_scraping,

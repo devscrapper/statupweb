@@ -9,12 +9,12 @@ class SeaAttack < ActiveRecord::Base
 
   validates :website_id, presence: {message: "must be given"}
   validates :statistic_type, :presence => true
-  validates :monday_start, :presence => true
+  validates :start_date, :presence => true
   validates :keywords, :presence => true
   validates :label_advertising, :presence => true
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
   validates :count_visits_per_day, :numericality => {:only_integer => true, :other_than => 0, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
-  validates :max_duration_scraping, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 1}
+  validates :max_duration_scraping, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0} #TODO mettre valeur par defaut non customisable ?
   validates :min_count_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 4}
   validates :max_count_page_organic, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 20}
   validates :min_duration_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
@@ -30,7 +30,7 @@ class SeaAttack < ActiveRecord::Base
   validates :max_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 120}
   validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
   validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
-  validate :monday_start_cannot_be_in_the_past_and_must_be_on_monday,
+  validate :cannot_be_in_the_past,
            :only_one_policy_for_a_website_by_period
 
   DELAY_WEEK = 7
@@ -68,26 +68,26 @@ class SeaAttack < ActiveRecord::Base
   end
 
 
-  def monday_start_cannot_be_in_the_past_and_must_be_on_monday
-    if !monday_start.nil?
-      errors.add(:monday_start, "must be in the future and #{max_duration_scraping} days before next monday") if !monday_start.nil? and monday_start - Date.today <= max_duration_scraping
-      errors.add(:monday_start, "must be on monday") if !monday_start.monday?
+  def cannot_be_in_the_past
+    if !start_date.nil?
+      errors.add(:start_date, "must be after tomorrow or later") if start_date < Date.today.next_day(2)
+
     end
   end
 
   def only_one_policy_for_a_website_by_period
 
-    if !monday_start.nil? and !count_weeks.nil?
-      end_date = monday_start + count_weeks * DELAY_WEEK
-      policies = Traffic.select("monday_start, count_weeks").where("website_id =? and id <>?", website_id, id)
+    if !start_date.nil? and !count_weeks.nil?
+      end_date = start_date + count_weeks * DELAY_WEEK
+      policies = SeaAttack.select("start_date, count_weeks").where("website_id =? and id <>?", website_id, id)
       policies.each { |policy|
         # on considère que les debuts de chaque periode sont tj avant les fins de chaque période
-        p "#{policy.monday_start + policy.count_weeks * DELAY_WEEK } <= #{monday_start}#{policy.monday_start + policy.count_weeks * DELAY_WEEK <= monday_start}"
-        p "#{policy.monday_start} >= #{end_date}#{policy.monday_start >= end_date}"
-        if policy.monday_start + policy.count_weeks * DELAY_WEEK <= monday_start or
-            policy.monday_start >= end_date
+        p "#{policy.start_date + policy.count_weeks * DELAY_WEEK } <= #{start_date}#{policy.start_date + policy.count_weeks * DELAY_WEEK <= start_date}"
+        p "#{policy.start_date} >= #{end_date}#{policy.start_date >= end_date}"
+        if policy.start_date + policy.count_weeks * DELAY_WEEK <= start_date or
+            policy.start_date >= end_date
         else
-          errors.add(:website, "only one policy on same periode")
+          errors.add(:website, "only one Seaattack policy on website on same periode")
           return
         end
       }
@@ -97,7 +97,7 @@ class SeaAttack < ActiveRecord::Base
   def to_hash
     policy = {:policy_id => id,
               :policy_type => self.class.name, :website_id => website_id, :website_label => website.label, :statistics_type => statistic_type,
-              :monday_start => monday_start, #à cause de la policy Traffic (scraping website & organic)
+              :start_date => start_date,
               :count_weeks => count_weeks,
               :keywords => keywords,
               :url_root => website.url_root,
