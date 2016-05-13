@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   match '/visits/refresh', to: 'visits#refresh', via: [:get], as: :refresh_visit
   match '/visits/:visit_id/browsed_page', to: 'visits#browsed_page', via: [:patch], as: :browsed_page_visit
   match '/visits/:visit_id/started', to: 'visits#started', via: [:patch], as: :started_visit
+  match '/visits/order_by', to: 'visits#order_by', via: [:get], as: :order_by_visit
 
   resources :visits
   #match '/traffics/destroy_all', to:'traffics#destroy_all', via: [:delete], as: :destroy_all_traffic
