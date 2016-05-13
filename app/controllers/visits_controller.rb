@@ -118,7 +118,15 @@ class VisitsController < ApplicationController
     end
   end
 
-
+  def order_by
+    @visits = Visit.where({:policy_id => params[:policy_id],
+                           :policy_type => params[:policy_type],
+                           :state => params[:state]}).order("#{params[:criteria].to_s || "start_time"} #{params[:way] || "desc"}")
+    @policy_id = params['policy_id']
+    @policy_type = params['policy_type']
+    @execution_mode = params['execution_mode']
+    @state = params[:state]
+  end
   def publish
     begin
       Scheduler::publish(params['visit_id'])

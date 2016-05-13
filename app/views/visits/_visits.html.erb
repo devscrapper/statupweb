@@ -205,11 +205,45 @@
         <th class="text-center">Actions</th>
     <% end %>
     <th class="text-left">Os</th>
-    <th class="text-left">Browser</th>
+    <th class="text-left">Browser
+      <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
+                  order_by_visit_path({:policy_id => policy_id,
+                                       :policy_type => policy_type,
+                                       :state => state,
+                                       :criteria => :browser,
+                                       :way => :asc}),
+                  remote: true
+      %>
+      <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
+                  order_by_visit_path({:policy_id => policy_id,
+                                       :policy_type => policy_type,
+                                       :state => state,
+                                       :criteria => :browser,
+                                       :way => :desc}),
+                  remote: true
+      %>
+    </th>
     <th class="text-center">Referrer</th>
     <th class="text-center">Advert</th>
     <% if ["started", "success", "fail", "overttl"].include?(state) %>
-        <th class="text-center">Geolocation</th>
+        <th class="text-center">Geolocation
+          <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
+                      order_by_visit_path({:policy_id => policy_id,
+                                           :policy_type => policy_type,
+                                           :state => state,
+                                           :criteria => :geolocation,
+                                           :way => :asc}),
+                      remote: true
+          %>
+          <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
+                      order_by_visit_path({:policy_id => policy_id,
+                                           :policy_type => policy_type,
+                                           :state => state,
+                                           :criteria => :geolocation,
+                                           :way => :desc}),
+                      remote: true
+          %></th>
+
     <% end %>
 
   </tr>
