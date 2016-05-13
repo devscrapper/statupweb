@@ -210,7 +210,7 @@
                   order_by_visit_path({:policy_id => policy_id,
                                        :policy_type => policy_type,
                                        :state => state,
-                                       :criteria => :browser,
+                                       :criteria => :browser_name,
                                        :way => :asc}),
                   remote: true
       %>
@@ -218,7 +218,7 @@
                   order_by_visit_path({:policy_id => policy_id,
                                        :policy_type => policy_type,
                                        :state => state,
-                                       :criteria => :browser,
+                                       :criteria => :browser_name,
                                        :way => :desc}),
                   remote: true
       %>
@@ -231,7 +231,7 @@
                       order_by_visit_path({:policy_id => policy_id,
                                            :policy_type => policy_type,
                                            :state => state,
-                                           :criteria => :geolocation,
+                                           :criteria => :ip_geo_proxy,
                                            :way => :asc}),
                       remote: true
           %>
@@ -239,7 +239,7 @@
                       order_by_visit_path({:policy_id => policy_id,
                                            :policy_type => policy_type,
                                            :state => state,
-                                           :criteria => :geolocation,
+                                           :criteria => :ip_geo_proxy,
                                            :way => :desc}),
                       remote: true
           %></th>
