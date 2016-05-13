@@ -14,7 +14,7 @@ class SeaAttack < ActiveRecord::Base
   validates :label_advertising, :presence => true
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
   validates :count_visits_per_day, :numericality => {:only_integer => true, :other_than => 0, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
-  validates :max_duration_scraping, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0} #TODO mettre valeur par defaut non customisable ?
+
   validates :min_count_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 4}
   validates :max_count_page_organic, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 20}
   validates :min_duration_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
