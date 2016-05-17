@@ -94,6 +94,15 @@ class SeaAttack < ActiveRecord::Base
     end
   end
 
+  def self.terminate
+    SeaAttack.where("state =?", "published").each { |policy|
+      if Date.today > policy.start_date + policy.count_weeks * DELAY_WEEK
+        # positionne la policy comme terminée
+        policy.state = "over"
+        policy.save(validate: false)
+      end
+    }
+  end
   def to_hash
     policy = {:policy_id => id,
               :policy_type => self.class.name, :website_id => website_id, :website_label => website.label, :statistics_type => statistic_type,

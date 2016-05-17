@@ -8,7 +8,7 @@ class TrafficsController < ApplicationController
   # GET /traffics
   # GET /traffics.json
   def index
-    @traffics = Traffic.all
+    @traffics = Traffic.order(:state)
     @traffics.each { |traffic|
       if traffic.state == "published"
         begin

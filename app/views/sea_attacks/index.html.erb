@@ -33,6 +33,8 @@
                        color_state = "label label-default"
                      when "published"
                        color_state = "label label-warning"
+                     when "over"
+                       color_state = "label label-success"
                    end %>
                 <span class="<%= color_state %>"><%= sea_attack.state %></span>
 

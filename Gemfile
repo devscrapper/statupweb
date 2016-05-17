@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'rake', '~> 10.5.0'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 gem 'rest-client', '~> 1.6.7'
