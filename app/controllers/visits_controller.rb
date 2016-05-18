@@ -5,9 +5,22 @@ class VisitsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_request?
 
   def index
+    if !params[:state].nil?
+      case params[:state]
+        when "created", "scheduled", "published", "outoftime", "neverstarted"
+          order_by = "plan_time asc"
+
+        when "success", "fail", "overttl"
+          order_by = "end_time desc"
+
+      end
+    else
+      order_by = "plan_time asc"
+    end
+
     @visits = Visit.where({:policy_id => params[:policy_id],
                            :policy_type => params[:policy_type],
-                           :state => params[:state] || "created"}).order("start_time desc")
+                           :state => params[:state] || "created"}).order(order_by)
     @policy_id = params['policy_id']
     @policy_type = params['policy_type']
     @execution_mode = params['execution_mode']
@@ -127,6 +140,7 @@ class VisitsController < ApplicationController
     @execution_mode = params['execution_mode']
     @state = params[:state]
   end
+
   def publish
     begin
       Scheduler::publish(params['visit_id'])

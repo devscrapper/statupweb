@@ -7,3 +7,5 @@ namespace :statupweb do
   end
 
 end
+
+# * 0 * * * cd /home/eric/statupweb && /usr/local/rvm/gems/ruby-2.2.3/bin/rake RAILS_ENV=production statupweb:terminate_policy
