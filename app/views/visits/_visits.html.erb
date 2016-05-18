@@ -252,8 +252,14 @@
 
 
   <tbody>
-
+  <% prev_date = nil %>
   <% visits.each do |visit| %>
+      <% if prev_date.nil? or prev_date != visit.plan_time.to_date
+           prev_date = visit.plan_time.to_date
+      %>
+         <tr class="info"> <td colspan="20"> <span class="label label-default"><%=prev_date%></span></td></tr>
+      <% end %>
+
 
       <td class="text-center">
         <% case visit.state
@@ -272,6 +278,7 @@
              else
                color_state = "label label-default"
            end %>
+
         <span class="<%= color_state %>"><%= visit.state %></span>
         <%= if visit.state == "created"
               link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
@@ -306,7 +313,7 @@
           <td class="text-center"><%= visit.end_time.localtime.to_formatted_s(:db) %></td>
       <% end %>
       <% if ["success", "fail", "overttl"].include?(state) %>
-          <td class="text-center"><%= visit.start_time.nil? ? 0 : (visit.end_time - visit.start_time) %></td>
+          <td class="text-center"><%= distance_of_time_in_words(visit.start_time, visit.start_time.nil? ? 0 : visit.end_time , include_seconds: true) %></td>
       <% end %>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
           <td class="text-center">
