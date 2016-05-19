@@ -1,5 +1,5 @@
 require_relative '../../lib/scheduler'
-
+require 'maxminddb'
 class VisitsController < ApplicationController
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
@@ -190,7 +190,8 @@ class VisitsController < ApplicationController
       elsif @visit.update_attributes({:start_time => Time.now,
                                       :actions => visit_params[:actions],
                                       :ip_geo_proxy => visit_params[:ip_geo_proxy],
-                                      :state => "started"})
+                                      :state => "started",
+                                     :country_geo_proxy => GeoIp.ip_to_country(visit_params[:ip_geo_proxy])})
         format.json { render json: @visit, status: :created }
 
       else
@@ -256,6 +257,7 @@ class VisitsController < ApplicationController
                                   :operating_system_version,
                                   :count_browsed_page,
                                   :ip_geo_proxy,
+                                  :country_geo_proxy,
                                   :actions => []) #car durations est un array
   end
 end

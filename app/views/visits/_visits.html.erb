@@ -243,6 +243,7 @@
                                            :way => :desc}),
                       remote: true
           %></th>
+        <th>Country</th>
 
     <% end %>
 
@@ -336,7 +337,8 @@
       <td class="text-center"><%= visit.referrer %></td>
       <td class="text-center"><%= visit.advert %></td>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
-          <td class="text-center"><%= visit.ip_geo_proxy %></td>
+          <td class="text-center"><%= visit.ip_geo_proxy %> </td>
+          <td class="text-center"><%= visit.country_geo_proxy %> </td>
       <% end %>
       </tr>
   <% end %>
