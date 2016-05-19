@@ -198,11 +198,11 @@
     <% if ["success", "fail", "overttl"].include?(state) %>
         <th class="text-left">End time</th>
     <% end %>
-    <% if ["success", "fail", "overttl"].include?(state) %>
+    <% if ["started", "success", "fail", "overttl"].include?(state) %>
         <th class="text-left">Delay</th>
     <% end %>
     <% if ["started", "success", "fail", "overttl"].include?(state) %>
-        <th class="text-center">Actions</th>
+        <th class="text-left">Actions</th>
     <% end %>
     <th class="text-left">Os</th>
     <th class="text-left">Browser
@@ -253,32 +253,68 @@
 
 
   <tbody>
-  <% prev_date = nil %>
+  <% prev_date = nil
+     count_visit_per_day = 0
+     count_adword_click = 0
+
+  %>
   <% visits.each do |visit| %>
-      <% if prev_date.nil? or prev_date != visit.plan_time.to_date
+      <% case visit.state
+           when "created"
+             color_state = "label label-default"
+           when "scheduled"
+             color_state = "label label-info"
+           when "outoftime", "overttl", "neverstarted"
+             color_state = "label label-warning"
+           when "started", "published"
+             color_state = "label label-primary"
+           when "success"
+             color_state = "label label-success"
+           when "fail"
+             color_state = "label label-danger"
+           else
+             color_state = "label label-default"
+         end %>
+      <!--affiche la premiere ligne du tableau -->
+      <% if prev_date.nil?
            prev_date = visit.plan_time.to_date
+
       %>
-         <tr class="info"> <td colspan="20"> <span class="label label-default"><%=prev_date%></span></td></tr>
+          <tr class="info">
+            <td colspan="20"><span class="label label-info"><%= visit.plan_time.to_date %></span></td>
+          </tr>
+          <% count_visit_per_day += 1
+             count_adword_click += (visit.actions.index("F").nil? ? 0 : visit.actions.index("F") + 1 <= visit.count_browsed_page) ? 1 : 0
+          %>
+          <!--affiche un changement de jour-->
+      <% elsif prev_date != visit.plan_time.to_date %>
+
+          <tr class="info">
+            <td colspan="20"><span class="label label-info">Visits/day</span>
+              <span class="badge"><%= count_visit_per_day %> </span>
+              <% if ["success", "fail", "overttl"].include?(state) %>
+                  <span class="label label-info">Total Adwords click</span>
+                  <span class="badge"><%= count_adword_click %></span>
+              <% end %>
+            </td>
+          </tr>
+          <tr class="info">
+            <td colspan="20"><span class="label label-info"><%= visit.plan_time.to_date %></span></td>
+          </tr>
+          <%
+             prev_date = visit.plan_time.to_date
+             count_visit_per_day = 1
+          %>
+          <!--affiche une ligne de visit-->
+      <% else
+           count_visit_per_day += 1
+           count_adword_click += (visit.actions.index("F").nil? ? 0 : visit.actions.index("F") + 1 <= visit.count_browsed_page) ? 1 : 0
+      %>
       <% end %>
 
 
       <td class="text-center">
-        <% case visit.state
-             when "created"
-               color_state = "label label-default"
-             when "scheduled"
-               color_state = "label label-info"
-             when "outoftime", "overttl", "neverstarted"
-               color_state = "label label-warning"
-             when "started", "published"
-               color_state = "label label-primary"
-             when "success"
-               color_state = "label label-success"
-             when "fail"
-               color_state = "label label-danger"
-             else
-               color_state = "label label-default"
-           end %>
+        <%= count_visit_per_day %>
 
         <span class="<%= color_state %>"><%= visit.state %></span>
         <%= if visit.state == "created"
@@ -305,19 +341,19 @@
       </td>
 
       <% if ["created", "scheduled", "published", "success", "fail", "outoftime", "overttl", "neverstarted"].include?(state) %>
-          <td class="text-center"><%= visit.plan_time.nil? ? "unknown" : visit.plan_time.localtime.to_formatted_s(:db) %></td>
+          <td class="text-center"><%= visit.plan_time.nil? ? "unknown" : visit.plan_time.localtime.to_formatted_s(:hour_min_sec) %></td>
       <% end %>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
-          <td class="text-center"><%= visit.start_time.nil? ? "unknown" : visit.start_time.localtime.to_formatted_s(:db) %></td>
+          <td class="text-center"><%= visit.start_time.nil? ? "unknown" : visit.start_time.localtime.to_formatted_s(:hour_min_sec) %></td>
       <% end %>
       <% if ["success", "fail", "overttl"].include?(state) %>
-          <td class="text-center"><%= visit.end_time.localtime.to_formatted_s(:db) %></td>
-      <% end %>
-      <% if ["success", "fail", "overttl"].include?(state) %>
-          <td class="text-center"><%= distance_of_time_in_words(visit.start_time, visit.start_time.nil? ? 0 : visit.end_time , include_seconds: true) %></td>
+          <td class="text-center"><%= visit.end_time.localtime.to_formatted_s(:hour_min_sec) %></td>
       <% end %>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
-          <td class="text-center">
+          <td class="text-left"><%= distance_of_time_in_words(visit.start_time, visit.start_time.nil? ? 0 : visit.end_time || Time.now, include_seconds: true) %></td>
+      <% end %>
+      <% if ["started", "success", "fail", "overttl"].include?(state) %>
+          <td class="text-left">
             <% visit.actions.each_with_index { |action, i| %>
                 <% if i + 1 <= visit.count_browsed_page %>
                     <span class="label label-success"><%= action %> </span>
@@ -342,5 +378,16 @@
       <% end %>
       </tr>
   <% end %>
+  <tr class="info">
+    <td colspan="20"><span class="label label-info">Visits/day</span>
+      <span class="badge"><%= count_visit_per_day %></span>
+      <% if ["success", "fail", "overttl"].include?(state) %>
+
+          <span class="label label-success">Total Adwords click</span>
+          <span class="badge"><%= count_adword_click %></span>
+
+      <% end %>
+    </td>
+  </tr>
   </tbody>
 </table>
