@@ -44,7 +44,7 @@ class SeaAttack < ActiveRecord::Base
         .select("actions", "count_browsed_page", "state")
         .where(state: ["overttl", "started", "success", "fail"]).each { |v|
       # 'F' est le code action qui symbolise le click sur Adword
-      total += v.actions.index("F") + 1 <= v.count_browsed_page ? 1 : 0
+      total += v.actions.index("F") + 1 <= v.count_browsed_page ? 1 : 0 unless v.actions.index("F").nil?
     } if %w(published over).include?(state)
     total
   end
