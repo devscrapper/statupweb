@@ -14,7 +14,7 @@ class SeaAttack < ActiveRecord::Base
   validates :label_advertising, :presence => true
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
   validates :count_visits_per_day, :numericality => {:only_integer => true, :other_than => 0, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
-
+  validates :state, :presence => true, inclusion: {in: %w(created published over), message: "%{value} is not a valid state"}
   validates :min_count_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 4}
   validates :max_count_page_organic, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 20}
   validates :min_duration_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
@@ -37,6 +37,17 @@ class SeaAttack < ActiveRecord::Base
 
   # cette données est calculée à la volée à partir du Calednar de engine_bot et n'est jamais stockée
   attr_accessor :planed_dates
+
+  def total_click_adwords
+    total  = 0
+    visits
+        .select("actions", "count_browsed_page", "state")
+        .where(state: ["overttl", "started", "success", "fail"]).each { |v|
+      # 'F' est le code action qui symbolise le click sur Adword
+      total += v.actions.index("F") + 1 <= v.count_browsed_page ? 1 : 0
+    } if %w(published over).include?(state)
+    total
+  end
 
   def self.next_monday(date)
     today = Date.parse(date) if date.is_a?(String)
@@ -103,6 +114,7 @@ class SeaAttack < ActiveRecord::Base
       end
     }
   end
+
   def to_hash
     policy = {:policy_id => id,
               :policy_type => self.class.name, :website_id => website_id, :website_label => website.label, :statistics_type => statistic_type,

@@ -10,6 +10,7 @@ class Traffic < ActiveRecord::Base
   validates :website_id, presence: {message: "must be given"}
   validates :statistic_type, :presence => true
   validates :monday_start, :presence => true
+  validates :state, :presence => true, inclusion: {in: %w(created published over), message: "%{value} is not a valid state"}
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
   validates :change_count_visits_percent, :numericality => {:only_integer => true, :other_than => 0, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
   validates :change_bounce_visits_percent, :numericality => {:only_integer => true, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
