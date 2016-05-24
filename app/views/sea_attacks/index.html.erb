@@ -17,6 +17,8 @@
           <th class="text-left">Website</th>
           <th class="text-center">Start date</th>
           <th class="text-center">End policy</th>
+          <th class="text-center">Keywords</th>
+          <th class="text-center">Label advertising</th>
           <th class="text-center">Count visit per day</th>
           <th class="text-center">Total Adwords click</th>
           <th class="text-center">Statistic type</th>
@@ -60,7 +62,8 @@
               </td>
               <td class="text-center vert-align"><%= sea_attack.start_date.to_date %></td>
               <td class="text-center vert-align"><%= (sea_attack.start_date + sea_attack.count_weeks * 7 -1).to_date  %></td>
-              <td class="text-center vert-align"><%= sea_attack.count_visits_per_day %></td>
+              <td class="text-left vert-align"><%= sea_attack.keywords %></td>
+              <td class="text-left vert-align"><%= sea_attack.label_advertising %></td>
               <td class="text-center vert-align"><%= sea_attack.total_click_adwords %></td>
               <td class="text-center vert-align">
                 <% if sea_attack.statistic_type == "custom" %>
