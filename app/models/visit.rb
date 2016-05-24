@@ -19,5 +19,6 @@ class Visit < ActiveRecord::Base
   validates :operating_system_version, :presence => true
   validates :count_browsed_page, :presence => true
   validates :ip_geo_proxy, :presence => true
+  validates :reason, :presence => true , :if => "state == \"fail\""
 
 end

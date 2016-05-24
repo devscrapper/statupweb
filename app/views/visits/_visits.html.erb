@@ -204,6 +204,9 @@
     <% if ["started", "success", "fail", "overttl"].include?(state) %>
         <th class="text-left">Actions</th>
     <% end %>
+    <% if ["fail"].include?(state) %>
+        <th class="text-left">Reason</th>
+    <% end %>
     <th class="text-left">Os</th>
     <th class="text-left">Browser
       <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
@@ -367,6 +370,9 @@
                 <% end %>
             <% } %>
           </td>
+      <% end %>
+      <% if ["fail"].include?(state) %>
+          <td class="text-left"><%= visit.reason %></td>
       <% end %>
       <td class="text-left"><%= visit.operating_system_name %>/<%= visit.operating_system_version %></td>
       <td class="text-left"><%= visit.browser_name %>/<%= visit.browser_version %></td>

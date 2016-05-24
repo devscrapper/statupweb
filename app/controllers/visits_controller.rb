@@ -206,12 +206,20 @@ class VisitsController < ApplicationController
 
 
     case visit_params[:state]
-      when "success", "fail", "overttl"
+      when "fail"
+        datas = {:state => visit_params[:state],
+                 :reason => visit_params[:reason],
+                 :end_time => Time.now}
+
+      when "success",  "overttl"
         datas = {:state => visit_params[:state],
                  :end_time => Time.now}
+
       else
         datas = {:state => visit_params[:state]}
+
     end
+
     respond_to do |format|
       if @visit.nil?
         format.json { render json: @visit, status: :not_found }
@@ -258,6 +266,7 @@ class VisitsController < ApplicationController
                                   :count_browsed_page,
                                   :ip_geo_proxy,
                                   :country_geo_proxy,
+                                  :reason,
                                   :actions => []) #car durations est un array
   end
 end
