@@ -121,7 +121,8 @@ class VisitsController < ApplicationController
       if @visit.nil?
         format.json { render json: @visit, status: :not_found }
 
-      elsif @visit.update_attribute(:count_browsed_page, @visit.count_browsed_page + 1)
+      elsif @visit.update_attributes({:count_browsed_page => @visit.count_browsed_page + 1,
+                                      :actions => visit_params[:actions]})
         format.json { render json: @visit, status: :created }
 
       else

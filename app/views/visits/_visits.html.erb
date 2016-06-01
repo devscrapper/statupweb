@@ -353,7 +353,11 @@
           <td class="text-center"><%= visit.end_time.localtime.to_formatted_s(:hour_min_sec) %></td>
       <% end %>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
-          <td class="text-left"><%= distance_of_time_in_words(visit.start_time, visit.start_time.nil? ? 0 : visit.end_time || Time.now, include_seconds: true) %></td>
+          <td class="text-left"><%= visit.start_time.nil? ?
+                                            "unknown" :
+                                            distance_of_time_in_words(visit.start_time, visit.start_time.nil? ?
+                                                                                              0 :
+                                                                                              visit.end_time || Time.now, include_seconds: true) %></td>
       <% end %>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
           <td class="text-left">
@@ -362,8 +366,13 @@
                     <span class="label label-success"><%= action %> </span>
                 <% else %>
                     <!-- action F == click_on_advert-->
-                    <% if action == "F" %>
+                    <% case action %>
+            <% when "F" %>
                         <span class="label label-warning"><%= action %> </span>
+                    <% when "3" %>
+                        <span class="label label-danger"><%= action %> </span>
+                    <% when "H" %>
+                        <span class="label label-info"><%= action %> </span>
                     <% else %>
                         <span class="label label-default"><%= action %> </span>
                     <% end %>
