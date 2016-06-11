@@ -58,13 +58,12 @@ set :log_level, :debug
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, fetch(:linked_files, []).push('config/database.yml',
+set :linked_files, fetch(:linked_files, ['config/GeoLite2-City.mmdb']).push('config/database.yml',
                                                  'config/secrets.yml',
                                                  'config/publication.yml',
                                                  'config/extern_uri.yml',
                                                  'config/calendar.yml',
-                                                 'config/scheduler.yml',
-                                                 'config/GeoLite2-City.mmdb')
+                                                 'config/scheduler.yml')
 
 # Default value for linked_dirs is []
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
@@ -132,7 +131,17 @@ before 'deploy:check:linked_files', 'config:push'
 #----------------------------------------------------------------------------------------------------------------------
 # task list : log
 #----------------------------------------------------------------------------------------------------------------------
-
+namespace :install do
+  task :geolite2city do
+    on roles(:app) do
+         within shared_path do
+           execute :rm, "-rf", "#{shared_path}/config/GeoLite2-City.mmdb.gz" if test("[ -d #{shared_path}/config/GeoLite2-City.mmdb.gz ]")
+           execute :wget, " --output-document=#{shared_path}/config/GeoLite2-City.mmdb.gz", "http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz"
+           execute :gunzip, "-df", "#{shared_path}/config/GeoLite2-City.mmdb.gz"
+         end
+       end
+  end
+end
 
 namespace :deploy do
   task :bundle_install do
@@ -144,6 +153,7 @@ namespace :deploy do
   end
   after 'deploy:updating', 'deploy:bundle_install'
 
+  after 'deploy:bundle_install', 'install:geolite2city'
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do

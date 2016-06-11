@@ -1,0 +1,62 @@
+<%= form_for(@sea, :html => {:class => "form-horizontal"}) do |f| %>
+    <% if @sea.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@sea.errors.count, "error") %> prohibited this sea from being saved:</h2>
+
+          <ul>
+            <% @sea.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="container-fluid">
+      <div class="panel panel-default">
+        <div class="panel-heading"><b><%= label %></b></div>
+        <div class="panel-body">
+
+          <div class="form-group">
+            <%= f.label :label, class: "control-label  col-lg-3" %>
+            <div class="col-lg-3">
+              <%= f.text_field :label, class: "form-control", size: 48 %>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.label :advertiser, class: "control-label  col-lg-3" %>
+            <div class="col-lg-3">
+              <%= f.select :advertiser, options_for_select([["Advertiser Adwords", "adwords"]], @sea.advertiser), {}, {:class => "form-control", :multiple => false} %>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.label :keywords, class: "control-label  col-lg-3" %>
+            <div class="col-lg-3">
+              <%= text_area_tag :keywords, @sea.keywords_dspl, class: "form-control", rows: 5, cols: 25 %>
+              <%= f.label "separate keywords by semicolon (,)", class: "text-primary small" %>
+            </div>
+          </div>
+          <div class="form-group">
+
+            <%= f.label :label_advertisings, class: "control-label  col-lg-3" %>
+            <div class="col-lg-3">
+              <%= text_area_tag :label_advertisings, @sea.advertisings_dspl, class: "form-control", rows: 5, cols: 25 %>
+              <%= f.label "separate labels by semicolon (,)", class: "text-primary small" %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <p class="text-primary">
+              Would you Publish your Keywords, Label Advertisings update
+              <%= f.submit "Now", class: "btn btn-info", data: {confirm: "Are you sure?"} %>
+              or
+              <%= f.submit "Later", class: "btn btn-info" %>
+              ?
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+<% end %>

@@ -4,64 +4,95 @@ require 'rest-client'
 require 'json'
 
 module Publication
-
-
-  def execution_mode(policy_type, policy_id, execution_mode)
+  def sea(policy_id, keywords, label_advertisings)
     begin
-           parameters = Parameter.new(__FILE__)
+      parameters = Parameter.new(__FILE__)
 
-         rescue Exception => e
-           raise e.message
+    rescue Exception => e
+      raise e.message
 
-         else
-           enginebot_host = parameters.enginebot_host
-           enginebot_port = parameters.enginebot_port
+    else
+      enginebot_host = parameters.enginebot_host
+      enginebot_port = parameters.enginebot_port
 
-           begin
-              # http://localhost:9104/policies/seaattack/?execution_mode=[manual|auto]&policy_id=#{policy_id}
-             response = RestClient.patch "http://#{enginebot_host}:#{enginebot_port}/policies/#{policy_type}/?execution_mode=#{execution_mode}&policy_id=#{policy_id}",
-                                        :content_type => :json,
-                                        :accept => :json
-
-
-           rescue Exception => e
-             # impossible de demander le demarrage la tache vers engine bot
-             raise e.message
-
-           else
-             raise "not update execution mode #{policy_type} #{policy_id} on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
-             response
-           end
-         end
-  end
-  def start(task_label, event_id)
-     begin
-       parameters = Parameter.new(__FILE__)
-
-     rescue Exception => e
-       raise e.message
-
-     else
-       enginebot_host = parameters.enginebot_host
-       enginebot_port = parameters.enginebot_port
-
-       begin
-
-         response = RestClient.get "http://#{enginebot_host}:#{enginebot_port}/tasks/execute/?id=#{event_id}",
+      begin
+        # http://localhost:9104/policies/seaattack/?policy_id=#{policyid}
+        response = RestClient.patch "http://#{enginebot_host}:#{enginebot_port}/policies/seaattack/?policy_id=#{policy_id}",
+                                    JSON.generate({:keywords => keywords,
+                                                   :label_advertisings => label_advertisings}),
                                     :content_type => :json,
                                     :accept => :json
 
 
-       rescue Exception => e
-         # impossible de demander le demarrage la tache vers engine bot
-         raise e.message
+      rescue Exception => e
+        # impossible de demander le demarrage la tache vers engine bot
+        raise e.message
 
-       else
-         raise "not start task #{task_label} #{event_id} on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
-         response
-       end
-     end
-   end
+      else
+        raise "not update labels advertisings seaattack #{policy_id} on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
+        response
+      end
+    end
+  end
+
+  def execution_mode(policy_type, policy_id, execution_mode)
+    begin
+      parameters = Parameter.new(__FILE__)
+
+    rescue Exception => e
+      raise e.message
+
+    else
+      enginebot_host = parameters.enginebot_host
+      enginebot_port = parameters.enginebot_port
+
+      begin
+        # http://localhost:9104/policies/seaattack/?execution_mode=[manual|auto]&policy_id=#{policy_id}
+        response = RestClient.patch "http://#{enginebot_host}:#{enginebot_port}/policies/#{policy_type}/?execution_mode=#{execution_mode}&policy_id=#{policy_id}",
+                                    :content_type => :json,
+                                    :accept => :json
+
+
+      rescue Exception => e
+        # impossible de demander le demarrage la tache vers engine bot
+        raise e.message
+
+      else
+        raise "not update execution mode #{policy_type} #{policy_id} on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
+        response
+      end
+    end
+  end
+
+  def start(task_label, event_id)
+    begin
+      parameters = Parameter.new(__FILE__)
+
+    rescue Exception => e
+      raise e.message
+
+    else
+      enginebot_host = parameters.enginebot_host
+      enginebot_port = parameters.enginebot_port
+
+      begin
+
+        response = RestClient.get "http://#{enginebot_host}:#{enginebot_port}/tasks/execute/?id=#{event_id}",
+                                  :content_type => :json,
+                                  :accept => :json
+
+
+      rescue Exception => e
+        # impossible de demander le demarrage la tache vers engine bot
+        raise e.message
+
+      else
+        raise "not start task #{task_label} #{event_id} on enginebot calendar (#{enginebot_host}:#{enginebot_port}) : #{response}" if response.code != 200
+        response
+      end
+    end
+  end
+
   def publish(policy)
     begin
       parameters = Parameter.new(__FILE__)
@@ -147,7 +178,7 @@ module Publication
   end
 
   private
-
+  module_function :sea
   module_function :execution_mode
   module_function :publish
   module_function :delete

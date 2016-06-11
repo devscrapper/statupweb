@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'bootstrap-slider-rails', '~> 6.0', '>= 6.0.17'
 gem 'maxminddb'
 gem 'rake', '~> 10.5.0'
 gem 'bootstrap-sass', '~> 3.2.0'

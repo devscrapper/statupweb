@@ -5,7 +5,7 @@
 
     function refresh_sea_attack_source() {
         $.ajax({
-            url: "/websites/" + website_selected.selectedIndex,
+            url: "/websites/" + sea_selected.selectedIndex,
             type: "GET",
             dataType: "json",
             data: {},
@@ -24,7 +24,7 @@
     $(document).ready(function () {
         refresh_sea_attack_source();
     });
-    $('select#website_selected').on('change', function () {
+    $('select#sea_selected').on('change', function () {
         refresh_sea_attack_source();
     })
     ;
@@ -51,9 +51,9 @@
             <div class="col-lg-2">
               <p>
 
-                <%= label_tag "Website" %>
-                <%= select_tag :website_selected,
-                               options_from_collection_for_select(@websites, "id", "label", @website.nil? ? "0" : @website.id),
+                <%= label_tag "Sea" %>
+                <%= select_tag :sea_selected,
+                               options_from_collection_for_select(@seas, "id", "label", @sea.nil? ? "0" : @sea.id),
                                class: "form-control",
                                :include_blank => "Select one" %>
 
@@ -89,28 +89,11 @@
                 <div class="panel-body">
                   <p>
                     <%= f.label :start_date %>
-                    <%= f.date_field :start_date, class: "form-control"%>
-                  </p>
-                  <p>
-                    <%= f.label "Delay(week)" %><%= f.number_field :count_weeks, class: "form-control" %>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-2">
-              <div class="panel panel-default">
-                <div class="panel-heading">Objectives</div>
-                <div class="panel-body">
-                  <p>
-                    <%= f.label "Count visit per day" %>
-                    <%= f.number_field :count_visits_per_day, class: "form-control" %>
+                    <%= f.date_field :start_date, class: "form-control" %>
                   </p>
 
                   <p>
-                    <%= f.label "Keywords" %>
-                    <%= f.text_field :keywords, class: "form-control" %>
-                    <%= f.label "Label Adwords" %>
-                    <%= f.text_field :label_advertising, class: "form-control" %>
+                    <%= f.label "Delay(week)" %><%= f.number_field :count_weeks, class: "form-control" %>
                   </p>
                 </div>
               </div>
@@ -131,85 +114,83 @@
                       <div class="row">
                         <div class="col-lg-4">
                           <p>
-                            <%= f.label :min_duration %>
+                            <%= f.label "Min duration page" %>
                             <%= f.number_field :min_duration, class: "form-control" %>
                           </p>
+
                           <p>
-                            <%= f.label :min_duration_website %>
+                            <%= f.label "Min duration visit" %>
                             <%= f.number_field :min_duration_website, class: "form-control" %>
+                          </p>
+
+                          <p>
+                            <%= f.label "Min count page visit" %>
+                            <%= f.number_field :min_pages_website, class: "form-control" %>
                           </p>
                         </div>
                         <div class="col-lg-4">
                           <p>
-                            <%= f.label :max_duration %>
+                            <%= f.label "Max duration page" %>
                             <%= f.number_field :max_duration, class: "form-control" %>
 
                           </p>
 
 
                         </div>
-                        <div class="col-lg-4">
-                          <p>
-                            <%= f.label :min_pages_website %>
-                            <%= f.number_field :min_pages_website, class: "form-control" %>
-                          </p>
-                        </div>
+
                       </div>
                     </div>
                     <div id="behaviour_search" class="tab-pane fade">
                       <div class="row">
-                        <div class="col-lg-6">
-                          <p><%= f.label :min_count_page_organic %>
+                        <div class="col-lg-4">
+                          <p>
+                            <%= f.label "Min duration page" %>
+                            <%= f.number_field :min_duration_page_organic, class: "form-control" %>
+                          </p>
+                          <p><%= f.label "Min count page" %>
                             <%= f.number_field :min_count_page_organic, class: "form-control" %>
                           </p>
 
-                          <p>
 
-                            <%= f.label :max_count_page_organic %>
-                            <%= f.number_field :max_count_page_organic, class: "form-control" %>
-                          </p>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                           <p>
-
-                            <%= f.label :min_duration_page_organic %>
-                            <%= f.number_field :min_duration_page_organic, class: "form-control" %>
-                          </p>
-
-                          <p>
-
-
-                            <%= f.label :max_duration_page_organic %>
+                            <%= f.label "Max duration page"  %>
                             <%= f.number_field :max_duration_page_organic, class: "form-control" %>
                           </p>
+                          <p>
+                            <%= f.label "Max count page" %>
+                            <%= f.number_field :max_count_page_organic, class: "form-control" %>
+                          </p>
+
                         </div>
                       </div>
                     </div>
                     <div id="behaviour_advertiser" class="tab-pane fade ">
                       <div class="row">
                         <div class="col-lg-4">
-                          <p><%= f.label :min_count_page_advertiser %>
+                          <p><%= f.label "Min duration page" %>
+                            <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
+                          <p><%= f.label "Min count page" %>
                             <%= f.number_field :min_count_page_advertiser, class: "form-control" %> </p>
 
-                          <p><%= f.label :max_count_page_advertiser %>
-                            <%= f.number_field :max_count_page_advertiser, class: "form-control" %></p>
-                        </div>
-                        <div class="col-lg-4">
-                          <%= f.label :min_duration_page_advertiser %>
-                          <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
-                          <p>
-                            <%= f.label :percent_local_page_advertiser %>
-                            <%= f.number_field :percent_local_page_advertiser, class: "form-control" %>  </p>
-                        </div>
-                        <div class="col-lg-4">
-                          <p>
-                            <%= f.label :min_duration_page_advertiser %>
-                            <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
+
 
                           <p>
-                            <%= f.label :max_duration_page_advertiser %>
-                            <%= f.number_field :max_duration_page_advertiser, class: "form-control" %>   </p>
+                            <%= f.label "Percent local page" %>
+                            <%= f.number_field :percent_local_page_advertiser, class: "form-control" %>    </p>
                         </div>
+                        <div class="col-lg-4">
+
+                          <%= f.label "Max duration page" %>
+                          <%= f.number_field :max_duration_page_advertiser, class: "form-control" %>
+                          </p>
+                          <p>
+                            <%= f.label "Max count page" %>
+                            <%= f.number_field :max_count_page_advertiser, class: "form-control" %></p>
+                           <p>
+                        </div>
+
 
                       </div>
                     </div>

@@ -14,12 +14,11 @@
           <th class="text-center">Id</th>
           <th class="text-center">State</th>
           <th class="text-center">Execution</th>
-          <th class="text-left">Website</th>
+          <th class="text-left">Sea</th>
           <th class="text-center">Start date</th>
           <th class="text-center">End policy</th>
           <th class="text-center">Keywords</th>
           <th class="text-center">Label advertising</th>
-          <th class="text-center">Count visit per day</th>
           <th class="text-center">Total Adwords click</th>
           <th class="text-center">Statistic type</th>
           <th colspan="3"></th>
@@ -58,12 +57,12 @@
 
               </td>
               <td class="text-left vert-align">
-                <a data-toggle="collapse" class="" href="#panel-show<%= sea_attack.id %>"><%= sea_attack.website.label %></a>
+                <a data-toggle="collapse" class="" href="#panel-show<%= sea_attack.id %>"><%= sea_attack.sea.label %></a>
               </td>
               <td class="text-center vert-align"><%= sea_attack.start_date.to_date %></td>
               <td class="text-center vert-align"><%= (sea_attack.start_date.to_date + sea_attack.count_weeks * 7 -1).to_date  %></td>
-              <td class="text-left vert-align"><%= sea_attack.keywords %></td>
-              <td class="text-left vert-align"><%= sea_attack.label_advertising %></td>
+              <td class="text-left vert-align"><%= sea_attack.sea.keywords_dspl %></td>
+              <td class="text-left vert-align"><%= sea_attack.sea.advertisings_dspl %></td>
               <td class="text-center vert-align"><%= sea_attack.total_click_adwords %></td>
               <td class="text-center vert-align">
                 <% if sea_attack.statistic_type == "custom" %>

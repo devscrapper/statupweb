@@ -5,33 +5,54 @@ class SeaAttack < ActiveRecord::Base
   has_many :tasks, as: :policy, dependent: :destroy
   has_many :objectives, as: :policy, dependent: :destroy
   has_many :visits, as: :policy, dependent: :destroy
-  belongs_to :website
+  belongs_to :sea
 
-  validates :website_id, presence: {message: "must be given"}
-  validates :statistic_type, :presence => true
+
+  validates :sea_id, presence: {message: "must be given"}
+  validates :statistic_type, :presence => true, inclusion: {in: %w(default custom), message: "%{value} is not a type"}
   validates :start_date, :presence => true
-  validates :keywords, :presence => true
-  validates :label_advertising, :presence => true
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
-  validates :count_visits_per_day, :numericality => {:only_integer => true, :other_than => 0, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
   validates :state, :presence => true, inclusion: {in: %w(created published over), message: "%{value} is not a valid state"}
-  validates :min_count_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 4}
-  validates :max_count_page_organic, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 20}
-  validates :min_duration_page_organic, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
-  validates :max_duration_page_organic, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 40}
-  validates :min_duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 5}
-  validates :max_duration, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 30}
-  validates :min_duration_website, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
-  validates :min_pages_website, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 2}
+  validates :min_count_page_organic, :presence => true, :numericality => {:only_integer => true,
+                                                                          :greater_than_or_equal_to => 2,
+                                                                          :less_than => :max_count_page_organic}
+  validates :max_count_page_organic, :presence => true, :numericality => {:only_integer => true,
+                                                                          :less_than_or_equal_to => 10,
+                                                                          :greater_than => :min_count_page_organic}
+  validates :min_duration_page_organic, :presence => true, :numericality => {:only_integer => true,
+                                                                             :greater_than_or_equal_to => 10,
+                                                                             :less_than => :max_duration_page_organic}
+  validates :max_duration_page_organic, :presence => true, :numericality => {:only_integer => true,
+                                                                             :less_than_or_equal_to => 40,
+                                                                             :greater_than => :min_duration_page_organic}
+  validates :min_duration, :presence => true, :numericality => {:only_integer => true,
+                                                                :greater_than_or_equal_to => 5,
+                                                                :less_than => :max_duration}
+  validates :max_duration, :presence => true, :numericality => {:only_integer => true,
+                                                                :less_than_or_equal_to => 30,
+                                                                :greater_than => :min_duration}
+  validates :min_duration_website, :presence => true, :numericality => {:only_integer => true,
+                                                                        :greater_than_or_equal_to => 10}
+  validates :min_pages_website, :presence => true, :numericality => {:only_integer => true,
+                                                                     :greater_than_or_equal_to => 2}
   validates :execution_mode, :presence => true, inclusion: {in: %w(auto manual), message: "%{value} is not a valid mode"}
-  validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
-  validates :max_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 15}
-  validates :min_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 60}
-  validates :max_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 120}
-  validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
-  validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
+  validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true,
+                                                                             :greater_than_or_equal_to => 5,
+                                                                             :less_than => :max_count_page_advertiser}
+  validates :max_count_page_advertiser, :presence => true, :numericality => {:only_integer => true,
+                                                                             :less_than_or_equal_to => 10,
+                                                                             :greater_than => :min_count_page_advertiser}
+  validates :min_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true,
+                                                                                :greater_than_or_equal_to => 10,
+                                                                                :less_than => :max_duration_page_advertiser}
+  validates :max_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true,
+                                                                                :less_than_or_equal_to => 60,
+                                                                                :greater_than => :min_duration_page_advertiser}
+  validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true,
+                                                                                 :less_than_or_equal_to => 100}
+
   validate :cannot_be_in_the_past,
-           :only_one_policy_for_a_website_by_period
+           :only_one_policy_for_a_sea_by_period
 
   DELAY_WEEK = 7
 
@@ -39,7 +60,7 @@ class SeaAttack < ActiveRecord::Base
   attr_accessor :planed_dates
 
   def total_click_adwords
-    total  = 0
+    total = 0
     visits
         .select("actions", "count_browsed_page", "state")
         .where(state: ["overttl", "started", "success", "fail"]).each { |v|
@@ -49,18 +70,6 @@ class SeaAttack < ActiveRecord::Base
     total
   end
 
-  def self.next_monday(date)
-    today = Date.parse(date) if date.is_a?(String)
-    today = date if date.is_a?(Date)
-
-    return today.next_day(1) if today.sunday?
-    return today.next_day(2) if today.saturday?
-    return today.next_day(3) if today.friday?
-    return today.next_day(4) if today.thursday?
-    return today.next_day(5) if today.wednesday?
-    return today.next_day(6) if today.tuesday?
-    return today.next_day(7) if today.monday?
-  end
 
   def destroy
     CustomStatistic.where(policy_id: id, policy_type: "traffic").delete_all if statistic_type == "custom"
@@ -81,24 +90,22 @@ class SeaAttack < ActiveRecord::Base
 
   def cannot_be_in_the_past
     if !start_date.nil?
-      errors.add(:start_date, "must be after tomorrow or later") if start_date < Date.today.next_day(2)
+      errors.add(:start_date, "must be now or later") if start_date < Date.today
 
     end
   end
 
-  def only_one_policy_for_a_website_by_period
+  def only_one_policy_for_a_sea_by_period
 
     if !start_date.nil? and !count_weeks.nil?
       end_date = start_date + count_weeks * DELAY_WEEK
-      policies = SeaAttack.select("start_date, count_weeks").where("website_id =? and id <>?", website_id, id)
+      policies = SeaAttack.select("start_date, count_weeks").where("sea_id =? and id <>?", sea_id, id)
       policies.each { |policy|
         # on considère que les debuts de chaque periode sont tj avant les fins de chaque période
-        p "#{policy.start_date + policy.count_weeks * DELAY_WEEK } <= #{start_date}#{policy.start_date + policy.count_weeks * DELAY_WEEK <= start_date}"
-        p "#{policy.start_date} >= #{end_date}#{policy.start_date >= end_date}"
         if policy.start_date + policy.count_weeks * DELAY_WEEK <= start_date or
             policy.start_date >= end_date
         else
-          errors.add(:website, "only one Seaattack policy on website on same periode")
+          errors.add(:sea, "only one Seaattack policy on sea on same periode")
           return
         end
       }
@@ -117,21 +124,22 @@ class SeaAttack < ActiveRecord::Base
 
   def to_hash
     policy = {:policy_id => id,
-              :policy_type => self.class.name, :website_id => website_id, :website_label => website.label, :statistics_type => statistic_type,
+              :policy_type => self.class.name,
+              :website_id => sea.id, # on conserve website_id dans l hash car c'est l'interface officielle de
+              # l'object Policy dans enginebot. Peut êrre qu'un jour on fera un truc qui se spécialisera en fonction du type de policy
+              :website_label => sea.label,
+              :statistics_type => statistic_type,
               :start_date => start_date,
               :count_weeks => count_weeks,
-              :keywords => keywords,
-              :url_root => website.url_root,
-              :max_duration_scraping => 0, # pas de scraping pour realise la policy
-              :count_visits_per_day => count_visits_per_day, #à cause de la policy Traffic
-              :advertising_percent => 100, #à cause de la policy Traffic
-              :advertisers => "adwords",
-              :label_advertising => label_advertising, #TODO encode e utf8
+              :keywords => sea.keywords,
+              #TODO demain peut être qu'un SEA referencera plusieurs advertiser
+              :advertisers => [sea.advertiser], # Array obligatoire car le moteur enginebot attend un array d'avetiser pour traffic#
+              :label_advertisings => sea.label_advertisings,
               :min_count_page_advertiser => min_count_page_advertiser,
               :max_count_page_advertiser => max_count_page_advertiser,
               :min_duration_page_advertiser => min_duration_page_advertiser,
               :max_duration_page_advertiser => max_duration_page_advertiser,
-              :percent_local_page_advertiser => 100,
+              :percent_local_page_advertiser => percent_local_page_advertiser,
               :min_count_page_organic => min_count_page_organic,
               :max_count_page_organic => max_count_page_organic,
               :min_duration_page_organic => min_duration_page_organic,
@@ -150,6 +158,10 @@ class SeaAttack < ActiveRecord::Base
 
     end
     policy
+  end
+
+  def published?
+     state == "published"
   end
 
 end

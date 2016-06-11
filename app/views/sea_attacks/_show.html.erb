@@ -30,10 +30,10 @@
 
 
                     </li>
-                    <li><a data-toggle="tab" href="#website-sea_attack<%= sea_attack.id %>">Website</a></li>
+                    <li><a data-toggle="tab" href="#sea-sea_attack<%= sea_attack.id %>">Sea</a></li>
                 <% else %>
                     <li class="active">
-                      <a data-toggle="tab" href="#website-sea_attack<%= sea_attack.id %>">Website</a>
+                      <a data-toggle="tab" href="#sea-sea_attack<%= sea_attack.id %>">Sea</a>
                     </li>
                 <% end %>
                 <% if sea_attack.statistic_type == "custom" %>
@@ -86,13 +86,13 @@
                                                                            :policy_id => sea_attack.id,
                                                                            :planed_dates => sea_attack.planed_dates} %></p>
                     </div>
-                    <div id="website-sea_attack<%= sea_attack.id %>" class="tab-pane fade">
-                      <p><%= render partial: 'websites/show', :locals => {:website => sea_attack.website} %></p>
+                    <div id="sea-sea_attack<%= sea_attack.id %>" class="tab-pane fade">
+                      <p><%= render partial: 'seas/show', :locals => {:sea => sea_attack.sea} %></p>
                     </div>
                 <% else %>
 
-                    <div id="website-sea_attack<%= sea_attack.id %>" class="tab-pane fade in active">
-                      <p><%= render partial: 'websites/show', :locals => {:website => sea_attack.website} %></p>
+                    <div id="sea-sea_attack<%= sea_attack.id %>" class="tab-pane fade in active">
+                      <p><%= render partial: 'seas/show', :locals => {:sea => sea_attack.sea} %></p>
                     </div>
                 <% end %>
                 <% if sea_attack.statistic_type == "custom" %>
