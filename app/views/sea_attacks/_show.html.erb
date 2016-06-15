@@ -86,20 +86,16 @@
                                                                            :policy_id => sea_attack.id,
                                                                            :planed_dates => sea_attack.planed_dates} %></p>
                     </div>
-                    <div id="sea-sea_attack<%= sea_attack.id %>" class="tab-pane fade">
-                      <p><%= render partial: 'seas/show', :locals => {:sea => sea_attack.sea} %></p>
-                    </div>
-                <% else %>
-
-                    <div id="sea-sea_attack<%= sea_attack.id %>" class="tab-pane fade in active">
-                      <p><%= render partial: 'seas/show', :locals => {:sea => sea_attack.sea} %></p>
-                    </div>
                 <% end %>
                 <% if sea_attack.statistic_type == "custom" %>
                     <div id="statistics-sea_attack<%= sea_attack.id %>" class="tab-pane fade">
                       <p><%= render partial: 'statistics/show', :locals => {:statistic => sea_attack.custom_statistic.statistic} %></p>
                     </div>
                 <% end %>
+                <div id="sea-sea_attack<%= sea_attack.id %>" class="tab-pane fade">
+
+                  <p><%= render partial: 'seas/show', :locals => {:sea => sea_attack.sea} %></p>
+                </div>
                 <div id="behaviour-sea_attack<%= sea_attack.id %>" class="tab-pane fade">
                   <p>
 
