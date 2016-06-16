@@ -38,10 +38,10 @@
           </div>
           <div class="form-group">
 
-            <%= f.label :label_advertisings, class: "control-label  col-lg-3" %>
-            <span class="badge"> <%= @sea.label_advertisings.size %></span></a>
+            <%= f.label :fqdn_advertisings, class: "control-label  col-lg-3" %>
+            <span class="badge"> <%= @sea.fqdn_advertisings.size %></span></a>
             <div class="col-lg-3">
-              <%= text_area_tag :label_advertisings, @sea.advertisings_dspl, class: "form-control", rows: 5, cols: 25 %>
+              <%= text_area_tag :fqdn_advertisings, @sea.fqdn_advertisings_dspl, class: "form-control", rows: 5, cols: 25 %>
               <%= f.label "separate labels by semicolon (,)", class: "text-primary small" %>
             </div>
           </div>

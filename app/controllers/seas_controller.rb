@@ -26,7 +26,7 @@ class SeasController < ApplicationController
   # POST /seas.json
   def create
     @sea = Sea.new(sea_params)
-    @sea.label_advertisings = params[:label_advertisings].split(",").map! { |label| label.strip }
+    @sea.fqdn_advertisings = params[:fqdn_advertisings].split(",").map! { |label| label.strip }
     @sea.keywords = params[:keywords].split(",").map! { |keyword| keyword.strip }
     respond_to do |format|
       if @sea.save
@@ -43,7 +43,7 @@ class SeasController < ApplicationController
   # PATCH/PUT /seas/1
   # PATCH/PUT /seas/1.json
   def update
-    params[:sea][:label_advertisings] = params[:label_advertisings].split(",").map { |label| label.strip }
+    params[:sea][:fqdn_advertisings] = params[:fqdn_advertisings].split(",").map { |label| label.strip }
     params[:sea][:keywords] = params[:keywords].split(",").map { |keyword| keyword.strip }
     respond_to do |format|
 
@@ -80,7 +80,7 @@ class SeasController < ApplicationController
         # le test est fait lors de lindex.html
         # le bton publish ne serait pas affiché
         @sea_attack = @sea.published
-        Publication::sea(@sea_attack.id, @sea.keywords, @sea.label_advertisings)
+        Publication::sea(@sea_attack.id, @sea.keywords, @sea.fqdn_advertisings)
 
 
       rescue Exception => e
@@ -107,7 +107,7 @@ class SeasController < ApplicationController
           # le test est fait lors de lindex.html
           # le bton publish ne serait pas affiché
           @sea_attack = @sea.published
-          Publication::sea(@sea_attack.id, @sea.keywords, @sea.label_advertisings)
+          Publication::sea(@sea_attack.id, @sea.keywords, @sea.fqdn_advertisings)
 
 
         rescue Exception => e
@@ -134,6 +134,6 @@ class SeasController < ApplicationController
     params.require(:sea).permit(:label,
                                 :advertiser,
                                 :keywords => [],
-                                :label_advertisings => [])
+                                :fqdn_advertisings => [])
   end
 end

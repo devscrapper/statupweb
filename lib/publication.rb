@@ -4,7 +4,7 @@ require 'rest-client'
 require 'json'
 
 module Publication
-  def sea(policy_id, keywords, label_advertisings)
+  def sea(policy_id, keywords, fqdn_advertisings)
     begin
       parameters = Parameter.new(__FILE__)
 
@@ -19,7 +19,7 @@ module Publication
         # http://localhost:9104/policies/seaattack/?policy_id=#{policyid}
         response = RestClient.patch "http://#{enginebot_host}:#{enginebot_port}/policies/seaattack/?policy_id=#{policy_id}",
                                     JSON.generate({:keywords => keywords,
-                                                   :label_advertisings => label_advertisings}),
+                                                   :fqdn_advertisings => fqdn_advertisings}),
                                     :content_type => :json,
                                     :accept => :json
 

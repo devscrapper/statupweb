@@ -134,7 +134,7 @@ class SeaAttack < ActiveRecord::Base
               :keywords => sea.keywords,
               #TODO demain peut être qu'un SEA referencera plusieurs advertiser
               :advertisers => [sea.advertiser], # Array obligatoire car le moteur enginebot attend un array d'avetiser pour traffic#
-              :label_advertisings => sea.label_advertisings,
+              :fqdn_advertisings => sea.fqdn_advertisings,
               :min_count_page_advertiser => min_count_page_advertiser,
               :max_count_page_advertiser => max_count_page_advertiser,
               :min_duration_page_advertiser => min_duration_page_advertiser,

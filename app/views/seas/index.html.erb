@@ -14,7 +14,7 @@
           <th class="text-left">Label</th>
           <th class="text-left">Advertiser</th>
           <th class="text-left">Keywords</th>
-          <th class="text-left">Label advertising</th>
+          <th class="text-left">Fqdn advertising</th>
           <th colspan="3"></th>
         </tr>
         </thead>
@@ -25,7 +25,7 @@
               <td class="text-left vert-align"><%= sea.label %></td>
               <td class="text-left vert-align"><%= sea.advertiser %></td>
               <td class="text-left vert-align"><%= sea.keywords_dspl %></td>
-              <td class="text-left vert-align"><%= sea.advertisings_dspl %></td>
+              <td class="text-left vert-align"><%= sea.fqdn_advertisings_dspl %></td>
               <td class="text-center vert-align"><%= link_to 'Edit', edit_sea_path(sea), class: "btn btn-sm btn-default" %></td>
               <td class="text-center vert-align">
                 <%= if sea.published?
