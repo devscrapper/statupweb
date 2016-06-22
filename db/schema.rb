@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160608065056) do
+ActiveRecord::Schema.define(version: 20160616074034) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -115,12 +115,12 @@ ActiveRecord::Schema.define(version: 20160608065056) do
   add_index "sea_attacks", ["sea_id"], name: "index_sea_attacks_on_sea_id"
 
   create_table "seas", force: :cascade do |t|
-    t.string   "label",              null: false
-    t.string   "advertiser",         null: false
-    t.string   "keywords",           null: false
-    t.string   "label_advertisings", null: false
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.string   "label",             null: false
+    t.string   "advertiser",        null: false
+    t.text     "keywords",          null: false
+    t.text     "fqdn_advertisings", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "statistics", force: :cascade do |t|
