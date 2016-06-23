@@ -227,6 +227,9 @@
       %>
     </th>
     <th class="text-center">Referrer</th>
+    <% if ["SeaAttack"].include?(policy_type) %>
+        <th class="text-left">Keywords</th>
+    <% end %>
     <th class="text-center">Advert</th>
     <% if ["started", "success", "fail", "overttl"].include?(state) %>
         <th class="text-center">Geolocation
@@ -259,6 +262,7 @@
   <% prev_date = nil
      count_visit_per_day = 0
      count_adword_click = 0
+     count_advert_tracking = 0
 
   %>
   <% visits.each do |visit| %>
@@ -287,7 +291,8 @@
             <td colspan="20"><span class="label label-info"><%= visit.plan_time.to_date %></span></td>
           </tr>
           <% count_visit_per_day += 1
-             count_adword_click += (visit.actions.index("F").nil? ? 0 : visit.actions.index("F") + 1 <= visit.count_browsed_page) ? 1 : 0
+             count_adword_click += (visit.actions.index("F").nil? ? 0 : (visit.actions.index("F") + 1 <= visit.count_browsed_page) ? 1 : 0)
+             count_advert_tracking += visit.reason == "advert tracking" ? 1 : 0
           %>
           <!--affiche un changement de jour-->
       <% elsif prev_date != visit.plan_time.to_date %>
@@ -298,6 +303,8 @@
               <% if ["success", "fail", "overttl"].include?(state) %>
                   <span class="label label-info">Total Adwords click</span>
                   <span class="badge"><%= count_adword_click %></span>
+                  <span class="label label-info">Total Advert Tracking</span>
+                  <span class="badge"><%= count_advert_tracking %></span>
               <% end %>
             </td>
           </tr>
@@ -307,11 +314,14 @@
           <%
              prev_date = visit.plan_time.to_date
              count_visit_per_day = 1
+             count_adword_click = 0
+             count_advert_tracking = 0
           %>
           <!--affiche une ligne de visit-->
       <% else
            count_visit_per_day += 1
-           count_adword_click += (visit.actions.index("F").nil? ? 0 : visit.actions.index("F") + 1 <= visit.count_browsed_page) ? 1 : 0
+           count_adword_click += (visit.actions.index("F").nil? ? 0 : (visit.actions.index("F") + 1 <= visit.count_browsed_page) ? 1 : 0)
+           count_advert_tracking += visit.reason == "advert tracking" ? 1 : 0
       %>
       <% end %>
 
@@ -386,6 +396,9 @@
       <td class="text-left"><%= visit.operating_system_name %>/<%= visit.operating_system_version %></td>
       <td class="text-left"><%= visit.browser_name %>/<%= visit.browser_version %></td>
       <td class="text-center"><%= visit.referrer %></td>
+      <% if ["SeaAttack"].include?(policy_type) %>
+          <td class="text-left"><%= visit.keywords %></td>
+      <% end %>
       <td class="text-center"><%= visit.advert %></td>
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
           <td class="text-center"><%= visit.ip_geo_proxy %> </td>
@@ -398,8 +411,10 @@
       <span class="badge"><%= count_visit_per_day %></span>
       <% if ["success", "fail", "overttl"].include?(state) %>
 
-          <span class="label label-success">Total Adwords click</span>
+          <span class="label label-info">Total Adwords click</span>
           <span class="badge"><%= count_adword_click %></span>
+          <span class="label label-info">Total Advert Tracking</span>
+          <span class="badge"><%= count_advert_tracking %></span>
 
       <% end %>
     </td>

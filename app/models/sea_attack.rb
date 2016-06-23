@@ -70,7 +70,11 @@ class SeaAttack < ActiveRecord::Base
     total
   end
 
-
+  def total_advert_tracking_reason
+    visits
+        .where(reason: ["advert tracking"])
+        .count
+  end
   def destroy
     CustomStatistic.where(policy_id: id, policy_type: "traffic").delete_all if statistic_type == "custom"
 

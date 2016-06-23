@@ -8,7 +8,7 @@ class VisitsController < ApplicationController
     if !params[:state].nil?
       case params[:state]
         when "created", "scheduled", "published", "outoftime", "neverstarted"
-          order_by = "plan_time asc"
+          order_by = "plan_time desc"
 
         when "success", "fail", "overttl"
           order_by = "end_time desc"
@@ -268,6 +268,7 @@ class VisitsController < ApplicationController
                                   :ip_geo_proxy,
                                   :country_geo_proxy,
                                   :reason,
+                                  :keywords,
                                   :actions => []) #car durations est un array
   end
 end

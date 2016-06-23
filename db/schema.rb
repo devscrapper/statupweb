@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160616074034) do
+ActiveRecord::Schema.define(version: 20160623084921) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -235,6 +235,7 @@ ActiveRecord::Schema.define(version: 20160616074034) do
     t.string   "ip_geo_proxy",             default: "no geo",     null: false
     t.string   "country_geo_proxy",        default: "no country", null: false
     t.string   "reason",                   default: "no reason",  null: false
+    t.string   "keywords",                 default: "no keyword", null: false
   end
 
   add_index "visits", ["policy_type", "policy_id"], name: "index_visits_on_policy_type_and_policy_id"

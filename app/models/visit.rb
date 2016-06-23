@@ -20,5 +20,5 @@ class Visit < ActiveRecord::Base
   validates :count_browsed_page, :presence => true
   validates :ip_geo_proxy, :presence => true
   validates :reason, :presence => true , :if => "state == \"fail\""
-
+  validates :keywords, :presence => true
 end
