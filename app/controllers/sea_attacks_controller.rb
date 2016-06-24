@@ -34,7 +34,7 @@ class SeaAttacksController < ApplicationController
     @seas = Sea.all
     @statistics = Statistic.all
     @sea_attack = SeaAttack.new
-    @sea_attack.start_date = Date.today
+    @sea_attack.start_date = Date.today.next_day
   end
 
   # GET /sea_attacks/1/edit
@@ -103,7 +103,7 @@ class SeaAttacksController < ApplicationController
       begin
         @sea_attack = SeaAttack.find(params[:id])
 
-        raise "start date policy is older" if @sea_attack.start_date < Date.today
+        raise "start date policy is older" if @sea_attack.start_date <= Date.today
         Publication::publish(@sea_attack.to_hash)
 
       rescue Exception => e

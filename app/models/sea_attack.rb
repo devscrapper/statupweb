@@ -94,7 +94,7 @@ class SeaAttack < ActiveRecord::Base
 
   def cannot_be_in_the_past
     if !start_date.nil?
-      errors.add(:start_date, "must be now or later") if start_date < Date.today
+      errors.add(:start_date, "must be now tomorrow") if start_date <= Date.today
 
     end
   end
