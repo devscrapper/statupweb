@@ -228,7 +228,24 @@
     </th>
     <th class="text-center">Referrer</th>
     <% if ["SeaAttack"].include?(policy_type) %>
-        <th class="text-left">Keywords</th>
+        <th class="text-left">Keywords
+        <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
+                    order_by_visit_path({:policy_id => policy_id,
+                                         :policy_type => policy_type,
+                                         :state => state,
+                                         :criteria => :keywords,
+                                         :way => :asc}),
+                    remote: true
+        %>
+        <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
+                    order_by_visit_path({:policy_id => policy_id,
+                                         :policy_type => policy_type,
+                                         :state => state,
+                                         :criteria => :keywords,
+                                         :way => :desc}),
+                    remote: true
+        %>
+        </th>
     <% end %>
     <th class="text-center">Advert</th>
     <% if ["started", "success", "fail", "overttl"].include?(state) %>
