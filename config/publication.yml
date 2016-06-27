@@ -2,8 +2,8 @@ development:
     :enginebot_host: "localhost"
     :enginebot_port: 9104
 test:
-    :enginebot_host: "192.168.1.85"
+    :enginebot_host: "192.168.1.88"
     :enginebot_port: 9104
 production:
-    :enginebot_host: "192.168.1.85"
+    :enginebot_host: "192.168.1.88"
     :enginebot_port: 9104
