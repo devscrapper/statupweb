@@ -6,6 +6,7 @@
   <div class="panel-body">
     <%= link_to 'New SeaAttack', new_sea_attack_path, class: 'btn btn-sm btn-default' %>
     <%= link_to 'Delete all SeaAttacks', destroy_all_sea_attacks_path, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
+    <%= label_tag "Ratio Success = Total adwords click + Total adwords not found / Total visits" %>
 
     <div class="table-responsive">
       <table class="table table-hover ">
@@ -21,7 +22,8 @@
           <th class="text-center">Count fqdn advertising Sea</th>
           <th class="text-center">Statistic type</th>
           <th class="text-center">Total adwords click</th>
-          <th class="text-center">Total advert tracking reason</th>
+          <th class="text-center">Total adwords not found</th>
+          <th class="text-center">Ratio success</th>
           <th colspan="3"></th>
         </tr>
         </thead>
@@ -73,6 +75,7 @@
               </td>
               <td class="text-center vert-align"><%= sea_attack.total_click_adwords %></td>
               <td class="text-center vert-align"><%= sea_attack.total_advert_tracking_reason %></td>
+              <td class="text-center vert-align"><%= sea_attack.visits.count == 0 ? 0 : ((sea_attack.total_advert_tracking_reason + sea_attack.total_click_adwords ) * 100 /sea_attack.visits.count).to_i%></td>
               <td class="text-center vert-align">
                 <%= case sea_attack.state
                       when "created"
