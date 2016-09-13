@@ -324,8 +324,12 @@
                   <span class="badge"><%= count_adword_click %></span>
                   <span class="label label-success">Total Advert Tracking</span>
                   <span class="badge"><%= count_advert_tracking %></span>
+                  <span class="label label-success">Ratio Success</span>
+                  <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / count_visit_per_day).to_i %></span>
+
                   <span class="label label-danger">Total Captcha Submitting</span>
                   <span class="badge"><%= count_captcha_submitting %></span>
+
 
               <% end %>
             </td>
@@ -449,6 +453,9 @@
           <span class="badge"><%= count_adword_click %></span>
           <span class="label label-success">Total Advert Tracking</span>
           <span class="badge"><%= count_advert_tracking %></span>
+          <span class="label label-success">Ratio Success</span>
+          <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / count_visit_per_day).to_i %></span>
+
           <span class="label label-danger">Total Captcha Submitting</span>
           <span class="badge"><%= count_captcha_submitting %></span>
 
