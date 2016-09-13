@@ -25,7 +25,7 @@
 # le redemraage de delay_job (en production)
 #---------------------------------------------------------------------------------------------------------------------
 
-lock '3.4.0'
+lock '3.4.1'
 
 set :application, 'statupweb'
 set :repo_url, "git@github.com://github.com/devscrapper/#{fetch(:application)}.git/"
