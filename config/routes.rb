@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :pages
   resources :seas
   resources :sea_attacks
   mount DelayedJobWeb => "/delayed_job" if ["test", "production"].include?(Rails.env)

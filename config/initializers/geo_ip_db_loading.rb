@@ -8,6 +8,12 @@ class GeoIp
 
 
   def self.ip_to_country(ip)
-    @@db.lookup(ip).country.name
+    begin
+      country = @@db.lookup(ip).country.name
+    rescue Exception => e
+        "unknown ip"
+    else
+      country
+    end
   end
 end

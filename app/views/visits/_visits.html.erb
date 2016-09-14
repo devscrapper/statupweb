@@ -313,6 +313,7 @@
              count_advert_tracking += visit.reason == "advert tracking" ? 1 : 0
              count_captcha_submitting += visit.reason == "captcha submitting" ? 1 : 0
           %>
+
           <!--affiche un changement de jour-->
       <% elsif prev_date != visit.plan_time.to_date %>
 
@@ -400,21 +401,28 @@
       <% if ["started", "success", "fail", "overttl"].include?(state) %>
           <td class="text-left">
             <% visit.actions.each_with_index { |action, i| %>
-                <% if i + 1 <= visit.count_browsed_page %>
-                    <span class="label label-success"><%= action %> </span>
-                <% else %>
-                    <!-- action F == click_on_advert-->
-                    <% case action %>
-            <% when "F" %>
-                        <span class="label label-warning"><%= action %> </span>
-                    <% when "3" %>
-                        <span class="label label-danger"><%= action %> </span>
-                    <% when "H" %>
-                        <span class="label label-info"><%= action %> </span>
-                    <% else %>
-                        <span class="label label-default"><%= action %> </span>
-                    <% end %>
-                <% end %>
+                <% if i + 1 <= visit.count_browsed_page
+                     class_name = "label label-success"
+                   else
+                     # action F == click_on_advert
+                     case action
+                       when "F"
+                         class_name = "label label-warning"
+                       when "3"
+                         class_name = "label label-danger"
+                       when "H"
+                         class_name = "label label-info"
+                       else
+                         class_name = "label label-default"
+                     end
+                   end %>
+                <%= if !visit.pages[i].nil? and File.exist?(File.join("public", "images",visit.pages[i].image_file_id))
+                      link_to action, image_path(visit.pages[i].image_file_id), class: class_name
+                      #link_to action, image_path("#{visit.id_visit}_#{i}.png"), class: class_name
+                    else
+                      content_tag(:span, action, class: class_name)
+
+                    end %>
             <% } %>
           </td>
       <% end %>

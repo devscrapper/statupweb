@@ -1,0 +1,57 @@
+<script>
+    $(document).ready(function () {
+
+        // hide spinner
+        $(".fa").hide();
+
+
+        // show spinner on AJAX start
+        $(document).ajaxStart(function () {
+            $(".fa").show();
+        });
+
+        // hide spinner on AJAX stop
+        $(document).ajaxStop(function () {
+            $(".fa").hide();
+        });
+
+    });
+</script>
+
+<div class="row">
+
+  <div class="col-lg-2">
+    <div class="dropdown">
+      <button class="btn btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown">Next planed date
+        <span class="badge"><%=planed_dates.size%></span>
+        <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li role="presentation"><%= link_to "Yesterday", prev_day_calendar_path({:current_date => current_date,
+                                                                                 :policy_type => policy_type,
+                                                                                 :policy_id => policy_id}), remote: true %></li>
+
+        <li> <%= link_to "Today", today_calendar_path({:current_date => current_date,
+                                                       :policy_type => policy_type,
+                                                       :policy_id => policy_id}), remote: true %></li>
+
+        <li><%= link_to "Tomorrow", next_day_calendar_path({:current_date => current_date,
+                                                            :policy_type => policy_type,
+                                                            :policy_id => policy_id}), remote: true %> </li>
+        <li role="presentation" class="divider"></li>
+        <% planed_dates.each { |date| %>
+            <li role="presentation"><%= link_to Date.parse(date).strftime("%F, %a"), day_calendar_path({:current_date => date,
+                                                                         :policy_type => policy_type,
+                                                                         :policy_id => policy_id}), remote: true %>  </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div id="tasks<%= policy_id %>" style="display: none">    </div>
+  </div>
+
+</div>
+
+
+
