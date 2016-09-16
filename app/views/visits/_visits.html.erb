@@ -323,10 +323,10 @@
               <% if ["success", "fail", "overttl"].include?(state) %>
                   <span class="label label-info">Total Adwords click</span>
                   <span class="badge"><%= count_adword_click %></span>
-                  <span class="label label-success">Total Advert Tracking</span>
+                  <span class="label label-success">Total adwords not found</span>
                   <span class="badge"><%= count_advert_tracking %></span>
                   <span class="label label-success">Ratio Success</span>
-                  <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / count_visit_per_day).to_i %></span>
+                  <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>%</span>
 
                   <span class="label label-danger">Total Captcha Submitting</span>
                   <span class="badge"><%= count_captcha_submitting %></span>
@@ -459,10 +459,10 @@
 
           <span class="label label-info">Total Adwords click</span>
           <span class="badge"><%= count_adword_click %></span>
-          <span class="label label-success">Total Advert Tracking</span>
+          <span class="label label-success">Total adwords not found</span>
           <span class="badge"><%= count_advert_tracking %></span>
           <span class="label label-success">Ratio Success</span>
-          <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / count_visit_per_day).to_i %></span>
+          <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>%</span>
 
           <span class="label label-danger">Total Captcha Submitting</span>
           <span class="badge"><%= count_captcha_submitting %></span>

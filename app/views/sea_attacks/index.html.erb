@@ -75,7 +75,7 @@
               </td>
               <td class="text-center vert-align"><%= sea_attack.total_click_adwords %></td>
               <td class="text-center vert-align"><%= sea_attack.total_advert_tracking_reason %></td>
-              <td class="text-center vert-align"><%= sea_attack.visits.count == 0 ? 0 : ((sea_attack.total_advert_tracking_reason + sea_attack.total_click_adwords ) * 100 /sea_attack.visits.count).to_i%></td>
+              <td class="text-center vert-align"><%= sea_attack.visits.count == 0 ? 0 : ((sea_attack.total_advert_tracking_reason + sea_attack.total_click_adwords ) * 100 /sea_attack.visits.count).to_i%>%</td>
               <td class="text-center vert-align">
                 <%= case sea_attack.state
                       when "created"

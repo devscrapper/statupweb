@@ -22,4 +22,6 @@ class Visit < ActiveRecord::Base
   validates :ip_geo_proxy, :presence => true
   validates :reason, :presence => true , :if => "state == \"fail\""
   validates :keywords, :presence => true
+
+  scope :plan_today, ->(time) { where("date(plan_time) = ?", time) }
 end
