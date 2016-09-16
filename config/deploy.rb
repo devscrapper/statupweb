@@ -120,14 +120,23 @@ set :delayed_log_dir, '/log'
 ### Set the location of the delayed_job pid file
 set :delayed_job_pid_dir, '/tmp'
 
-before 'deploy:check:linked_files', 'config:push'
-
-# before 'deploy:starting', 'github:deployment:create'
-# after  'deploy:starting', 'github:deployment:pending'
-# after  'deploy:finished', 'github:deployment:success'
-# after  'deploy:failed',   'github:deployment:failure'
 
 
+
+
+
+#----------------------------------------------------------------------------------------------------------------------
+# task list : git push
+#----------------------------------------------------------------------------------------------------------------------
+namespace :git do
+  task :push do
+    on roles(:all) do
+      run_locally do
+        system 'git push origin master'
+      end
+    end
+  end
+end
 #----------------------------------------------------------------------------------------------------------------------
 # task list : log
 #----------------------------------------------------------------------------------------------------------------------
@@ -151,9 +160,6 @@ namespace :deploy do
       end
     end
   end
-  after 'deploy:updating', 'deploy:bundle_install'
-
-  after 'deploy:bundle_install', 'install:geolite2city'
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
@@ -165,3 +171,9 @@ namespace :deploy do
   end
 
 end
+
+
+before 'deploy:updating', "git:push"
+after "deploy:updating", "log:delete"
+after 'deploy:updating', 'deploy:bundle_install'
+after 'deploy:bundle_install', 'install:geolite2city'
