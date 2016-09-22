@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913175239) do
+ActiveRecord::Schema.define(version: 20160922144555) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 20160913175239) do
     t.datetime "error_time"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+  end
+
+  create_table "captchas", force: :cascade do |t|
+    t.string   "visit_id",                          null: false
+    t.string   "image_file_id"
+    t.integer  "index",                             null: false
+    t.string   "text",          default: "unknown", null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
   create_table "custom_statistics", force: :cascade do |t|

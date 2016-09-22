@@ -204,6 +204,9 @@
     <% if ["started", "success", "fail", "overttl"].include?(state) %>
         <th class="text-left">Actions</th>
     <% end %>
+    <% if ["started", "success", "fail", "overttl"].include?(state) %>
+        <th class="text-left">Captchas</th>
+    <% end %>
     <% if ["fail"].include?(state) %>
         <th class="text-left">Reason</th>
     <% end %>
@@ -421,6 +424,17 @@
                       #link_to action, image_path("#{visit.id_visit}_#{i}.png"), class: class_name
                     else
                       content_tag(:span, action, class: class_name)
+
+                    end %>
+            <% } %>
+          </td>
+          <td class="text-left">
+            <% visit.captchas.each { |captcha| %>
+                <%= if !visit.captcha.image_file_id.nil? and File.exist?(File.join("public", "images",visit.captcha.image_file_id))
+                      link_to captcha.text, image_path(captcha.image_file_id), class: "label label-danger"
+
+                    else
+                      content_tag(:span, captcha.text, class: "label label-danger")
 
                     end %>
             <% } %>
