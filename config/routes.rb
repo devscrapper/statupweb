@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :captchas
   resources :pages
   resources :seas
   resources :sea_attacks

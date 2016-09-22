@@ -126,6 +126,32 @@ set :delayed_job_pid_dir, '/tmp'
 
 
 #----------------------------------------------------------------------------------------------------------------------
+# task list : log
+#----------------------------------------------------------------------------------------------------------------------
+namespace :log do
+  task :down do
+    on roles(:app) do
+      begin
+        capture("ls #{File.join(current_path, 'log', '*.*')}").split(/\r\n/).each { |log_file|
+          get log_file, File.join(File.dirname(__FILE__), '..', 'log', File.basename(log_file))
+        }
+      rescue Exception => e
+        p "dont down log : #{e.message}"
+      end
+    end
+  end
+  task :delete do
+    on roles(:app) do
+      begin
+        execute :rm, "-rf", "#{File.join(current_path, 'log', '*.*')}"
+      rescue Exception => e
+      end
+    end
+  end
+
+
+end
+#----------------------------------------------------------------------------------------------------------------------
 # task list : git push
 #----------------------------------------------------------------------------------------------------------------------
 namespace :git do
