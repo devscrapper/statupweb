@@ -434,9 +434,8 @@
           </td>
           <td class="text-left">
             <% visit.captchas.each { |captcha| %>
-                <%= if !visit.captcha.nil? and
-                        !visit.captcha.image_file_id.nil? and
-                        File.exist?(File.join("public", "images", visit.captcha.image_file_id))
+                <%= if !captcha.image_file_id.nil? and
+                        File.exist?(File.join("public", "images", captcha.image_file_id))
                       link_to captcha.text, image_path(captcha.image_file_id), class: "label label-danger"
 
                     else
