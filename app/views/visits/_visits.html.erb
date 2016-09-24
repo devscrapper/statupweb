@@ -330,7 +330,8 @@
                   <span class="label label-success">Total adwords not found</span>
                   <span class="badge"><%= count_advert_tracking %></span>
                   <span class="label label-success">Ratio Success</span>
-                  <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>%</span>
+                  <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
+                    %</span>
 
                   <span class="label label-danger">Total Captcha Submitting</span>
                   <span class="badge"><%= count_captcha_submitting %></span>
@@ -385,7 +386,7 @@
                     data: {confirm: 'Are you sure?'}
         %>
       </td>
-      <td><%=visit.id_visit%></td>
+      <td><%= visit.id_visit %></td>
       <% if ["created", "scheduled", "published", "success", "fail", "outoftime", "overttl", "neverstarted"].include?(state) %>
           <td class="text-center"><%= visit.plan_time.nil? ? "unknown" : visit.plan_time.localtime.to_formatted_s(:hour_min_sec) %></td>
       <% end %>
@@ -422,7 +423,7 @@
                    end %>
                 <%= if !visit.pages[i].nil? and
                         !visit.pages[i].image_file_id.nil? and
-                        File.exist?(File.join("public", "images",visit.pages[i].image_file_id))
+                        File.exist?(File.join("public", "images", visit.pages[i].image_file_id))
                       link_to action, image_path(visit.pages[i].image_file_id), class: class_name
                       #link_to action, image_path("#{visit.id_visit}_#{i}.png"), class: class_name
                     else
@@ -433,7 +434,9 @@
           </td>
           <td class="text-left">
             <% visit.captchas.each { |captcha| %>
-                <%= if !visit.captcha.image_file_id.nil? and File.exist?(File.join("public", "images",visit.captcha.image_file_id))
+                <%= if !visit.captcha.nil? and
+                        !visit.captcha.image_file_id.nil? and
+                        File.exist?(File.join("public", "images", visit.captcha.image_file_id))
                       link_to captcha.text, image_path(captcha.image_file_id), class: "label label-danger"
 
                     else
@@ -479,7 +482,8 @@
           <span class="label label-success">Total adwords not found</span>
           <span class="badge"><%= count_advert_tracking %></span>
           <span class="label label-success">Ratio Success</span>
-          <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>%</span>
+          <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
+            %</span>
 
           <span class="label label-danger">Total Captcha Submitting</span>
           <span class="badge"><%= count_captcha_submitting %></span>
