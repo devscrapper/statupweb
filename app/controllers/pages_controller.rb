@@ -14,7 +14,7 @@ class PagesController < ApplicationController
         @page.index = params['index']
         unless params['image'].nil?
           uploaded_io = params['image']
-          @page.image_file_id = "#{params['visit_id']}_#{params['index']}#{File.extname(uploaded_io.original_filename)}"
+          @page.image_file_id = "#{params['visit_id']}_#{params['index']}_screenshot_#{File.extname(uploaded_io.original_filename)}"
         end
         # save to DB
         @page.save!

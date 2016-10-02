@@ -15,7 +15,7 @@ class CaptchasController < ApplicationController
         @captcha.text = params['text'] unless params['text'].nil?
         unless params['image'].nil?
           uploaded_io = params['image']
-          @captcha.image_file_id = "#{params['visit_id']}_#{params['index']}#{File.extname(uploaded_io.original_filename)}"
+          @captcha.image_file_id = "#{params['visit_id']}_#{params['index']}_captcha_#{File.extname(uploaded_io.original_filename)}"
         end
         # save to DB
         @captcha.save!
