@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :logs
   resources :captchas
   resources :pages
   resources :seas
@@ -29,9 +30,12 @@ Rails.application.routes.draw do
   match '/visits/refresh', to: 'visits#refresh', via: [:get], as: :refresh_visit
   match '/visits/:visit_id/browsed_page', to: 'visits#browsed_page', via: [:patch], as: :browsed_page_visit
   match '/visits/:visit_id/started', to: 'visits#started', via: [:patch], as: :started_visit
+  # match '/visits/:visit_id/log', to: 'visits#log', via: [:get], as: :log
   match '/visits/order_by', to: 'visits#order_by', via: [:get], as: :order_by_visit
   match '/seas/:id/publish', to: 'seas#publish', via: [:patch], as: :publish_sea
-  resources :visits
+  resources :visits do
+    resource :log
+  end
   #match '/traffics/destroy_all', to:'traffics#destroy_all', via: [:delete], as: :destroy_all_traffic
   resources :ranks do
     collection do

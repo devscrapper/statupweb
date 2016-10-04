@@ -132,6 +132,10 @@ class VisitsController < ApplicationController
     end
   end
 
+  def log
+    render :file => @visit.log.log_file_id
+  end
+
   def order_by
     @visits = Visit.where({:policy_id => params[:policy_id],
                            :policy_type => params[:policy_type],

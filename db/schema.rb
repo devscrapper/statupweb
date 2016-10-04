@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922144555) do
+ActiveRecord::Schema.define(version: 20161004135111) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 20160922144555) do
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
   end
+
+  add_index "captchas", ["visit_id"], name: "index_captchas_on_visit_id"
 
   create_table "custom_statistics", force: :cascade do |t|
     t.integer  "policy_id"
@@ -61,6 +63,15 @@ ActiveRecord::Schema.define(version: 20160922144555) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
+  create_table "logs", force: :cascade do |t|
+    t.string   "visit_id",    null: false
+    t.string   "log_file_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "logs", ["visit_id"], name: "index_logs_on_visit_id"
+
   create_table "objectives", force: :cascade do |t|
     t.integer  "policy_id"
     t.string   "policy_type"
@@ -83,6 +94,8 @@ ActiveRecord::Schema.define(version: 20160922144555) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
+
+  add_index "pages", ["visit_id"], name: "index_pages_on_visit_id"
 
   create_table "ranks", force: :cascade do |t|
     t.string   "statistic_type",                         null: false
