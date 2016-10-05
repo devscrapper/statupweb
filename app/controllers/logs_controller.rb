@@ -39,7 +39,7 @@ class LogsController < ApplicationController
   end
 
   def show
-    render file: File.join("public", "logs",@log.log_file_id)
+    render plain: File.read(File.join("public", "logs",@log.log_file_id))
   end
   protected
 
