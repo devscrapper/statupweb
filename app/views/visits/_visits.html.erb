@@ -125,6 +125,28 @@
               data: {confirm: 'Are you sure?'}
     end
 %>
+
+<% count_visits = Visit.where({:policy_id => policy_id,
+                               :policy_type => policy_type,
+                               :state => "advertnotfound"}).count
+%>
+
+<%= link_to "Advert not found (#{count_visits})",
+            visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                         :policy_type => policy_type,
+                         :state => "advertnotfound"}),
+            remote: true,
+            class: "btn btn-sm btn-danger" %>
+
+<%= if state == "advertnotfound" and count_visits > 0
+      link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+              delete_all_by_state_path({:policy_id => policy_id,
+                                        :policy_type => policy_type,
+                                        :state => "fail"}),
+              remote: true,
+              data: {confirm: 'Are you sure?'}
+    end
+%>
 <% count_visits = Visit.where({:policy_id => policy_id,
                                :policy_type => policy_type,
                                :state => "outoftime"}).count
@@ -190,25 +212,25 @@
   <tr>
     <th class="text-center">State</th>
     <th class="text-center">id</th>
-    <% if ["created", "scheduled", "published", "success", "fail", "outoftime", "overttl", "neverstarted"].include?(state) %>
+    <% if ["created", "scheduled", "published", "success", "fail", "advertnotfound", "outoftime", "overttl", "neverstarted"].include?(state) %>
         <th class="text-center">Plan time</th>
     <% end %>
-    <% if ["started", "success", "fail", "overttl"].include?(state) %>
+    <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
         <th class="text-center">Start time</th>
     <% end %>
-    <% if ["success", "fail", "overttl"].include?(state) %>
+    <% if ["success", "fail", "advertnotfound", "overttl"].include?(state) %>
         <th class="text-left">End time</th>
     <% end %>
-    <% if ["started", "success", "fail", "overttl"].include?(state) %>
+    <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
         <th class="text-left">Delay</th>
     <% end %>
-    <% if ["started", "success", "fail", "overttl"].include?(state) %>
+    <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
         <th class="text-left">Actions</th>
     <% end %>
-    <% if ["started", "success", "fail", "overttl"].include?(state) %>
+    <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
         <th class="text-left">Captchas</th>
     <% end %>
-    <% if ["fail"].include?(state) %>
+    <% if ["fail", "advertnotfound"].include?(state) %>
         <th class="text-left">Reason</th>
     <% end %>
     <th class="text-left">Os</th>
@@ -252,7 +274,7 @@
         </th>
     <% end %>
     <th class="text-center">Advert</th>
-    <% if ["started", "success", "fail", "overttl"].include?(state) %>
+    <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
         <th class="text-center">Geolocation
           <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
                       order_by_visit_path({:policy_id => policy_id,
@@ -301,6 +323,8 @@
              color_state = "label label-success"
            when "fail"
              color_state = "label label-danger"
+           when "advertnotfound"
+             color_state = "label label-danger"
            else
              color_state = "label label-default"
          end %>
@@ -324,15 +348,19 @@
           <tr class="info">
             <td colspan="20"><span class="label label-info">Visits/day</span>
               <span class="badge"><%= count_visit_per_day %> </span>
-              <% if ["success", "fail", "overttl"].include?(state) %>
-                  <span class="label label-info">Total Adwords click</span>
-                  <span class="badge"><%= count_adword_click %></span>
+              <% if ["advertnotfound"].include?(state) %>
                   <span class="label label-success">Total adwords not found</span>
                   <span class="badge"><%= count_advert_tracking %></span>
                   <span class="label label-success">Ratio Success</span>
+                                    <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
+                                      %</span>
+              <% end %>
+              <% if ["success", "fail", "overttl"].include?(state) %>
+                  <span class="label label-info">Total Adwords click</span>
+                  <span class="badge"><%= count_adword_click %></span>
+                  <span class="label label-success">Ratio Success</span>
                   <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
                     %</span>
-
                   <span class="label label-danger">Total Captcha Submitting</span>
                   <span class="badge"><%= count_captcha_submitting %></span>
 
@@ -372,8 +400,7 @@
                       remote: true,
                       data: {confirm: 'Are you sure?'}
             end %>
-        <%= if visit.state == "fail"
-              #  render :file => File.join("public", "logs",visit.log.log_file_id)
+        <%= if ["fail", "advertnotfound"].include?(state)
               link_to content_tag(:span, "", class: "glyphicon glyphicon-export"),
                       visit_log_path({:visit_id => visit.id})
             end %>
@@ -384,25 +411,26 @@
                     remote: true,
                     data: {confirm: 'Are you sure?'}
         %>
+
       </td>
       <td><%= visit.id_visit %></td>
       <% if ["created", "scheduled", "published", "success", "fail", "outoftime", "overttl", "neverstarted"].include?(state) %>
           <td class="text-center"><%= visit.plan_time.nil? ? "unknown" : visit.plan_time.localtime.to_formatted_s(:hour_min_sec) %></td>
       <% end %>
-      <% if ["started", "success", "fail", "overttl"].include?(state) %>
+      <% if ["started", "success", "fail", "neverstarted", "overttl"].include?(state) %>
           <td class="text-center"><%= visit.start_time.nil? ? "unknown" : visit.start_time.localtime.to_formatted_s(:hour_min_sec) %></td>
       <% end %>
-      <% if ["success", "fail", "overttl"].include?(state) %>
+      <% if ["success", "fail", "neverstarted", "overttl"].include?(state) %>
           <td class="text-center"><%= visit.end_time.localtime.to_formatted_s(:hour_min_sec) %></td>
       <% end %>
-      <% if ["started", "success", "fail", "overttl"].include?(state) %>
+      <% if ["started", "success", "fail", "neverstarted", "overttl"].include?(state) %>
           <td class="text-left"><%= visit.start_time.nil? ?
                                             "unknown" :
                                             distance_of_time_in_words(visit.start_time, visit.start_time.nil? ?
                                                                                               0 :
                                                                                               visit.end_time || Time.now, include_seconds: true) %></td>
       <% end %>
-      <% if ["started", "success", "fail", "overttl"].include?(state) %>
+      <% if ["started", "success", "fail", "neverstarted", "overttl"].include?(state) %>
           <td class="text-left">
             <% visit.actions.each_with_index { |action, i| %>
                 <% if i + 1 <= visit.count_browsed_page
@@ -420,11 +448,15 @@
                          class_name = "label label-default"
                      end
                    end %>
+
                 <%= if !visit.pages[i].nil? and
                         !visit.pages[i].image_file_id.nil? and
-                        File.exist?(File.join("public", "images", visit.pages[i].image_file_id))
-                      link_to action, image_path(visit.pages[i].image_file_id), class: class_name
-                      #link_to action, image_path("#{visit.id_visit}_#{i}.png"), class: class_name
+                        File.exist?(File.join("public", "images", visit.pages[i].image_file_id)) #TODO faire le controle ailleur
+                      link_to action,
+                              visit_pages_path({:visit_id => visit.id, :id => visit.pages[i].id}),
+                              class: class_name
+
+
                     else
                       content_tag(:span, action, class: class_name)
 
@@ -436,7 +468,9 @@
                 <%= if !captcha.image_file_id.nil? and
                         File.exist?(File.join("public", "images", captcha.image_file_id))
                       link_to captcha.text, image_path(captcha.image_file_id), class: "label label-danger"
-
+                      link_to captcha.text,
+                              visit_captchas_path({:visit_id => visit.id, :id => captcha.id}),
+                              class: "label label-warning"
                     else
                       content_tag(:span, captcha.text, class: "label label-danger")
 
@@ -444,7 +478,7 @@
             <% } %>
           </td>
       <% end %>
-      <% if ["fail"].include?(state) %>
+      <% if ["fail", "neverstarted"].include?(state) %>
           <td class="text-left">
             <% case visit.reason %>
             <% when "advert tracking" %>
@@ -464,7 +498,7 @@
           <td class="text-left"><%= visit.keywords %></td>
       <% end %>
       <td class="text-center"><%= visit.advert %></td>
-      <% if ["started", "success", "fail", "overttl"].include?(state) %>
+      <% if ["started", "success", "fail", "neverstarted", "overttl"].include?(state) %>
           <td class="text-center"><%= visit.ip_geo_proxy %> </td>
           <td class="text-center"><%= visit.country_geo_proxy %> </td>
       <% end %>
@@ -473,12 +507,18 @@
   <tr class="info">
     <td colspan="20"><span class="label label-info">Visits/day</span>
       <span class="badge"><%= count_visit_per_day %></span>
+
+      <% if ["neverstarted"].include?(state) %>
+          <span class="label label-success">Total adwords not found</span>
+          <span class="badge"><%= count_advert_tracking %></span>
+          <span class="label label-success">Ratio Success</span>
+          <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
+            %</span>
+      <% end %>
       <% if ["success", "fail", "overttl"].include?(state) %>
 
           <span class="label label-info">Total Adwords click</span>
           <span class="badge"><%= count_adword_click %></span>
-          <span class="label label-success">Total adwords not found</span>
-          <span class="badge"><%= count_advert_tracking %></span>
           <span class="label label-success">Ratio Success</span>
           <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
             %</span>

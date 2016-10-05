@@ -48,7 +48,8 @@ class CaptchasController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_captcha
-    @captcha = Captcha.find(params[:id])
+    @captcha = Captcha.find(params[:id]) if !params[:id].nil? and params[:visit_id].nil?
+    @captcha = Captcha.find_by({:visit_id => params[:visit_id], :id => params[:id]}) if !params[:id].nil? and !params[:visit_id].nil?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
