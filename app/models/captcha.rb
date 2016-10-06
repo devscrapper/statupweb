@@ -3,6 +3,10 @@ class Captcha < ActiveRecord::Base
 
   before_destroy :delete_image_file
 
+  def has_image_file?
+    !image_file_id.nil? and
+        File.exist?(File.join("public", "images", image_file_id))
+  end
   private
 
   def delete_image_file

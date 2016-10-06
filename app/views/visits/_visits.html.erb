@@ -449,14 +449,10 @@
                      end
                    end %>
 
-                <%= if !visit.pages[i].nil? and
-                        !visit.pages[i].image_file_id.nil? and
-                        File.exist?(File.join("public", "images", visit.pages[i].image_file_id)) #TODO faire le controle ailleur
+                <%= if !visit.pages[i].nil? and visit.pages[i].has_image_file?
                       link_to action,
                               visit_pages_path({:visit_id => visit.id, :id => visit.pages[i].id}),
                               class: class_name
-
-
                     else
                       content_tag(:span, action, class: class_name)
 
@@ -465,9 +461,7 @@
           </td>
           <td class="text-left">
             <% visit.captchas.each { |captcha| %>
-                <%= if !captcha.image_file_id.nil? and
-                        File.exist?(File.join("public", "images", captcha.image_file_id))
-                      link_to captcha.text, image_path(captcha.image_file_id), class: "label label-danger"
+                <%= if captcha.has_image_file?
                       link_to captcha.text,
                               visit_captchas_path({:visit_id => visit.id, :id => captcha.id}),
                               class: "label label-warning"
