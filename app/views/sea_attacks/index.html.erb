@@ -60,7 +60,7 @@
 
               </td>
               <td class="text-left vert-align">
-                <a data-toggle="collapse" class="" href="#panel-show<%= sea_attack.id %>"><%= sea_attack.sea.label %></a>
+                <%= link_to sea_attack.sea.label, sea_attack_path(sea_attack.id)  %>
               </td>
               <td class="text-center vert-align"><%= sea_attack.start_date.to_date %></td>
               <td class="text-center vert-align"><%= (sea_attack.start_date.to_date + sea_attack.count_weeks * 7 -1).to_date  %></td>
@@ -100,14 +100,6 @@
 
               </td>
               <td class="text-center vert-align"><%= link_to 'Destroy', sea_attack, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
-            </tr>
-            <tr>
-              <td colspan="14">
-                <div id="panel-show<%= sea_attack.id %>" class="panel-collapse collapse">
-                  <%= render partial: 'show', locals: {:sea_attack => sea_attack} %>
-                </div>
-              </td>
-
             </tr>
         <% end %>
         </tbody>

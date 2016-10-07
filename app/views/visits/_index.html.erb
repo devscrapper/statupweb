@@ -5,13 +5,428 @@
 
   <div id="visits<%= policy_id %>" style="">
 
-    <%= render partial: 'visits/visits', :locals => {:execution_mode => execution_mode,
-                                                     :policy_id => policy_id,
-                                                     :policy_type => policy_type,
-                                                     :state => state,
-                                                     visits: Visit.where({:policy_id => policy_id,
-                                                                          :policy_type => policy_type,
-                                                                          :state => state}).order("plan_time desc")} %>
+    <!--created scheduled outoftime started neverstarted success fail-->
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "created"}).count
+    %>
+    <%= link_to "Created (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "created"}),
+                remote: true,
+                class: "btn btn-sm btn-default"
+    %>
+    <% if state == "created" and count_visits > 0 %>
+        <%=
+            link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
+                    publish_all_path({:policy_id => policy_id,
+                                      :policy_type => policy_type,
+                                      :state => "created"}),
+                    remote: true,
+                    data: {confirm: 'Are you sure?'}
+
+        %>
+        <%=
+            link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                    delete_all_by_state_path({:policy_id => policy_id,
+                                              :policy_type => policy_type,
+                                              :state => "created"}),
+                    remote: true,
+                    data: {confirm: 'Are you sure?'}
+
+        %>
+    <% end %>
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "scheduled"}).count
+    %>
+    <%= link_to "Scheduled (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "scheduled"}),
+                remote: true,
+                class: "btn btn-sm btn-info" %>
+    <%= if state == "scheduled" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "scheduled"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "published"}).count
+    %>
+    <%= link_to "Published (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "published"}),
+                remote: true,
+                class: "btn btn-sm btn-primary" %>
+    <%= if state == "published" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "published"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "started"}).count
+    %>
+    <%= link_to "Started (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "started"}),
+                remote: true,
+                class: "btn btn-sm btn-primary" %>
+    <%= if state == "started" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "started"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "success"}).count
+    %>
+    <%= link_to "Success (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "success"}),
+                remote: true,
+                class: "btn btn-sm btn-success" %>
+    <%= if state == "success" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "success"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "fail"}).count
+    %>
+    <%= link_to "Fail (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "fail"}),
+                remote: true,
+                class: "btn btn-sm btn-danger" %>
+    <%= if state == "fail" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "fail"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "advertnotfound"}).count
+    %>
+
+    <%= link_to "Advert not found (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "advertnotfound"}),
+                remote: true,
+                class: "btn btn-sm btn-danger" %>
+
+    <%= if state == "advertnotfound" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "fail"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "outoftime"}).count
+    %>
+    <%= link_to "Out of Time (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "outoftime"}),
+                remote: true,
+                class: "btn btn-sm btn-warning" %>
+    <%= if state == "outoftime" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "outoftime"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "overttl"}).count
+    %>
+    <%= link_to "Over Time to Live (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "overttl"}),
+                remote: true,
+                class: "btn btn-sm btn-warning" %>
+    <%= if state == "overttl" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "overttl"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+    <% count_visits = Visit.where({:policy_id => policy_id,
+                                   :policy_type => policy_type,
+                                   :state => "neverstarted"}).count
+    %>
+    <%= link_to "Never Started (#{count_visits})",
+                visits_path({:execution_mode => execution_mode, :policy_id => policy_id,
+                             :policy_type => policy_type,
+                             :state => "neverstarted"}),
+                remote: true,
+                class: "btn btn-sm btn-warning" %>
+
+    <%= if state == "neverstarted" and count_visits > 0
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+                  delete_all_by_state_path({:policy_id => policy_id,
+                                            :policy_type => policy_type,
+                                            :state => "neverstarted"}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end
+    %>
+
+
+    <table class="table">
+      <thead class="header-table">
+      <tr>
+        <th class="text-center">State</th>
+        <th class="text-center">id</th>
+        <% if ["created", "scheduled", "published", "success", "fail", "advertnotfound", "outoftime", "overttl", "neverstarted"].include?(state) %>
+            <th class="text-center">Plan time</th>
+        <% end %>
+        <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
+            <th class="text-center">Start time</th>
+        <% end %>
+        <% if ["success", "fail", "advertnotfound", "overttl"].include?(state) %>
+            <th class="text-left">End time</th>
+        <% end %>
+        <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
+            <th class="text-left">Delay</th>
+        <% end %>
+        <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
+            <th class="text-left">Actions</th>
+        <% end %>
+        <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
+            <th class="text-left">Captchas</th>
+        <% end %>
+        <% if ["fail", "advertnotfound"].include?(state) %>
+            <th class="text-left">Reason</th>
+        <% end %>
+        <th class="text-left">Os</th>
+        <th class="text-left">Browser
+          <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
+                      order_by_visit_path({:policy_id => policy_id,
+                                           :policy_type => policy_type,
+                                           :state => state,
+                                           :criteria => :browser_name,
+                                           :way => :asc}),
+                      remote: true
+          %>
+          <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
+                      order_by_visit_path({:policy_id => policy_id,
+                                           :policy_type => policy_type,
+                                           :state => state,
+                                           :criteria => :browser_name,
+                                           :way => :desc}),
+                      remote: true
+          %>
+        </th>
+        <th class="text-center">Referrer</th>
+        <% if ["SeaAttack"].include?(policy_type) %>
+            <th class="text-left">Keywords
+              <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
+                          order_by_visit_path({:policy_id => policy_id,
+                                               :policy_type => policy_type,
+                                               :state => state,
+                                               :criteria => :keywords,
+                                               :way => :asc}),
+                          remote: true
+              %>
+              <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
+                          order_by_visit_path({:policy_id => policy_id,
+                                               :policy_type => policy_type,
+                                               :state => state,
+                                               :criteria => :keywords,
+                                               :way => :desc}),
+                          remote: true
+              %>
+            </th>
+        <% end %>
+        <th class="text-center">Advert</th>
+        <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
+            <th class="text-center">Geolocation
+              <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
+                          order_by_visit_path({:policy_id => policy_id,
+                                               :policy_type => policy_type,
+                                               :state => state,
+                                               :criteria => :ip_geo_proxy,
+                                               :way => :asc}),
+                          remote: true
+              %>
+              <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
+                          order_by_visit_path({:policy_id => policy_id,
+                                               :policy_type => policy_type,
+                                               :state => state,
+                                               :criteria => :ip_geo_proxy,
+                                               :way => :desc}),
+                          remote: true
+              %></th>
+            <th>Country</th>
+
+        <% end %>
+
+      </tr>
+
+      </thead>
+
+
+      <tbody>
+      <% prev_date = nil
+         count_visit_per_day = 0
+         count_adword_click = 0
+         count_advert_tracking = 0
+         count_captcha_submitting = 0
+
+      %>
+      <% visits.each do |visit| %>
+          <% case visit.state
+               when "created"
+                 color_state = "label label-default"
+               when "scheduled"
+                 color_state = "label label-info"
+               when "outoftime", "overttl", "neverstarted"
+                 color_state = "label label-warning"
+               when "started", "published"
+                 color_state = "label label-primary"
+               when "success"
+                 color_state = "label label-success"
+               when "fail"
+                 color_state = "label label-danger"
+               when "advertnotfound"
+                 color_state = "label label-danger"
+               else
+                 color_state = "label label-default"
+             end %>
+          <!--affiche la premiere ligne du tableau -->
+          <% if prev_date.nil?
+               prev_date = visit.plan_time.to_date
+
+          %>
+              <tr class="info">
+                <td colspan="20"><span class="label label-info"><%= visit.plan_time.to_date %></span></td>
+              </tr>
+              <% count_visit_per_day += 1
+                 count_adword_click += (visit.actions.index("F").nil? ? 0 : (visit.actions.index("F") + 1 <= visit.count_browsed_page) ? 1 : 0)
+                 count_advert_tracking += visit.reason == "advert tracking" ? 1 : 0
+                 count_captcha_submitting += visit.reason == "captcha submitting" ? 1 : 0
+              %>
+
+              <!--affiche un changement de jour-->
+          <% elsif prev_date != visit.plan_time.to_date %>
+
+              <tr class="info">
+                <td colspan="20"><span class="label label-info">Visits/day</span>
+                  <span class="badge"><%= count_visit_per_day %> </span>
+                  <% if ["advertnotfound"].include?(state) %>
+                      <span class="label label-success">Total adwords not found</span>
+                      <span class="badge"><%= count_advert_tracking %></span>
+                      <span class="label label-success">Ratio Success</span>
+                                        <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
+                                          %</span>
+                  <% end %>
+                  <% if ["success", "fail", "overttl"].include?(state) %>
+                      <span class="label label-info">Total Adwords click</span>
+                      <span class="badge"><%= count_adword_click %></span>
+                      <span class="label label-success">Ratio Success</span>
+                      <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
+                        %</span>
+                      <span class="label label-danger">Total Captcha Submitting</span>
+                      <span class="badge"><%= count_captcha_submitting %></span>
+
+
+                  <% end %>
+                </td>
+              </tr>
+              <tr class="info">
+                <td colspan="20"><span class="label label-info"><%= visit.plan_time.to_date %></span></td>
+              </tr>
+              <%
+                 prev_date = visit.plan_time.to_date
+                 count_visit_per_day = 1
+                 count_adword_click = 0
+                 count_advert_tracking = 0
+                 count_captcha_submitting = 0
+              %>
+              <!--affiche une ligne de visit-->
+          <% else
+               count_visit_per_day += 1
+               count_adword_click += (visit.actions.index("F").nil? ? 0 : (visit.actions.index("F") + 1 <= visit.count_browsed_page) ? 1 : 0)
+               count_advert_tracking += visit.reason == "advert tracking" ? 1 : 0
+               count_captcha_submitting += visit.reason == "captcha submitting" ? 1 : 0
+          %>
+          <% end %>
+
+          <%= render partial: 'visits/show', :locals => {:count_visit_per_day => count_visit_per_day,
+                                                         :visit => visit,
+                                                         :color_state => color_state,
+                                                         :state => state,
+                                                         :policy_type => policy_type} %>
+      <% end %>
+      <tr class="info">
+        <td colspan="20"><span class="label label-info">Visits/day</span>
+          <span class="badge"><%= count_visit_per_day %></span>
+
+          <% if ["neverstarted"].include?(state) %>
+              <span class="label label-success">Total adwords not found</span>
+              <span class="badge"><%= count_advert_tracking %></span>
+              <span class="label label-success">Ratio Success</span>
+              <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
+                %</span>
+          <% end %>
+          <% if ["success", "fail", "overttl"].include?(state) %>
+
+              <span class="label label-info">Total Adwords click</span>
+              <span class="badge"><%= count_adword_click %></span>
+              <span class="label label-success">Ratio Success</span>
+              <span class="badge"><%= count_visit_per_day == 0 ? 0 : ((count_adword_click + count_advert_tracking) * 100 / Visit.plan_today(prev_date).count).to_i %>
+                %</span>
+
+              <span class="label label-danger">Total Captcha Submitting</span>
+              <span class="badge"><%= count_captcha_submitting %></span>
+
+          <% end %>
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 
 </div>

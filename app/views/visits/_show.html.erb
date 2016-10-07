@@ -1,0 +1,110 @@
+<tr>
+<td class="text-center">
+  <%= count_visit_per_day %>
+
+  <span class="<%= color_state %>"><%= visit.state %></span>
+  <%= if visit.state == "created"
+        link_to content_tag(:span, "", class: "glyphicon glyphicon-play"),
+                publish_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id,
+                                    :policy_type => policy_type,
+                                    :state => visit.state}),
+                remote: true,
+                data: {confirm: 'Are you sure?'}
+      end %>
+  <%= if ["fail", "advertnotfound"].include?(state)
+        link_to content_tag(:span, "", class: "glyphicon glyphicon-export"),
+                visit_log_path({:visit_id => visit.id})
+      end %>
+  <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
+              delete_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id,
+                                 :policy_type => policy_type,
+                                 :state => visit.state}),
+              remote: true,
+              data: {confirm: 'Are you sure?'}
+  %>
+
+</td>
+<td><%= visit.id_visit %></td>
+<% if ["created", "scheduled", "published", "success", "fail", "outoftime", "overttl", "neverstarted"].include?(state) %>
+    <td class="text-center"><%= visit.plan_time.nil? ? "unknown" : visit.plan_time.localtime.to_formatted_s(:hour_min_sec) %></td>
+<% end %>
+<% if ["started", "success", "fail", "neverstarted", "overttl"].include?(state) %>
+    <td class="text-center"><%= visit.start_time.nil? ? "unknown" : visit.start_time.localtime.to_formatted_s(:hour_min_sec) %></td>
+<% end %>
+<% if ["success", "fail", "neverstarted", "overttl"].include?(state) %>
+    <td class="text-center"><%= visit.end_time.localtime.to_formatted_s(:hour_min_sec) %></td>
+<% end %>
+<% if ["started", "success", "fail", "neverstarted", "overttl"].include?(state) %>
+    <td class="text-left"><%= visit.start_time.nil? ?
+                                      "unknown" :
+                                      distance_of_time_in_words(visit.start_time, visit.start_time.nil? ?
+                                                                                        0 :
+                                                                                        visit.end_time || Time.now, include_seconds: true) %></td>
+<% end %>
+<% if ["started", "success", "fail", "neverstarted", "overttl"].include?(state) %>
+    <td class="text-left">
+      <% visit.actions.each_with_index { |action, i| %>
+          <% if i + 1 <= visit.count_browsed_page
+               class_name = "label label-success"
+             else
+               # action F == click_on_advert
+               case action
+                 when "F"
+                   class_name = "label label-warning"
+                 when "3"
+                   class_name = "label label-danger"
+                 when "H"
+                   class_name = "label label-info"
+                 else
+                   class_name = "label label-default"
+               end
+             end %>
+
+          <%= if !visit.pages[i].nil? and visit.pages[i].has_image_file?
+                link_to action,
+                        visit_pages_path({:visit_id => visit.id, :id => visit.pages[i].id}),
+                        class: class_name
+              else
+                content_tag(:span, action, class: class_name)
+
+              end %>
+      <% } %>
+    </td>
+    <td class="text-left">
+      <% visit.captchas.each { |captcha| %>
+          <%= if captcha.has_image_file?
+                link_to captcha.text,
+                        visit_captchas_path({:visit_id => visit.id, :id => captcha.id}),
+                        class: "label label-warning"
+              else
+                content_tag(:span, captcha.text, class: "label label-danger")
+
+              end %>
+      <% } %>
+    </td>
+<% end %>
+<% if ["fail", "neverstarted"].include?(state) %>
+    <td class="text-left">
+      <% case visit.reason %>
+      <% when "advert tracking" %>
+          <span class="label label-success"><%= visit.reason %> </span>
+      <% when "captcha submitting" %>
+          <span class="label label-danger"><%= visit.reason %> </span>
+      <% else %>
+          <%= visit.reason %>
+      <% end %>
+
+    </td>
+<% end %>
+<td class="text-left"><%= visit.operating_system_name %>/<%= visit.operating_system_version %></td>
+<td class="text-left"><%= visit.browser_name %>/<%= visit.browser_version %></td>
+<td class="text-center"><%= visit.referrer %></td>
+<% if ["SeaAttack"].include?(policy_type) %>
+    <td class="text-left"><%= visit.keywords %></td>
+<% end %>
+<td class="text-center"><%= visit.advert %></td>
+<% if ["started", "success", "fail", "neverstarted", "overttl"].include?(state) %>
+    <td class="text-center"><%= visit.ip_geo_proxy %> </td>
+    <td class="text-center"><%= visit.country_geo_proxy %> </td>
+<% end %>
+</tr>

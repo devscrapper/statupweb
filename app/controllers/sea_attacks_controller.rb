@@ -26,7 +26,16 @@ class SeaAttacksController < ApplicationController
   # GET /sea_attacks/1
   # GET /sea_attacks/1.json
   def show
+    if @sea_attack.state == "published"
+      begin
+        @sea_attack.planed_dates = Calendar.planed_dates(30, :seaattack, @sea_attack.id)
+      rescue Exception => e
+        @sea_attack.planed_dates = []
 
+      end
+    else
+      @sea_attack.planed_dates = []
+    end
   end
 
   # GET /sea_attacks/new

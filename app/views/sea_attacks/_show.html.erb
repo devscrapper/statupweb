@@ -78,7 +78,10 @@
                       <p><%= render partial: 'visits/index', :locals => {:execution_mode => sea_attack.execution_mode,
                                                                          :policy_id => sea_attack.id,
                                                                          :policy_type => sea_attack.class.name,
-                                                                         :state => "created"} %></p>
+                                                                         :state => "created",
+                                                                         :visits => Visit.where({:policy_id => sea_attack.id,
+                                                                                                :policy_type => sea_attack.class.name,
+                                                                                                :state => "created"}).order("plan_time desc")} %></p>
                     </div>
                     <div id="calendar-sea_attack<%= sea_attack.id %>" class="tab-pane fade in active">
                       <p><%= render partial: 'calendar/index', :locals => {:current_date => Date.today,

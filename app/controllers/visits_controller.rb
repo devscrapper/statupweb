@@ -3,6 +3,7 @@ require 'maxminddb'
 class VisitsController < ApplicationController
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
+  before_action :set_visit, only: [:show]
 
   def index
     if !params[:state].nil?
@@ -90,6 +91,7 @@ class VisitsController < ApplicationController
       @policy_type = params['policy_type']
       @execution_mode = params['execution_mode']
       @state = params[:state]
+      render :index
     end
   end
 
@@ -111,6 +113,7 @@ class VisitsController < ApplicationController
       @policy_type = params['policy_type']
       @execution_mode = params['execution_mode']
       @state = params[:state]
+      render :index
     end
   end
 
@@ -144,6 +147,7 @@ class VisitsController < ApplicationController
     @policy_type = params['policy_type']
     @execution_mode = params['execution_mode']
     @state = params[:state]
+    render :index
   end
 
   def publish
@@ -160,6 +164,7 @@ class VisitsController < ApplicationController
       @policy_type = params['policy_type']
       @execution_mode = params['execution_mode']
       @state = params[:state]
+      render :index
     end
   end
 
@@ -182,8 +187,10 @@ class VisitsController < ApplicationController
       @policy_type = params['policy_type']
       @execution_mode = params['execution_mode']
       @state = params[:state]
+      render :index
     end
   end
+
 
   def started
     @visit = Visit.find_by_id_visit(params[:visit_id])
@@ -247,7 +254,7 @@ class VisitsController < ApplicationController
 
   private
   # Use callbacks to share common setup or constraints between actions.
-  def set_traffic
+  def set_visit
     @visit = Visit.find(params[:id])
   end
 
