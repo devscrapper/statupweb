@@ -75,10 +75,13 @@
                       <p><%= render partial: 'objectives/index', :locals => {:objectives => objectives} %></p>
                     </div>
                     <div id="visits-traffic<%= traffic.id %>" class="tab-pane fade">
-                      <p><%= render partial: 'visits/index', :locals => {:execution_mode => traffic.execution_mode,
-                                                                         :policy_id => traffic.id,
-                                                                         :policy_type => traffic.class.name,
-                                                                         :state => "created"} %></p>
+                      <p><%= render partial: 'visits/index', :locals =>  {:execution_mode => traffic.execution_mode,
+                                                                                               :policy_id => traffic.id,
+                                                                                               :policy_type => traffic.class.name,
+                                                                                               :state => "created",
+                                                                                               :visits => Visit.where({:policy_id => traffic.id,
+                                                                                                                      :policy_type => traffic.class.name,
+                                                                                                                      :state => "created"}).order("plan_time desc")} %></p>
                     </div>
                     <div id="calendar-traffic<%= traffic.id %>" class="tab-pane fade in active">
                       <p><%= render partial: 'calendar/index', :locals => {:current_date => Date.today,
