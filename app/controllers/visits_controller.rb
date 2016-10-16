@@ -218,7 +218,7 @@ class VisitsController < ApplicationController
 
 
     case visit_params[:state]
-      when "fail"
+      when "fail", "advertnotfound"
         datas = {:state => visit_params[:state],
                  :reason => visit_params[:reason],
                  :end_time => Time.now}

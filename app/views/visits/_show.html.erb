@@ -32,10 +32,10 @@
       <td class="text-center"><%= visit.start_time.nil? ? "unknown" : visit.start_time.localtime.to_formatted_s(:hour_min_sec) %></td>
   <% end %>
   <% if ["success", "fail", "neverstarted", "overttl", "advertnotfound"].include?(state) %>
-      <td class="text-center"><%= visit.end_time.localtime.to_formatted_s(:hour_min_sec) %></td>
+      <td class="text-center"><%= visit.end_time.nil? ? "unknown" : visit.end_time.localtime.to_formatted_s(:hour_min_sec) %></td>
   <% end %>
   <% if ["started", "success", "fail", "neverstarted", "overttl", "advertnotfound"].include?(state) %>
-      <td class="text-left"><%= visit.start_time.nil? ?
+      <td class="text-left"><%= visit.start_time.nil? or visit.end_time.nil? ?
                                         "unknown" :
                                         distance_of_time_in_words(visit.start_time, visit.start_time.nil? ?
                                                                                           0 :
