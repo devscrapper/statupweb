@@ -149,7 +149,7 @@
           link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
                   delete_all_by_state_path({:policy_id => policy_id,
                                             :policy_type => policy_type,
-                                            :state => "fail"}),
+                                            :state => "advertnotfound"}),
                   remote: true,
                   data: {confirm: 'Are you sure?'}
         end
