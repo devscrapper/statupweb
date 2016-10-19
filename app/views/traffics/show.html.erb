@@ -1,133 +1,42 @@
-<p id="notice"><%= notice %></p>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Traffic</h3>
+  </div>
 
-<p>
-  <strong>Statistic type:</strong>
-  <%= @traffic.statistic_type %>
-</p>
+  <div class="panel-body">
+    <div class="container-fluid">
 
-<p>
-  <strong>Website:</strong>
-  <%= @traffic.website_id %>
-</p>
+      <div class="row">
+        <div class="col-xs-1">
+          <%= if @traffic.state == "created"
+                link_to 'Edit', edit_traffic_path(@traffic), class: "btn btn-sm btn-default"
+              end %>
+          <%= if @traffic.state == "published"
+                link_to 'Edit', edit_traffic_path(@traffic), class: "btn btn-sm btn-default disabled"
+              end %>
+        </div>
+        <div class="col-xs-1">
 
+          <%= link_to 'Destroy', @traffic, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
+        </div>
 
+        <div class="col-xs-1">
+          <%= if @traffic.state == "created"
+                form_for @traffic, as: :post, method: :patch, url: publish_traffic_path(@traffic) do |f|
+                  f.submit "Publish", class: "btn btn-sm btn-warning", data: {confirm: "Are you sure?"}
+                end
+              end %>
+          <%= if @traffic.state == "published"
+                form_for @traffic, as: :post, method: :patch, url: unpublish_traffic_path(@traffic) do |f|
+                  f.submit "Unpublish", class: "btn btn-sm btn-warning", data: {confirm: "Are you sure?"}
+                end
+              end %>
+        </div>
+        <div class="col-xs-9"> </div>
 
-<p>
-  <strong>Monday start:</strong>
-  <%= @traffic.monday_start %>
-</p>
+      </div>
 
-<p>
-  <strong>Count weeks:</strong>
-  <%= @traffic.count_weeks %>
-</p>
-
-<p>
-  <strong>Change count visits percent:</strong>
-  <%= @traffic.change_count_visits_percent %>
-</p>
-
-<p>
-  <strong>Change bounce visits percent:</strong>
-  <%= @traffic.change_bounce_visits_percent %>
-</p>
-
-<p>
-  <strong>Direct medium percent:</strong>
-  <%= @traffic.direct_medium_percent %>
-</p>
-
-<p>
-  <strong>Organic medium percent:</strong>
-  <%= @traffic.organic_medium_percent %>
-</p>
-
-<p>
-  <strong>Referral medium percent:</strong>
-  <%= @traffic.referral_medium_percent %>
-</p>
-
-<p>
-  <strong>Advertising percent:</strong>
-  <%= @traffic.advertising_percent %>
-</p>
-
-
-
-<p>
-  <strong>Max duration scraping:</strong>
-  <%= @traffic.max_duration_scraping %>
-</p>
-
-<p>
-  <strong>Min count page advertiser:</strong>
-  <%= @traffic.min_count_page_advertiser %>
-</p>
-
-<p>
-  <strong>Max count page advertiser:</strong>
-  <%= @traffic.max_count_page_advertiser %>
-</p>
-
-<p>
-  <strong>Min duration page advertiser:</strong>
-  <%= @traffic.min_duration_page_advertiser %>
-</p>
-
-<p>
-  <strong>Max duration page advertiser:</strong>
-  <%= @traffic.max_duration_page_advertiser %>
-</p>
-
-<p>
-  <strong>Percent local page advertiser:</strong>
-  <%= @traffic.percent_local_page_advertiser %>
-</p>
-
-<p>
-  <strong>Duration referral:</strong>
-  <%= @traffic.duration_referral %>
-</p>
-
-<p>
-  <strong>Min count page organic:</strong>
-  <%= @traffic.min_count_page_organic %>
-</p>
-
-<p>
-  <strong>Max count page organic:</strong>
-  <%= @traffic.max_count_page_organic %>
-</p>
-
-<p>
-  <strong>Min duration page organic:</strong>
-  <%= @traffic.min_duration_page_organic %>
-</p>
-
-<p>
-  <strong>Max duration page organic:</strong>
-  <%= @traffic.max_duration_page_organic %>
-</p>
-
-<p>
-  <strong>Min duration:</strong>
-  <%= @traffic.min_duration %>
-</p>
-
-<p>
-  <strong>Max duration:</strong>
-  <%= @traffic.max_duration %>
-</p>
-
-<p>
-  <strong>Min duration website:</strong>
-  <%= @traffic.min_duration_website %>
-</p>
-
-<p>
-  <strong>Min pages website:</strong>
-  <%= @traffic.min_pages_website %>
-</p>
-
-
-
+      <%= render partial: 'show', locals: {:traffic => @traffic} %>
+    </div>
+  </div>
+</div>

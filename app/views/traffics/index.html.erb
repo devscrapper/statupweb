@@ -57,7 +57,7 @@
 
               </td>
               <td class="text-left vert-align">
-                <a data-toggle="collapse" class="" href="#panel-show<%= traffic.id %>"><%= traffic.website.label %></a>
+                <%= link_to traffic.website.label, traffic_path(traffic.id)  %>
               </td>
               <td class="text-center vert-align"><%= traffic.monday_start %></td>
               <td class="text-center vert-align"><%= traffic.monday_start + traffic.count_weeks * 7 -1 %></td>
@@ -97,14 +97,6 @@
 
               </td>
               <td class="text-center vert-align"><%= link_to 'Destroy', traffic, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
-            </tr>
-            <tr>
-              <td colspan="14">
-                <div id="panel-show<%= traffic.id %>" class="panel-collapse collapse">
-                  <%= render partial: 'show', locals: {:traffic => traffic} %>
-                </div>
-              </td>
-
             </tr>
         <% end %>
         </tbody>
