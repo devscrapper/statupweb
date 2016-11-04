@@ -6,26 +6,37 @@ class VisitsController < ApplicationController
   before_action :set_visit, only: [:show]
 
   def index
-    if !params[:state].nil?
-      case params[:state]
-        when "created", "scheduled", "published", "outoftime", "neverstarted"
-          order_by = "plan_time desc"
-
-        when "success", "fail", "overttl"
-          order_by = "end_time desc"
-
-      end
-    else
-      order_by = "plan_time asc"
-    end
-
-    @visits = Visit.where({:policy_id => params[:policy_id],
-                           :policy_type => params[:policy_type],
-                           :state => params[:state] || "created"}).order(order_by)
     @policy_id = params['policy_id']
     @policy_type = params['policy_type']
     @execution_mode = params['execution_mode']
     @state = params[:state] || "created"
+
+    case @state
+      when "created", "scheduled", "published", "neverstarted"
+        order_by = "plan_time desc"
+
+      when "success", "fail", "outoftime", "overttl"
+        order_by = "end_time desc"
+
+    end
+
+
+    if !@policy_type.nil? and !@policy_id.nil?
+      @visits = Visit.where({:policy_id => @policy_id,
+                             :policy_type => @policy_type,
+                             :state => @state}).order(order_by)
+    elsif !@policy_type.nil?
+      @visits = Visit.where({:policy_type => @policy_type,
+                             :state => @state}).order(order_by)
+    elsif !@policy_id.nil?
+
+      @visits = Visit.where({:policy_id => @policy_id,
+                             :state => @state}).order(order_by)
+    else
+      @visits = Visit.where({:state => @state}).order(order_by)
+    end
+
+
   end
 
   def refresh
@@ -203,7 +214,7 @@ class VisitsController < ApplicationController
                                       :actions => visit_params[:actions],
                                       :ip_geo_proxy => visit_params[:ip_geo_proxy],
                                       :state => "started",
-                                     :country_geo_proxy => GeoIp.ip_to_country(visit_params[:ip_geo_proxy])})
+                                      :country_geo_proxy => GeoIp.ip_to_country(visit_params[:ip_geo_proxy])})
         format.json { render json: @visit, status: :created }
 
       else
@@ -223,7 +234,7 @@ class VisitsController < ApplicationController
                  :reason => visit_params[:reason],
                  :end_time => Time.now}
 
-      when "success",  "overttl"
+      when "success", "overttl"
         datas = {:state => visit_params[:state],
                  :end_time => Time.now}
 

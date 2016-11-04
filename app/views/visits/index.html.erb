@@ -1,0 +1,26 @@
+<table>
+  <% case @state
+                when "created"
+                  color_state = "label label-default"
+                when "scheduled"
+                  color_state = "label label-info"
+                when "outoftime", "overttl", "neverstarted"
+                  color_state = "label label-warning"
+                when "started", "published"
+                  color_state = "label label-primary"
+                when "success"
+                  color_state = "label label-success"
+                when "fail"
+                  color_state = "label label-danger"
+                when "advertnotfound"
+                  color_state = "label label-danger"
+                else
+                  color_state = "label label-default"
+              end %>
+  <%= render partial: 'visits/index', :locals => {:count_visit_per_day => "",
+                                                 :visit => @visit,
+                                                 :color_state => color_state,
+                                                 :state => @state,
+                                                 :policy_type => @policy_type} %>
+
+</table>

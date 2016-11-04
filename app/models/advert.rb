@@ -91,7 +91,7 @@ class Advert < ActiveRecord::Base
               :policy_type => self.class.name,
               :website_id => website_id,
               :website_label => website.label,
-              :statistics_type => "default",
+              :statistics_type => statistic_type,
               :monday_start => monday_start, #à cause de la policy Advert (scraping website & organic)
               :count_weeks => count_weeks,
               :url_root => website.url_root,

@@ -15,9 +15,9 @@
           <th class="text-center">State</th>
           <th class="text-center">Execution</th>
           <th class="text-left">Website</th>
-          <th class="text-center">Monday start</th>
+          <th class="text-center">Date start</th>
           <th class="text-center">End policy</th>
-          <th class="text-center">Statistic type</th>
+          <th class="text-center">Count visit per day</th>
           <th colspan="3"></th>
         </tr>
         </thead>
@@ -57,13 +57,7 @@
               </td>
               <td class="text-center vert-align"><%= advert.monday_start %></td>
               <td class="text-center vert-align"><%= advert.monday_start + advert.count_weeks * 7 -1 %></td>
-              <td class="text-center vert-align">
-                <% if advert.statistic_type == "custom" %>
-                    <a href="#" data-toggle="tooltip" data-placement="right" title="<%= advert.custom_statistic.statistic.label %>"><%= advert.statistic_type %></a>
-                <% else %>
-                    <%= advert.statistic_type %>
-                <% end %>
-              </td>
+              <td class="text-center vert-align"><%= advert.count_visits_per_day %></td>
               <td class="text-center vert-align">
                 <%= case advert.state
                       when "created"

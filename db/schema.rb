@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161027095918) do
+ActiveRecord::Schema.define(version: 20161104161229) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20161027095918) do
 
   create_table "adverts", force: :cascade do |t|
     t.integer  "website_id",                                        null: false
-    t.string   "statistic_type",                                    null: false
+    t.string   "statistic_type",                default: "default", null: false
     t.date     "monday_start",                                      null: false
     t.integer  "count_weeks",                   default: 1,         null: false
     t.integer  "count_visits_per_day",          default: 0,         null: false
