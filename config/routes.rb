@@ -1,13 +1,19 @@
 Rails.application.routes.draw do
+  resources :tests
   resources :logs
   resources :captchas
   resources :pages
   resources :seas
+  resources :adverts
   resources :sea_attacks
   mount DelayedJobWeb => "/delayed_job" if ["test", "production"].include?(Rails.env)
   resources :activity_servers
   resources :objectives
   resources :tasks
+  match '/adverts/:id/publish', to: 'adverts#publish', via: [:patch], as: :publish_advert
+  match '/adverts/:id/unpublish', to: 'adverts#unpublish', via: [:patch], as: :unpublish_advert
+  match '/adverts/:id/manual', to: 'adverts#manual', via: [:patch], as: :manual_advert
+  match '/adverts/:id/auto', to: 'adverts#auto', via: [:patch], as: :auto_advert
   match '/traffics/:id/publish', to: 'traffics#publish', via: [:patch], as: :publish_traffic
   match '/traffics/:id/unpublish', to: 'traffics#unpublish', via: [:patch], as: :unpublish_traffic
   match '/traffics/:id/manual', to: 'traffics#manual', via: [:patch], as: :manual_traffic
@@ -37,7 +43,12 @@ Rails.application.routes.draw do
     resource :captchas
     resource :log
   end
-  #match '/traffics/destroy_all', to:'traffics#destroy_all', via: [:delete], as: :destroy_all_traffic
+  resources :adverts do
+    collection do
+      delete :destroy_all
+    end
+  end
+
   resources :ranks do
     collection do
       delete :destroy_all

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161004135111) do
+ActiveRecord::Schema.define(version: 20161027095918) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -24,6 +24,31 @@ ActiveRecord::Schema.define(version: 20161004135111) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end
+
+  create_table "adverts", force: :cascade do |t|
+    t.integer  "website_id",                                        null: false
+    t.string   "statistic_type",                                    null: false
+    t.date     "monday_start",                                      null: false
+    t.integer  "count_weeks",                   default: 1,         null: false
+    t.integer  "count_visits_per_day",          default: 0,         null: false
+    t.integer  "advertising_percent",           default: 100,       null: false
+    t.integer  "max_duration_scraping",         default: 1,         null: false
+    t.integer  "min_count_page_advertiser",     default: 10,        null: false
+    t.integer  "max_count_page_advertiser",     default: 15,        null: false
+    t.integer  "min_duration_page_advertiser",  default: 60,        null: false
+    t.integer  "max_duration_page_advertiser",  default: 120,       null: false
+    t.integer  "percent_local_page_advertiser", default: 80,        null: false
+    t.integer  "min_duration",                  default: 5,         null: false
+    t.integer  "max_duration",                  default: 10,        null: false
+    t.integer  "min_duration_website",          default: 10,        null: false
+    t.integer  "min_pages_website",             default: 2,         null: false
+    t.string   "execution_mode",                default: "auto",    null: false
+    t.string   "state",                         default: "created", null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+  end
+
+  add_index "adverts", ["website_id"], name: "index_adverts_on_website_id"
 
   create_table "captchas", force: :cascade do |t|
     t.string   "visit_id",                          null: false

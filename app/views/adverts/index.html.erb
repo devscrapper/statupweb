@@ -1,0 +1,97 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Listing Adverts <span class="badge"><%= Advert.count %></span></h3>
+  </div>
+
+  <div class="panel-body">
+    <%= link_to 'New Advert', new_advert_path, class: 'btn btn-sm btn-default' %>
+    <%= link_to 'Delete all Adverts', destroy_all_adverts_path, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
+
+    <div class="table-responsive">
+      <table class="table table-hover ">
+        <thead class="header-table">
+        <tr>
+          <th class="text-center">Id</th>
+          <th class="text-center">State</th>
+          <th class="text-center">Execution</th>
+          <th class="text-left">Website</th>
+          <th class="text-center">Monday start</th>
+          <th class="text-center">End policy</th>
+          <th class="text-center">Statistic type</th>
+          <th colspan="3"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% @adverts.each do |advert| %>
+            <tr>
+              <td class="text-center vert-align"><%= advert.id %></td>
+              <td class="text-center vert-align">
+                <% case advert.state
+                     when "created"
+                       color_state = "label label-default"
+                     when "published"
+                       color_state = "label label-warning"
+                     when "over"
+                       color_state = "label label-success"
+                   end %>
+                <span class="<%= color_state %>"><%= advert.state %></span>
+
+              </td>
+              <td class="text-center vert-align">
+                <%= case advert.execution_mode
+                      when "manual"
+                        form_for advert, as: :post, method: :patch, url: auto_advert_path(advert) do |f|
+                          f.submit "M", class: "btn btn-xs btn-danger", data: {confirm: "Change execution to Auto ?"}
+                        end
+
+                      when "auto"
+                        form_for advert, as: :post, method: :patch, url: manual_advert_path(advert) do |f|
+                          f.submit "A", class: "btn btn-xs btn-success", data: {confirm: "Change execution to Manual ?"}
+                        end
+                    end %>
+
+              </td>
+              <td class="text-left vert-align">
+                <%= link_to advert.website.label, advert_path(advert.id)  %>
+              </td>
+              <td class="text-center vert-align"><%= advert.monday_start %></td>
+              <td class="text-center vert-align"><%= advert.monday_start + advert.count_weeks * 7 -1 %></td>
+              <td class="text-center vert-align">
+                <% if advert.statistic_type == "custom" %>
+                    <a href="#" data-toggle="tooltip" data-placement="right" title="<%= advert.custom_statistic.statistic.label %>"><%= advert.statistic_type %></a>
+                <% else %>
+                    <%= advert.statistic_type %>
+                <% end %>
+              </td>
+              <td class="text-center vert-align">
+                <%= case advert.state
+                      when "created"
+
+                        link_to 'Edit', edit_advert_path(advert), class: "btn btn-sm btn-default"
+                      when "published"
+                        link_to 'Edit', edit_advert_path(advert), class: "btn btn-sm btn-default disabled"
+                    end %>
+              </td>
+              <td class="text-center vert-align">
+
+                <%= case advert.state
+                      when "created"
+                        form_for advert, as: :post, method: :patch, url: publish_advert_path(advert) do |f|
+                          f.submit "Publish", class: "btn btn-sm btn-warning", data: {confirm: "Are you sure?"}
+                        end
+                      when "published"
+                        form_for advert, as: :post, method: :patch, url: unpublish_advert_path(advert) do |f|
+                          f.submit "Unpublish", class: "btn btn-sm btn-warning", data: {confirm: "Are you sure?"}
+                        end
+                    end %>
+
+              </td>
+              <td class="text-center vert-align"><%= link_to 'Destroy', advert, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

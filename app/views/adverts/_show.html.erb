@@ -1,0 +1,191 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <ul class="nav nav-tabs">
+
+                <% if ["published"].include?(advert.state) %>
+                    <li class="active">
+                      <a data-toggle="tab" href="#calendar-advert<%= advert.id %>">Calendar</a>
+                    </li>
+                    <% tasks = advert.tasks %>
+                    <li>
+                      <a data-toggle="tab" href="#tasks-advert<%= advert.id %>">Tasks
+                        <span class="badge"> <%= tasks.size %></span></a>
+                    </li>
+                    <% objectives = advert.objectives %>
+                    <li>
+                      <a data-toggle="tab" href="#objectives-advert<%= advert.id %>">Objectives
+                        <span class="badge"> <%= objectives.size %></span></a>
+                    </li>
+
+                    <li>
+
+                      <a data-toggle="tab" href="#visits-advert<%= advert.id %>">Visits
+
+                        <span class="badge"> <%= advert.visits.count %>  </span></a>
+
+
+                    </li>
+                    <li><a data-toggle="tab" href="#website-advert<%= advert.id %>">Website</a></li>
+                <% else %>
+                    <li class="active">
+                      <a data-toggle="tab" href="#website-advert<%= advert.id %>">Website</a>
+                    </li>
+                <% end %>
+                <% if advert.statistic_type == "custom" %>
+                    <li>
+                      <a data-toggle="tab" href="#statistics-advert<%= advert.id %>">Statistic</a>
+                    </li>
+                <% end %>
+                <li>
+                  <a data-toggle="tab" href="#behaviour-advert<%= advert.id %>">Behaviour</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <% if ["published"].include?(advert.state) %>
+                    <div id="tasks-advert<%= advert.id %>" class="tab-pane fade">
+
+                      <% tasks = advert.tasks.group("date(time)").order(time: :desc).size %>
+
+                      <div class="panel-group" id="accordion">
+                        <% tasks.each { |date, count_tasks| %>
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
+
+                                <a data-toggle="collapse" data-parent="#accordion" href="#tasks-advert<%= advert.id %>-<%= date %>"><%= date %></a>
+
+                              </div>
+                              <div id="tasks-advert<%= advert.id %>-<%= date %>" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                  <%= render partial: 'tasks/index', :locals => {:tasks => advert.tasks.where("date(time) = ?", date)} %>
+                                </div>
+                              </div>
+                            </div>
+                        <% } %>
+                      </div>
+
+
+                    </div>
+
+                    <div id="objectives-advert<%= advert.id %>" class="tab-pane fade">
+                      <p><%= render partial: 'objectives/index', :locals => {:objectives => objectives} %></p>
+                    </div>
+                    <div id="visits-advert<%= advert.id %>" class="tab-pane fade">
+                      <p><%= render partial: 'visits/index', :locals =>  {:execution_mode => advert.execution_mode,
+                                                                                               :policy_id => advert.id,
+                                                                                               :policy_type => advert.class.name,
+                                                                                               :state => "created",
+                                                                                               :visits => Visit.where({:policy_id => advert.id,
+                                                                                                                      :policy_type => advert.class.name,
+                                                                                                                      :state => "created"}).order("plan_time desc")} %></p>
+                    </div>
+                    <div id="calendar-advert<%= advert.id %>" class="tab-pane fade in active">
+                      <p><%= render partial: 'calendar/index', :locals => {:current_date => Date.today,
+                                                                           :policy_type => :advert,
+                                                                           :policy_id => advert.id,
+                                                                           :planed_dates => advert.planed_dates} %></p>
+                    </div>
+                    <div id="website-advert<%= advert.id %>" class="tab-pane fade">
+                      <p><%= render partial: 'websites/show', :locals => {:website => advert.website} %></p>
+                    </div>
+                <% else %>
+
+                    <div id="website-advert<%= advert.id %>" class="tab-pane fade in active">
+                      <p><%= render partial: 'websites/show', :locals => {:website => advert.website} %></p>
+                    </div>
+                <% end %>
+                <% if advert.statistic_type == "custom" %>
+                    <div id="statistics-advert<%= advert.id %>" class="tab-pane fade">
+                      <p><%= render partial: 'statistics/show', :locals => {:statistic => advert.custom_statistic.statistic} %></p>
+                    </div>
+                <% end %>
+                <div id="behaviour-advert<%= advert.id %>" class="tab-pane fade">
+                  <p>
+
+                  <div class="col-lg-3">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Advertiser visit</div>
+                      <div class="panel-body">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <p>
+                              <strong>Min count page :</strong>
+                              <%= advert.min_count_page_advertiser %> </p>
+
+                            <p>
+                              <strong>Max count page :</strong>
+                              <%= advert.max_count_page_advertiser %></p>
+
+                            <p>
+                              <strong>Min duration page :</strong>
+                              <%= advert.min_duration_page_advertiser %> </p>
+
+                            <p>
+                              <strong>Max duration page :</strong>
+                              <%= advert.max_duration_page_advertiser %> </p>
+
+                            <p>
+                              <strong>Percent local page :</strong>
+                              <%= advert.percent_local_page_advertiser %></p>
+
+                            <p>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Website visit</div>
+                      <div class="panel-body">
+                        <p>
+                          <strong>Max duration scraping :</strong> <%= advert.max_duration_scraping %><br>
+                        </p>
+
+                        <p>
+                          <strong>Min duration :</strong><%= advert.min_duration %>  </p>
+
+                        <p>
+                          <strong>Max duration :</strong><%= advert.max_duration %>
+                        </p>
+
+                        <p>
+                          <strong>Min duration website :</strong><%= advert.min_duration_website %>  </p>
+
+                        <p>
+                          <strong>Min pages website :</strong><%= advert.min_pages_website %>
+                        </p>
+
+                      </div>
+                    </div>
+                  </div>
+                  </p>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+<p>
+
+</p>
+
+
+
+
+
