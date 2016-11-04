@@ -43,7 +43,7 @@ class AdvertsController < ApplicationController
     @websites = Website.all
     @statistics = Statistic.all
     @advert = Advert.new
-    @advert.monday_start = Date.today + @advert.max_duration_scraping
+    @advert.monday_start = Date.today + @advert.max_duration_scraping + 1
   end
 
   # GET /adverts/1/edit

@@ -20,56 +20,29 @@
         <div class="panel-heading"><b><%= label %></b></div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-4">
               <p>
-                <%= label_tag "Website" %>
+                <%= label_tag "Select target website" %>
                 <%= select_tag :website_selected,
                                options_from_collection_for_select(@websites, "id", "label", @website.nil? ? "0" : @website.id),
                                class: "form-control",
                                :include_blank => "Select one" %>
               </p>
+
               <p>
-                <%= f.label :count_visits_per_day %><%= f.text_field :count_visits_per_day, class: "form-control" %>
+                <%= f.label "How many visit per a day" %><%= f.text_field :count_visits_per_day, class: "form-control" %>
               </p>
 
               <p>
-
-              <div class="panel panel-default">
-                <div class="panel-heading">Statistic</div>
-                <div class="panel-body">
-                  <p>
-                    <%= label_tag "Default" %>
-                    <%= f.radio_button :statistic_type, "default", :checked => true %>
-                    <%= label_tag "Custom" %>
-                    <%= f.radio_button :statistic_type, "custom", :disabled => true %>
-                  </p>
-
-                  <p>
-                    <%= select_tag :statistic_selected,
-                                   options_from_collection_for_select(@statistics, "id", "label", @statistic.nil? ? "0" : @statistic.statistic_id),
-                                   class: "form-control",
-                                   :include_blank => "Select one",
-                                   :disabled => @advert.statistic_type == "custom" ? false : true %>
-                  </p>
-                </div>
-              </div>
+                <%= f.label "Which start date" %><%= f.text_field :monday_start, class: "form-control", :disabled => false %>
               </p>
+
+              <p>
+                <%= f.label  "How many weeks delay" %><%= f.number_field :count_weeks, class: "form-control" %>
+              </p>
+
             </div>
 
-            <div class="col-lg-2">
-              <div class="panel panel-default">
-                <div class="panel-heading">Planification</div>
-                <div class="panel-body">
-                  <p>
-                    <%= f.label :monday_start %><%= f.text_field :monday_start, class: "form-control", :disabled => false %>
-                  </p>
-
-                  <p>
-                    <%= f.label :count_weeks %><%= f.number_field :count_weeks, class: "form-control" %>
-                  </p>
-                </div>
-              </div>
-            </div>
 
             <div class="col-lg-4">
               <div class="panel panel-default">
@@ -147,12 +120,12 @@
                   </div>
                 </div>
               </div>
+
             </div>
-          </div>
-          <div class="row">
+
             <div class="col-lg-2">
               <div class="panel panel-default">
-                <div class="panel-heading">Execution mode</div>
+                <div class="panel-heading">Execution mode <span class="label label-warning">Expert</span></div>
                 <div class="panel-body">
                   <p>
                     <%= label_tag "Auto" %>
@@ -167,7 +140,7 @@
           <div class="row">
             <div class="col-lg-12">
               <p class="text-primary">
-                Would you Publish your Advert Policy
+                Publish Advert Policy
                 <%= f.submit "Now", class: "btn btn-info", data: {confirm: "Are you sure?"} %>
                 or
                 <%= f.submit "Later", class: "btn btn-info" %>

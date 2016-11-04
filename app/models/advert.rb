@@ -11,6 +11,7 @@ class Advert < ActiveRecord::Base
   validates :statistic_type, :presence => true
   validates :monday_start, :presence => true
   validates :state, :presence => true, inclusion: {in: %w(created published over), message: "%{value} is not a valid state"}
+  validates :count_visits_per_day, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 10}
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
   validates :max_duration_scraping, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 1}
   validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
@@ -52,7 +53,7 @@ class Advert < ActiveRecord::Base
 
   def monday_start_cannot_be_in_the_past
     if !monday_start.nil?
-      errors.add(:monday_start, "must be in the future and #{max_duration_scraping}") if !monday_start.nil? and monday_start.to_time.to_i - Time.now.to_i <= max_duration_scraping * 24 * 60 * 60 #en hour
+      errors.add(:monday_start, "must be in the future and #{max_duration_scraping}") if !monday_start.nil? and monday_start - Date.today < max_duration_scraping + 1 # en jour
     end
   end
 

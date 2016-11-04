@@ -276,8 +276,8 @@ def render_after_create_or_update(ok, notice)
       format.html {
         @websites = Website.all
         @statistics = Statistic.all
-        @website = @traffic.website
-        @statistic = @traffic.custom_statistic if @traffic.statistic_type == "custom"
+        @website = @advert.website
+        @statistic = @advert.custom_statistic if @traffic.statistic_type == "custom"
         render :new
       }
       format.json { render json: @traffic.errors, status: :unprocessable_entity }
