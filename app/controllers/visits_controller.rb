@@ -15,7 +15,7 @@ class VisitsController < ApplicationController
       when "created", "scheduled", "published", "neverstarted"
         order_by = "plan_time desc"
 
-      when "success", "fail", "outoftime", "overttl"
+      when "success", "fail", "outoftime", "overttl","advertnotfound"
         order_by = "end_time desc"
 
     end

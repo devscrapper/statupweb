@@ -4,7 +4,7 @@ class Visit < ActiveRecord::Base
   has_many :pages, dependent: :destroy
   has_many :captchas, dependent: :destroy
   has_one :log, dependent: :destroy
-  validates :policy_type, :presence => true, inclusion: {in: %w(Traffic Rank SeaAttack), message: "%{value} is not a valid policy type"}
+  validates :policy_type, :presence => true, inclusion: {in: %w(Traffic Rank SeaAttack Advert), message: "%{value} is not a valid policy type"}
   validates :policy_id, :presence => true
   validates :id_visit, :presence => true
   validates :plan_time, :presence => true
