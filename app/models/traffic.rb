@@ -144,7 +144,6 @@ class Traffic < ActiveRecord::Base
         :change_bounce_visits_percent => change_bounce_visits_percent, #à cause de la policy Traffic
         :change_count_visits_percent => change_count_visits_percent, #à cause de la policy Traffic
         :count_page => website.count_page, #à cause de la policy Traffic
-        :count_visits_per_day => count_visits_per_day,
         :count_weeks => count_weeks,
         :direct_medium_percent => direct_medium_percent, #à cause de la policy Traffic
         :duration_referral => duration_referral,
@@ -178,7 +177,7 @@ class Traffic < ActiveRecord::Base
     }
     case statistic_type
       when "default"
-
+        policy.merge!(:count_visits_per_day => 0)  # par defaut
       when "custom"
         policy.merge!(custom_statistic.statistic.to_hash)
       when "ga"
