@@ -1,21 +1,21 @@
 <div class="btn-group">
-  <button data-toggle="collapse" data-target="#screenshot" class="btn btn-primary">Screenshot</button>
-  <button data-toggle="collapse" data-target="#source" class="btn btn-default">Source</button>
+  <% if !@page.image_file_id.nil? %>
+      <button data-toggle="collapse" data-target="#screenshot" class="btn btn-primary">Screenshot</button>
+  <% end %>
+  <% if !@page.source_file_id.nil? %>
+      <button data-toggle="collapse" data-target="#source" class="btn btn-default">Source</button>
+  <% end %>
 </div>
 
+<% if !@page.image_file_id.nil? %>
+    <div id="screenshot" class="collapse">
+      <%= image_tag image_path(@page.image_file_id),
+                    alt: "visit: #{@page.visit.id_visit}, page: #{@page.index}" %>
+    </div>
+<% end %>
+<% if !@page.source_file_id.nil? %>
+    <div id="source" class="collapse">
+      <%= text_area_tag(:source,  File.read(File.join("public", "sources", @page.source_file_id)), size: '240x80') %>
 
-<div id="screenshot" class="collapse">
-  <%= image_tag image_path(@page.image_file_id),
-                alt: "visit: #{@page.visit.id_visit}, page: #{@page.index}" %>
-</div>
-
-
-
-
-<div id="source" class="collapse">
-  <%= text_area_tag :source,
-                    @page.source_file_id,
-           size: "640x480"
-                     %>
-</div>
-
+    </div>
+<% end %>
