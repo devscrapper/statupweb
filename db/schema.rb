@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161104161229) do
+ActiveRecord::Schema.define(version: 20161124121700) do
 
   create_table "activity_servers", force: :cascade do |t|
     t.string   "label",                               null: false
@@ -113,11 +113,12 @@ ActiveRecord::Schema.define(version: 20161104161229) do
   add_index "objectives", ["policy_type", "policy_id"], name: "index_objectives_on_policy_type_and_policy_id"
 
   create_table "pages", force: :cascade do |t|
-    t.string   "visit_id",      null: false
+    t.string   "visit_id",       null: false
     t.string   "image_file_id"
-    t.integer  "index",         null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "index",          null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "source_file_id"
   end
 
   add_index "pages", ["visit_id"], name: "index_pages_on_visit_id"

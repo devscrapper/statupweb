@@ -12,18 +12,30 @@ class PagesController < ApplicationController
         visit_id = Visit.find_by_id_visit(params['visit_id']).id
         @page.visit_id= visit_id
         @page.index = params['index']
+
         unless params['image'].nil?
           uploaded_io = params['image']
           @page.image_file_id = "#{params['visit_id']}_#{params['index']}_screenshot#{File.extname(uploaded_io.original_filename)}"
         end
-        # save to DB
-        @page.save!
-
         # save image to /public
         File.open(Rails.root.join('public', 'images', @page.image_file_id), 'wb') do |file|
           file.write(uploaded_io.read)
           file.close
         end
+
+        unless params['source'].nil?
+          uploaded_io = params['source']
+          @page.source_file_id = "#{params['visit_id']}_#{params['index']}_source#{File.extname(uploaded_io.original_filename)}"
+        end
+
+        # save source to /public
+        File.open(Rails.root.join('public', 'sources', @page.source_file_id), 'wb') do |file|
+          file.write(uploaded_io.read)
+          file.close
+        end
+
+        # save to DB
+        @page.save!
 
 
       rescue Exception => e
@@ -55,6 +67,7 @@ class PagesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def page_params
     params.require(:page).permit(:image,
+                                 :source,
                                  :visit_id,
                                  :index)
   end

@@ -60,7 +60,7 @@
                  end
                end %>
 
-            <%= if !visit.pages[i].nil? and visit.pages[i].has_image_file?
+            <%= if !visit.pages[i].nil? and (visit.pages[i].has_image_file? or visit.pages[i].has_source_file?)
                   link_to action,
                           visit_pages_path({:visit_id => visit.id, :id => visit.pages[i].id}),
                           class: class_name

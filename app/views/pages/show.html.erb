@@ -1,4 +1,21 @@
+<div class="btn-group">
+  <button data-toggle="collapse" data-target="#screenshot" class="btn btn-primary">Screenshot</button>
+  <button data-toggle="collapse" data-target="#source" class="btn btn-default">Source</button>
+</div>
 
-<%= image_tag image_path(@page.image_file_id),
-                         alt: "visit: #{@page.visit.id_visit}, page: #{@page.index}" %>
+
+<div id="screenshot" class="collapse">
+  <%= image_tag image_path(@page.image_file_id),
+                alt: "visit: #{@page.visit.id_visit}, page: #{@page.index}" %>
+</div>
+
+
+
+
+<div id="source" class="collapse">
+  <%= text_area_tag :source,
+                    @page.source_file_id,
+           size: "640x480"
+                     %>
+</div>
 
