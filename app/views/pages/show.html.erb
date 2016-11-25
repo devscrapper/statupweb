@@ -1,4 +1,4 @@
-<div class="btn-group">
+<div class="btn-group ">
   <% if !@page.image_file_id.nil? %>
       <button data-toggle="collapse" data-target="#screenshot" class="btn btn-primary">Screenshot</button>
   <% end %>
@@ -8,14 +8,14 @@
 </div>
 
 <% if !@page.image_file_id.nil? %>
-    <div id="screenshot" class="collapse">
+    <div id="screenshot" class="collapse in">
       <%= image_tag image_path(@page.image_file_id),
                     alt: "visit: #{@page.visit.id_visit}, page: #{@page.index}" %>
     </div>
 <% end %>
 <% if !@page.source_file_id.nil? %>
-    <div id="source" class="collapse">
-      <%= text_area_tag(:source,  File.read(File.join("public", "sources", @page.source_file_id)), size: '240x80') %>
+    <div id="source" class="collapse <%=@page.image_file_id.nil? ? "in" : ""%>">
+      <%= text_area_tag(:source, File.read(File.join("public", "sources", @page.source_file_id)), size: '240x80') %>
 
     </div>
 <% end %>

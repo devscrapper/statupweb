@@ -11,7 +11,7 @@
                   remote: true,
                   data: {confirm: 'Are you sure?'}
         end %>
-    <%= if ["fail", "advertnotfound"].include?(state)
+    <%= if ["success", "fail", "advertnotfound", "outoftime", "overttl"].include?(state)
           link_to content_tag(:span, "", class: "glyphicon glyphicon-export"),
                   visit_log_path({:visit_id => visit.id})
         end %>
