@@ -22,8 +22,23 @@ class Visit < ActiveRecord::Base
   validates :operating_system_version, :presence => true
   validates :count_browsed_page, :presence => true
   validates :ip_geo_proxy, :presence => true
-  validates :reason, :presence => true , :if => "state == \"fail\""
+  validates :reason, :presence => true, :if => "state == \"fail\""
   validates :keywords, :presence => true
 
   scope :plan_today, ->(time) { where("date(plan_time) = ?", time) }
+
+  def self.counts(state, policy_type, policy_id)
+    where = {}
+    where.merge!({:state => state}) unless state.nil?
+    where.merge!({:policy_type => policy_type}) unless policy_type.nil?
+    where.merge!({:policy_id => policy_id}) unless policy_id.nil?
+
+    if where.empty?
+      Visit.all.count
+    else
+      Visit.where(where).count
+    end
+
+
+  end
 end

@@ -1,6 +1,6 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
-
+gem 'kaminari', '~> 0.16.3'
 gem 'bootstrap-slider-rails', '~> 6.0', '>= 6.0.17'
 gem 'maxminddb'
 gem 'rake', '~> 10.5.0'

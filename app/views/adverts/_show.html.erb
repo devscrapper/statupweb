@@ -75,13 +75,16 @@
                       <p><%= render partial: 'objectives/index', :locals => {:objectives => objectives} %></p>
                     </div>
                     <div id="visits-advert<%= advert.id %>" class="tab-pane fade">
-                      <p><%= render partial: 'visits/index', :locals =>  {:execution_mode => advert.execution_mode,
-                                                                                               :policy_id => advert.id,
-                                                                                               :policy_type => advert.class.name,
-                                                                                               :state => "created",
-                                                                                               :visits => Visit.where({:policy_id => advert.id,
-                                                                                                                      :policy_type => advert.class.name,
-                                                                                                                      :state => "created"}).order("plan_time desc")} %></p>
+                      <p>
+                      <div id="visits<%= advert.id %>" style="">
+                        <%= render partial: 'visits/index', :locals => {:policy_id => advert.id,
+                                                                        :policy_type => advert.class.name,
+                                                                        :state => "created",
+                                                                        :visits => Visit.where({:policy_id => advert.id,
+                                                                                                :policy_type => advert.class.name,
+                                                                                                :state => "created"}).order("plan_time desc")} %>
+                      </div>
+                      </p>
                     </div>
                     <div id="calendar-advert<%= advert.id %>" class="tab-pane fade in active">
                       <p><%= render partial: 'calendar/index', :locals => {:current_date => Date.today,

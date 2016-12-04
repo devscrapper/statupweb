@@ -11,8 +11,9 @@ class Page < ActiveRecord::Base
   end
 
   def has_source_file?
-    !image_source_id.nil? and
-        File.exist?(File.join("public", "sources", image_source_id))
+     !source_file_id.nil? and
+        File.exist?(File.join("public", "sources", source_file_id))
+
   end
   private
 
@@ -23,8 +24,8 @@ class Page < ActiveRecord::Base
     end
   end
   def delete_source_file
-    if !image_source_id.nil? and File.exist?(Rails.root.join('public', 'sources', source_file_id))
-      File.delete(Rails.root.join('public', 'sources', image_source_id))
+    if !source_file_id.nil? and File.exist?(Rails.root.join('public', 'sources', source_file_id))
+      File.delete(Rails.root.join('public', 'sources', source_file_id))
     end
   end
 end

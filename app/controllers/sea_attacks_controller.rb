@@ -8,7 +8,7 @@ class SeaAttacksController < ApplicationController
   # GET /sea_attacks
   # GET /sea_attacks.json
   def index
-    @sea_attacks = SeaAttack.order(:state)
+    @sea_attacks = SeaAttack.order(:state, start_date: :desc)
     @sea_attacks.each { |sea_attack|
       if sea_attack.state == "published"
         begin

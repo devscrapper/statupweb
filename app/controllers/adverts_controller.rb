@@ -8,7 +8,7 @@ class AdvertsController < ApplicationController
   # GET /adverts
   # GET /adverts.json
   def index
-    @adverts = Advert.order(:state)
+    @adverts = Advert.order(:state, monday_start: :desc)
     @adverts.each { |advert|
       if advert.state == "published"
         begin

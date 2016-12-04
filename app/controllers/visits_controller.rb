@@ -5,10 +5,12 @@ class VisitsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_request?
   before_action :set_visit, only: [:show]
 
+
+
   def index
     @policy_id = params['policy_id']
     @policy_type = params['policy_type']
-    @execution_mode = params['execution_mode']
+
     @state = params[:state] || "created"
 
     case @state
@@ -18,7 +20,7 @@ class VisitsController < ApplicationController
       when "started"
         order_by = "start_time desc"
 
-      when "success", "fail", "outoftime", "overttl","advertnotfound"
+      when "success", "fail", "outoftime", "overttl", "advertnotfound"
         order_by = "end_time desc"
 
     end
@@ -36,7 +38,7 @@ class VisitsController < ApplicationController
       @visits = Visit.where({:policy_id => @policy_id,
                              :state => @state}).order(order_by)
     else
-      @visits = Visit.where({:state => @state}).order(order_by)
+      @visits = Visit.where({:state => @state}).order(order_by).page(1)
     end
 
 
@@ -48,7 +50,7 @@ class VisitsController < ApplicationController
                            :state => params[:state]}).order("start_time desc")
     @policy_id = params['policy_id']
     @policy_type = params['policy_type']
-    @execution_mode = params['execution_mode']
+
     @state = params[:state]
   end
 
@@ -103,7 +105,7 @@ class VisitsController < ApplicationController
                              :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
       @policy_type = params['policy_type']
-      @execution_mode = params['execution_mode']
+  
       @state = params[:state]
       render :index
     end
@@ -125,7 +127,7 @@ class VisitsController < ApplicationController
                              :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
       @policy_type = params['policy_type']
-      @execution_mode = params['execution_mode']
+  
       @state = params[:state]
       render :index
     end
@@ -159,7 +161,7 @@ class VisitsController < ApplicationController
                            :state => params[:state]}).order("date(plan_time) desc, #{params[:criteria].to_s || "start_time"} #{params[:way] || "desc"}")
     @policy_id = params['policy_id']
     @policy_type = params['policy_type']
-    @execution_mode = params['execution_mode']
+
     @state = params[:state]
     render :index
   end
@@ -176,7 +178,7 @@ class VisitsController < ApplicationController
       @visits = Visit.where({:policy_id => params[:policy_id], :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
       @policy_type = params['policy_type']
-      @execution_mode = params['execution_mode']
+  
       @state = params[:state]
       render :index
     end
@@ -199,7 +201,7 @@ class VisitsController < ApplicationController
                              :state => params[:state]}).order("start_time desc")
       @policy_id = params['policy_id']
       @policy_type = params['policy_type']
-      @execution_mode = params['execution_mode']
+  
       @state = params[:state]
       render :index
     end
