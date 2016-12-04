@@ -45,9 +45,33 @@ class VisitsController < ApplicationController
   end
 
   def refresh
-    @visits = Visit.where({:policy_id => params[:policy_id],
-                           :policy_type => params[:policy_type],
-                           :state => params[:state]}).order("start_time desc")
+    case params[:state]
+      when "created", "scheduled", "published", "neverstarted"
+        order_by = "plan_time desc"
+
+      when "started"
+        order_by = "start_time desc"
+
+      when "success", "fail", "outoftime", "overttl", "advertnotfound"
+        order_by = "end_time desc"
+
+    end
+
+    if !@policy_type.nil? and !@policy_id.nil?
+      @visits = Visit.where({:policy_id => params[:policy_id],
+                             :policy_type => params[:policy_type],
+                             :state => params[:state]}).order(order_by)
+        elsif !@policy_type.nil?
+          @visits = Visit.where({:policy_type => params[:policy_type],
+                                 :state => params[:state]}).order(order_by)
+        elsif !@policy_id.nil?
+          @visits = Visit.where({:policy_id => params[:policy_id],
+                                 :state => params[:state]}).order(order_by)
+        else
+          @visits = Visit.where({:state => params[:state]}).order(order_by).page(1)
+    end
+
+
     @policy_id = params['policy_id']
     @policy_type = params['policy_type']
 
@@ -100,9 +124,31 @@ class VisitsController < ApplicationController
     else
       @notice = "Visit #{params['visit_id']}  delete"
     ensure
-      @visits = Visit.where({:policy_id => params[:policy_id],
-                             :policy_type => params[:policy_type],
-                             :state => params[:state]}).order("start_time desc")
+      case params[:state]
+        when "created", "scheduled", "published", "neverstarted"
+          order_by = "plan_time desc"
+
+        when "started"
+          order_by = "start_time desc"
+
+        when "success", "fail", "outoftime", "overttl", "advertnotfound"
+          order_by = "end_time desc"
+
+      end
+
+      if !@policy_type.nil? and !@policy_id.nil?
+        @visits = Visit.where({:policy_id => params[:policy_id],
+                               :policy_type => params[:policy_type],
+                               :state => params[:state]}).order(order_by)
+          elsif !@policy_type.nil?
+            @visits = Visit.where({:policy_type => params[:policy_type],
+                                   :state => params[:state]}).order(order_by)
+          elsif !@policy_id.nil?
+            @visits = Visit.where({:policy_id => params[:policy_id],
+                                   :state => params[:state]}).order(order_by)
+          else
+            @visits = Visit.where({:state => params[:state]}).order(order_by).page(1)
+      end
       @policy_id = params['policy_id']
       @policy_type = params['policy_type']
   
@@ -113,18 +159,53 @@ class VisitsController < ApplicationController
 
   def delete_all_by_state
     begin
-      @visits = Visit.where({:policy_id => params[:policy_id],
-                             :policy_type => params[:policy_type],
-                             :state => params[:state]})
+      case params[:state]
+        when "created", "scheduled", "published", "neverstarted"
+          order_by = "plan_time desc"
+
+        when "started"
+          order_by = "start_time desc"
+
+        when "success", "fail", "outoftime", "overttl", "advertnotfound"
+          order_by = "end_time desc"
+
+      end
+
+      if !@policy_type.nil? and !@policy_id.nil?
+        @visits = Visit.where({:policy_id => params[:policy_id],
+                               :policy_type => params[:policy_type],
+                               :state => params[:state]}).order(order_by)
+          elsif !@policy_type.nil?
+            @visits = Visit.where({:policy_type => params[:policy_type],
+                                   :state => params[:state]}).order(order_by)
+          elsif !@policy_id.nil?
+            @visits = Visit.where({:policy_id => params[:policy_id],
+                                   :state => params[:state]}).order(order_by)
+          else
+            @visits = Visit.where({:state => params[:state]}).order(order_by).page(1)
+      end
+
       @visits.each { |visit| visit.destroy! }
     rescue Exception => e
       @alert = "Visits not delete : #{e.message}"
     else
       @notice = "All Visits delete"
     ensure
-      @visits = Visit.where({:policy_id => params[:policy_id],
-                             :policy_type => params[:policy_type],
-                             :state => params[:state]}).order("start_time desc")
+
+
+      if !@policy_type.nil? and !@policy_id.nil?
+        @visits = Visit.where({:policy_id => params[:policy_id],
+                               :policy_type => params[:policy_type],
+                               :state => params[:state]}).order(order_by)
+          elsif !@policy_type.nil?
+            @visits = Visit.where({:policy_type => params[:policy_type],
+                                   :state => params[:state]}).order(order_by)
+          elsif !@policy_id.nil?
+            @visits = Visit.where({:policy_id => params[:policy_id],
+                                   :state => params[:state]}).order(order_by)
+          else
+            @visits = Visit.where({:state => params[:state]}).order(order_by).page(1)
+      end
       @policy_id = params['policy_id']
       @policy_type = params['policy_type']
   
