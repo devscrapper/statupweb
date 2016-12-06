@@ -24,7 +24,12 @@
     %>
 
   </td>
-  <td><%= visit.id_visit %></td>
+  <% if policy_type.nil? %>
+      <td><%= visit.policy_type %></td>
+  <% else %>
+      <td><%= visit.id_visit %></td>
+  <% end %>
+
   <% if ["created", "scheduled", "published", "success", "fail", "outoftime", "overttl", "neverstarted", "advertnotfound"].include?(state) %>
       <td class="text-center"><%= visit.plan_time.nil? ? "unknown" : visit.plan_time.localtime.to_formatted_s(:hour_min_sec) %></td>
   <% end %>

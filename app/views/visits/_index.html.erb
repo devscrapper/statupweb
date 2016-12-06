@@ -188,7 +188,11 @@
     <thead class="header-table">
     <tr>
       <th class="text-center">State</th>
-      <th class="text-center">id</th>
+      <% if policy_type.nil? %>
+          <th class="text-center">policy type</th>
+      <% else %>
+          <th class="text-center">id</th>
+      <% end %>
       <% if ["created", "scheduled", "published", "success", "fail", "advertnotfound", "outoftime", "overttl", "neverstarted"].include?(state) %>
           <th class="text-center">Plan time</th>
       <% end %>
