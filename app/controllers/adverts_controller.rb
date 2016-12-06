@@ -2,7 +2,7 @@ require_relative '../../lib/publication'
 
 
 class AdvertsController < ApplicationController
-  before_action :set_advert, only: [:show, :edit, :update, :destroy]
+  before_action :set_advert, only: [:show, :edit, :update, :show, :destroy]
   include Publication
 
   # GET /adverts
@@ -53,7 +53,7 @@ class AdvertsController < ApplicationController
     @advert = Advert.find(params[:id])
     @website = @advert.website
     @statistic = @advert.custom_statistic if @advert.statistic_type == "custom"
-    @advert.monday_start = Date.today + @advert.max_duration_scraping + 1 if @advert.monday_start -  Date.today <= @advert.max_duration_scraping + 1
+    @advert.monday_start = Date.today + @advert.max_duration_scraping + 1 if @advert.monday_start - Date.today <= @advert.max_duration_scraping + 1
   end
 
   # POST /adverts
@@ -74,9 +74,11 @@ class AdvertsController < ApplicationController
   def manual
     update_execution_mode("manual")
   end
+
   def auto
     update_execution_mode("auto")
   end
+
   def publish
 
 
@@ -167,16 +169,21 @@ class AdvertsController < ApplicationController
 
   def destroy_all
 
-    begin
-      Advert.all.each { |advert| advert.destroy }
+    notice = ""
+    count_success = 0
+    Advert.all.each { |advert|
+      begin
+        advert.destroy
 
-    rescue Exception => e
-      notice = e.message
+      rescue Exception => e
+        notice += e.message
+        notice += "\n"
+      else
+        count_success += 1
 
-    else
-      notice = 'all Adverts were successfully destroyed.'
-
-    end
+      end
+    }
+    notice += "#{count_success} Advert(s) were successfully destroyed."
 
     respond_to do |format|
       format.html { redirect_to adverts_url, notice: notice }
@@ -193,84 +200,85 @@ class AdvertsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def advert_params
     params.require(:advert).permit(:statistic_selected,
-                                    :count_visits_per_day,
-                                    :hourly_daily_distribution,
-                                    :avg_time_on_site,
-                                    :statistic_type,
-                                    :page_views_per_visit,
-                                    :website_id,
-                                    :statistic_id,
-                                    :monday_start,
-                                    :count_weeks,
-                                    :advertising_percent,
-                                    :advertisers,
-                                    :max_duration_scraping,
-                                    :min_count_page_advertiser,
-                                    :max_count_page_advertiser,
-                                    :min_duration_page_advertiser,
-                                    :max_duration_page_advertiser,
-                                    :percent_local_page_advertiser,
-                                    :min_duration,
-                                    :max_duration,
-                                    :min_duration_website,
-                                    :min_pages_website,
-                                    :execution_mode)
+                                   :count_visits_per_day,
+                                   :hourly_daily_distribution,
+                                   :avg_time_on_site,
+                                   :statistic_type,
+                                   :page_views_per_visit,
+                                   :website_id,
+                                   :statistic_id,
+                                   :monday_start,
+                                   :count_weeks,
+                                   :advertising_percent,
+                                   :advertisers,
+                                   :max_duration_scraping,
+                                   :min_count_page_advertiser,
+                                   :max_count_page_advertiser,
+                                   :min_duration_page_advertiser,
+                                   :max_duration_page_advertiser,
+                                   :percent_local_page_advertiser,
+                                   :min_duration,
+                                   :max_duration,
+                                   :min_duration_website,
+                                   :min_pages_website,
+                                   :execution_mode)
   end
 
-end
 
-def update_execution_mode(mode)
-     respond_to do |format|
-       begin
-         @advert = Advert.find(params[:id])
+  def update_execution_mode(mode)
+    respond_to do |format|
+      begin
+        @advert = Advert.find(params[:id])
 
-         if @advert.state == "published"
-           Publication::execution_mode("advert", @advert.id, mode)
-         end
+        if @advert.state == "published"
+          Publication::execution_mode("advert", @advert.id, mode)
+        end
 
-       rescue Exception => e
+      rescue Exception => e
 
-         format.html { redirect_to adverts_path, alert: "Execution mode Advert n°#{params[:id]}  not change : #{e.message}" }
+        format.html { redirect_to adverts_path, alert: "Execution mode Advert n°#{params[:id]}  not change : #{e.message}" }
 
-       else
-         @advert.update_attribute(:execution_mode, mode)
-         format.html { redirect_to adverts_path, notice: 'Execution mode Advert was successfully change to enginebot.' }
-
-       end
-     end
-end
-def render_after_create_or_update(ok, notice)
-  respond_to do |format|
-    if ok
-      if params[:commit] == "Later"
-        format.html { redirect_to adverts_path, notice: notice }
+      else
+        @advert.update_attribute(:execution_mode, mode)
+        format.html { redirect_to adverts_path, notice: 'Execution mode Advert was successfully change to enginebot.' }
 
       end
+    end
+  end
 
-      if params[:commit] == "Now"
-        begin
-          Publication::publish(@advert.to_hash)
-
-        rescue Exception => e
-          format.html { redirect_to adverts_path, alert: "Advert was not published : #{e.message}" }
-
-        else
-          @advert.update_attribute(:state, :published)
-          format.html { redirect_to adverts_path, notice: 'Advert was successfully published to enginebot.' }
+  def render_after_create_or_update(ok, notice)
+    respond_to do |format|
+      if ok
+        if params[:commit] == "Later"
+          format.html { redirect_to adverts_path, notice: notice }
 
         end
+
+        if params[:commit] == "Now"
+          begin
+            Publication::publish(@advert.to_hash)
+
+          rescue Exception => e
+            format.html { redirect_to adverts_path, alert: "Advert was not published : #{e.message}" }
+
+          else
+            @advert.update_attribute(:state, :published)
+            format.html { redirect_to adverts_path, notice: 'Advert was successfully published to enginebot.' }
+
+          end
+        end
+      else
+
+        format.html {
+          @websites = Website.all
+          @statistics = Statistic.all
+          @website = @advert.website
+          @statistic = @advert.custom_statistic if @advert.statistic_type == "custom"
+          render :new
+        }
+        format.json { render json: @advert.errors, status: :unprocessable_entity }
+
       end
-    else
-
-      format.html {
-        @websites = Website.all
-        @statistics = Statistic.all
-        @website = @advert.website
-        @statistic = @advert.custom_statistic if @advert.statistic_type == "custom"
-        render :new
-      }
-      format.json { render json: @advert.errors, status: :unprocessable_entity }
-
     end
   end
 end

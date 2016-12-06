@@ -43,6 +43,11 @@ class TrafficsController < ApplicationController
     @websites = Website.all
     @statistics = Statistic.all
     @traffic = Traffic.new
+    @traffic.advertising_percent  =0
+    @traffic.change_bounce_visits_percent= 1
+    @traffic.change_count_visits_percent=100
+    @traffic.count_weeks=1
+    @traffic.direct_medium_percent=100
     @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
   end
 
@@ -61,21 +66,52 @@ class TrafficsController < ApplicationController
 
     params[:traffic][:website_id] = params[:website_selected]
     @traffic = Traffic.new(traffic_params)
-    ok = @traffic.save
-    if ok and @traffic.statistic_type == "custom"
-      @statistic = @traffic.build_custom_statistic({:statistic_id => params[:statistic_selected]})
-      ok = ok && @statistic.save
-    end
+       begin
+         @traffic.save!
+       rescue Exception => e
+         respond_to do |format|
+           format.html {
+             @websites = Website.all
+             @statistics = Statistic.all
+             @website = @traffic.website
+             redirect_to new_traffic_path, alert: e.message and return
+           }
+         end
+       end
+       if @traffic.statistic_type == "custom"
+         begin
+           @statistic = @traffic.create_custom_statistic!({:statistic_id => params[:statistic_selected],
+                                                              :policy_id => @traffic.id,
+                                                              :policy_type => @traffic.class.name})
+         rescue Exception => e
+           # on remet le type par defaut et on le sauve car si l'utilisateur s'en va san terminer la creation alors il manque une custom static et cela entraineenra une erruer dans index
+           @traffic.update_attribute(:statistic_type, "default")
 
-    render_after_create_or_update(ok, "Traffic n°#{@traffic.id} was successfully created.")
+           respond_to do |format|
+             format.html {
+               @websites = Website.all
+               @statistics = Statistic.all
+               @website = @traffic.website
+               @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
+               redirect_to edit_traffic_path(@traffic), alert: e.message and return
+             }
+           end
+         end
+
+       end
+
+
+    render_after_create_ok_or_update_ok("Traffic n°#{@traffic.id} was successfully created.")
   end
 
   def manual
     update_execution_mode("manual")
   end
+
   def auto
     update_execution_mode("auto")
   end
+
   def publish
 
 
@@ -166,16 +202,21 @@ class TrafficsController < ApplicationController
 
   def destroy_all
 
-    begin
-      Traffic.all.each { |traffic| traffic.destroy }
+    notice = ""
+    count_success = 0
+    Traffic.all.each { |traffic|
+      begin
+        traffic.destroy
 
-    rescue Exception => e
-      notice = e.message
+      rescue Exception => e
+        notice += e.message
+        notice += "\n"
+      else
+        count_success += 1
 
-    else
-      notice = 'all Traffics were successfully destroyed.'
-
-    end
+      end
+    }
+    notice += "#{count_success} Traffic(s) were successfully destroyed."
 
     respond_to do |format|
       format.html { redirect_to traffics_url, notice: notice }
@@ -231,57 +272,47 @@ class TrafficsController < ApplicationController
 end
 
 def update_execution_mode(mode)
-     respond_to do |format|
-       begin
-         @traffic = Traffic.find(params[:id])
-
-         if @traffic.state == "published"
-           Publication::execution_mode("traffic", @traffic.id, mode)
-         end
-
-       rescue Exception => e
-
-         format.html { redirect_to traffics_path, alert: "Execution mode Traffic n°#{params[:id]}  not change : #{e.message}" }
-
-       else
-         @traffic.update_attribute(:execution_mode, mode)
-         format.html { redirect_to traffics_path, notice: 'Execution mode Traffic was successfully change to enginebot.' }
-
-       end
-     end
-end
-def render_after_create_or_update(ok, notice)
   respond_to do |format|
-    if ok
-      if params[:commit] == "Later"
-        format.html { redirect_to traffics_path, notice: notice }
+    begin
+      @traffic = Traffic.find(params[:id])
 
+      if @traffic.state == "published"
+        Publication::execution_mode("traffic", @traffic.id, mode)
       end
 
-      if params[:commit] == "Now"
-        begin
-          Publication::publish(@traffic.to_hash)
+    rescue Exception => e
 
-        rescue Exception => e
-          format.html { redirect_to traffics_path, alert: "Traffic was not published : #{e.message}" }
+      format.html { redirect_to traffics_path, alert: "Execution mode Traffic n°#{params[:id]}  not change : #{e.message}" }
 
-        else
-          @traffic.update_attribute(:state, :published)
-          format.html { redirect_to traffics_path, notice: 'Traffic was successfully published to enginebot.' }
-
-        end
-      end
     else
-
-      format.html {
-        @websites = Website.all
-        @statistics = Statistic.all
-        @website = @advert.website
-        @statistic = @advert.custom_statistic if @traffic.statistic_type == "custom"
-        render :new
-      }
-      format.json { render json: @traffic.errors, status: :unprocessable_entity }
+      @traffic.update_attribute(:execution_mode, mode)
+      format.html { redirect_to traffics_path, notice: 'Execution mode Traffic was successfully change to enginebot.' }
 
     end
+  end
+end
+
+def render_after_create_ok_or_update_ok(notice)
+  respond_to do |format|
+    if params[:commit] == "Later"
+      format.html { redirect_to traffics_path, notice: notice }
+
+    end
+
+    if params[:commit] == "Now"
+      begin
+        Publication::publish(@traffic.to_hash)
+
+      rescue Exception => e
+        format.html { redirect_to traffics_path, alert: "Traffic was not published : #{e.message}" }
+
+      else
+        @traffic.update_attribute(:state, :published)
+        format.html { redirect_to traffics_path, notice: 'Traffic was successfully published to enginebot.' }
+
+      end
+    end
+
+
   end
 end

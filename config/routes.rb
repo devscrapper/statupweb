@@ -4,8 +4,6 @@ Rails.application.routes.draw do
   resources :captchas
   resources :pages
   resources :seas
-  resources :adverts
-  resources :sea_attacks
   mount DelayedJobWeb => "/delayed_job" if ["test", "production"].include?(Rails.env)
   resources :activity_servers
   resources :objectives
@@ -36,7 +34,6 @@ Rails.application.routes.draw do
   match '/visits/refresh', to: 'visits#refresh', via: [:get], as: :refresh_visit
   match '/visits/:visit_id/browsed_page', to: 'visits#browsed_page', via: [:patch], as: :browsed_page_visit
   match '/visits/:visit_id/started', to: 'visits#started', via: [:patch], as: :started_visit
-  match '/visits/order_by', to: 'visits#order_by', via: [:get], as: :order_by_visit
   match '/seas/:id/publish', to: 'seas#publish', via: [:patch], as: :publish_sea
   resources :visits do
     resource :pages

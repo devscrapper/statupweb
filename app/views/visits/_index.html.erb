@@ -1,11 +1,10 @@
 <div class="container-fluid">
 
 
-
   <!--created scheduled outoftime started neverstarted success fail-->
   <% count_visits = Visit.counts("created", policy_type, policy_id) %>
   <%= link_to "Created (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "created"}),
               remote: true,
@@ -34,7 +33,7 @@
   <% count_visits = Visit.counts("scheduled", policy_type, policy_id)
   %>
   <%= link_to "Scheduled (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "scheduled"}),
               remote: true,
@@ -50,7 +49,7 @@
   %>
   <% count_visits = Visit.counts("published", policy_type, policy_id) %>
   <%= link_to "Published (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "published"}),
               remote: true,
@@ -67,7 +66,7 @@
   <% count_visits = Visit.counts("started", policy_type, policy_id) %>
 
   <%= link_to "Started (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "started"}),
               remote: true,
@@ -84,7 +83,7 @@
   <% count_visits = Visit.counts("success", policy_type, policy_id) %>
 
   <%= link_to "Success (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "success"}),
               remote: true,
@@ -101,7 +100,7 @@
   <% count_visits = Visit.counts("fail", policy_type, policy_id) %>
 
   <%= link_to "Fail (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "fail"}),
               remote: true,
@@ -119,7 +118,7 @@
   <% count_visits = Visit.counts("advertnotfound", policy_type, policy_id) %>
 
   <%= link_to "Advert not found (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "advertnotfound"}),
               remote: true,
@@ -136,7 +135,7 @@
   %>
   <% count_visits = Visit.counts("outoftime", policy_type, policy_id) %>
   <%= link_to "Out of Time (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "outoftime"}),
               remote: true,
@@ -152,7 +151,7 @@
   %>
   <% count_visits = Visit.counts("overttl", policy_type, policy_id) %>
   <%= link_to "Over Time to Live (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "overttl"}),
               remote: true,
@@ -168,7 +167,7 @@
   %>
   <% count_visits = Visit.counts("neverstarted", policy_type, policy_id) %>
   <%= link_to "Never Started (#{count_visits})",
-              visits_path({ :policy_id => policy_id,
+              visits_path({:policy_id => policy_id,
                            :policy_type => policy_type,
                            :state => "neverstarted"}),
               remote: true,
@@ -214,19 +213,19 @@
       <th class="text-left">Os</th>
       <th class="text-left">Browser
         <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
-                    order_by_visit_path({:policy_id => policy_id,
-                                         :policy_type => policy_type,
-                                         :state => state,
-                                         :criteria => :browser_name,
-                                         :way => :asc}),
+                    visits_path({:policy_id => policy_id,
+                                 :policy_type => policy_type,
+                                 :state => state,
+                                 :criteria => :browser_name,
+                                 :way => :asc}),
                     remote: true
         %>
         <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
-                    order_by_visit_path({:policy_id => policy_id,
-                                         :policy_type => policy_type,
-                                         :state => state,
-                                         :criteria => :browser_name,
-                                         :way => :desc}),
+                    visits_path({:policy_id => policy_id,
+                                 :policy_type => policy_type,
+                                 :state => state,
+                                 :criteria => :browser_name,
+                                 :way => :desc}),
                     remote: true
         %>
       </th>
@@ -234,19 +233,19 @@
       <% if ["SeaAttack"].include?(policy_type) %>
           <th class="text-left">Keywords
             <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
-                        order_by_visit_path({:policy_id => policy_id,
-                                             :policy_type => policy_type,
-                                             :state => state,
-                                             :criteria => :keywords,
-                                             :way => :asc}),
+                        visits_path({:policy_id => policy_id,
+                                     :policy_type => policy_type,
+                                     :state => state,
+                                     :criteria => :keywords,
+                                     :way => :asc}),
                         remote: true
             %>
             <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
-                        order_by_visit_path({:policy_id => policy_id,
-                                             :policy_type => policy_type,
-                                             :state => state,
-                                             :criteria => :keywords,
-                                             :way => :desc}),
+                        visits_path({:policy_id => policy_id,
+                                     :policy_type => policy_type,
+                                     :state => state,
+                                     :criteria => :keywords,
+                                     :way => :desc}),
                         remote: true
             %>
           </th>
@@ -255,19 +254,19 @@
       <% if ["started", "success", "fail", "advertnotfound", "overttl"].include?(state) %>
           <th class="text-center">Geolocation
             <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-up"),
-                        order_by_visit_path({:policy_id => policy_id,
-                                             :policy_type => policy_type,
-                                             :state => state,
-                                             :criteria => :ip_geo_proxy,
-                                             :way => :asc}),
+                        visits_path({:policy_id => policy_id,
+                                     :policy_type => policy_type,
+                                     :state => state,
+                                     :criteria => :ip_geo_proxy,
+                                     :way => :asc}),
                         remote: true
             %>
             <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-arrow-down"),
-                        order_by_visit_path({:policy_id => policy_id,
-                                             :policy_type => policy_type,
-                                             :state => state,
-                                             :criteria => :ip_geo_proxy,
-                                             :way => :desc}),
+                        visits_path({:policy_id => policy_id,
+                                     :policy_type => policy_type,
+                                     :state => state,
+                                     :criteria => :ip_geo_proxy,
+                                     :way => :desc}),
                         remote: true
             %></th>
           <th>Country</th>
@@ -397,6 +396,13 @@
       </td>
     </tr>
     </tbody>
+    <tfoot>
+    <% unless @visits.nil? %>
+        <%= paginate @visits %>
+    <% else %>
+        none visits
+    <% end %>
+    </tfoot>
   </table>
 
 
