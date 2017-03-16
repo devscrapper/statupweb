@@ -40,7 +40,7 @@
       <td class="text-center"><%= visit.end_time.nil? ? "unknown" : visit.end_time.localtime.to_formatted_s(:hour_min_sec) %></td>
   <% end %>
   <% if ["started", "success", "fail", "neverstarted", "overttl", "advertnotfound"].include?(state) %>
-      <td class="text-left"><%= visit.end_time.nil? or visit.start_time.nil? ?
+      <td class="text-left"><%= (visit.end_time.nil? or visit.start_time.nil?) ?
               "unknown" :
               distance_of_time_in_words(visit.start_time, visit.end_time || Time.now, include_seconds: true) %></td>
   <% end %>
