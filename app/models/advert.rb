@@ -14,10 +14,10 @@ class Advert < ActiveRecord::Base
   validates :count_visits_per_day, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 10}
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
   validates :max_duration_scraping, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 1}
-  validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
-  validates :max_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 15}
-  validates :min_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 60}
-  validates :max_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 120}
+  validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 3}
+  validates :max_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 10}
+  validates :min_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
+  validates :max_duration_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 60}
   validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 100}
   validates :min_duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 5}
   validates :max_duration, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 30}
@@ -59,7 +59,12 @@ class Advert < ActiveRecord::Base
 
     if !monday_start.nil? and !count_weeks.nil?
       end_date = monday_start + count_weeks * DELAY_WEEK
-      policies = Advert.select("monday_start, count_weeks").where("website_id =? and id <>?", website_id, id)
+      if id.nil?
+        policies = Advert.select("monday_start, count_weeks").where("website_id =?", website_id)
+      else
+        policies = Advert.select("monday_start, count_weeks").where("website_id =? and id <>?", website_id, id)
+      end
+
       policies.each { |policy|
         # on considère que les debuts de chaque periode sont tj avant les fins de chaque période
         logger.debug "#{policy.monday_start + policy.count_weeks * DELAY_WEEK } <= #{monday_start}#{policy.monday_start + policy.count_weeks * DELAY_WEEK <= monday_start}"

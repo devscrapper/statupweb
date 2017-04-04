@@ -61,6 +61,7 @@ class AdvertsController < ApplicationController
   def create
 
     params[:advert][:website_id] = params[:website_selected]
+    params[:advert][:count_weeks] = params[:count_weeks_selected]
     @advert = Advert.new(advert_params)
     ok = @advert.save
     if ok and @advert.statistic_type == "custom"
@@ -128,6 +129,7 @@ class AdvertsController < ApplicationController
   # PATCH/PUT /adverts/1.json
   def update
     params[:advert][:website_id] = params[:website_selected]
+    params[:advert][:count_weeks] = params[:count_weeks_selected]
     @advert = Advert.find_by_id(params[:id])
     ok = @advert.update(advert_params)
     if ok and @advert.statistic_type == "custom"

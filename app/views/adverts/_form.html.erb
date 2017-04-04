@@ -1,8 +1,5 @@
-<%= javascript_include_tag 'moment' %> <!-- utiliser pour afficher le calendrier -->
-<%= javascript_include_tag 'bootstrap-datetimepicker.js' %> <!-- utiliser pour afficher le calendrier -->
-
-
 <%= form_for(@advert) do |f| %>
+
     <% if @advert.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@advert.errors.count, "error") %> prohibited this advert from being saved:</h2>
@@ -30,7 +27,25 @@
               </p>
 
               <p>
-                <%= f.label "How many visit per a day" %><%= f.text_field :count_visits_per_day, class: "form-control" %>
+                <%= f.label "How many visit per a day" %>
+                <%= f.hidden_field :count_visits_per_day, size: 3, class: "form-control" %>
+
+              <div class="btn-group">
+                <% btn_count = 10 %>
+                <% btn_count.times.each { |i| %>
+                    <%= button_tag(type: 'button',
+                                   :class => "btn btn-default #{@advert.count_visits_per_day.nil? or @advert.count_visits_per_day != i ? "" : "active" }",
+                                   :id => "btn-#{i}",
+                                   :onmousedown =>  "for(var j = 0; j < #{btn_count} ;j++) {
+                                        $('#btn-' + j).attr('class', 'btn btn-default');
+                                     }",
+                                   :onclick => "$('#advert_count_visits_per_day').val(#{i+1});  $('#btn-#{i}').attr('class', 'btn btn-default active');") do
+                      content_tag(:strong, i + 1)
+                    end %>
+                <% } %>
+
+              </div>
+
               </p>
 
               <p>
@@ -38,7 +53,16 @@
               </p>
 
               <p>
-                <%= f.label  "How many weeks delay" %><%= f.number_field :count_weeks, class: "form-control" %>
+                <%= f.label "How many weeks delay" %>
+                <%= select_tag :count_weeks_selected,
+                               options_for_select({"One week" => "1",
+                                                   "Two weeks" => "2",
+                                                   "Three weeks" => "3",
+                                                   "One month" => "4",
+                                                   "Two monthes" => "8"},
+                                                  @advert.count_weeks.nil? ? "1" : @advert.count_weeks),
+                               class: "form-control",
+                               :onclick => "$('#advert_count_weeks').val($('#count_weeks_selected').val());" %>
               </p>
 
             </div>
