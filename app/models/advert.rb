@@ -7,11 +7,13 @@ class Advert < ActiveRecord::Base
   has_many :visits, as: :policy, dependent: :destroy
   belongs_to :website
 
+  MAX_COUNT_VISITS_PER_DAY  = 10
+
   validates :website_id, presence: {message: "must be given"}
   validates :statistic_type, :presence => true
   validates :monday_start, :presence => true
   validates :state, :presence => true, inclusion: {in: %w(created published over), message: "%{value} is not a valid state"}
-  validates :count_visits_per_day, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 10}
+  validates :count_visits_per_day, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => MAX_COUNT_VISITS_PER_DAY}
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
   validates :max_duration_scraping, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 1}
   validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 3}
