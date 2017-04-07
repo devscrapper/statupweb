@@ -10,23 +10,26 @@ class StatisticsController < ApplicationController
   # GET /statistics/1
   # GET /statistics/1.json
   def show
+
   end
 
   # GET /statistics/new
   def new
     @statistic = Statistic.new
+    @statistic.avg_time_on_site /= 60 # conversion seconde en mn
   end
 
   # GET /statistics/1/edit
   def edit
     @statistic = Statistic.find(params[:id])
+    @statistic.avg_time_on_site /= 60 # conversion seconde en mn
   end
 
   # POST /statistics
   # POST /statistics.json
   def create
     @statistic = Statistic.new(statistic_params)
-
+    @statistic.avg_time_on_site *= 60 # conversion mn en seconde
     respond_to do |format|
       if @statistic.save
         format.html { redirect_to statistics_path, notice: 'Statistic was successfully created.' }
@@ -42,6 +45,7 @@ class StatisticsController < ApplicationController
   # PATCH/PUT /statistics/1.json
   def update
     respond_to do |format|
+      @statistic.avg_time_on_site *= 60 # conversion mn en seconde-
       if @statistic.update(statistic_params)
         format.html { redirect_to statistics_path, notice: 'Statistic was successfully updated.' }
         format.json { render :show, status: :ok, location: @statistic }
@@ -70,12 +74,12 @@ class StatisticsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_statistic
     @statistic = Statistic.find(params[:id])
+    @statistic.avg_time_on_site /= 60 # conversion  seconde en mn
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def statistic_params
     params.require(:statistic).permit(:label,
-                                      :count_visits_per_day,
                                       :percent_new_visit,
                                       :visit_bounce_rate, :avg_time_on_site, :page_views_per_visit,
                                       :hourly_daily_distribution0,

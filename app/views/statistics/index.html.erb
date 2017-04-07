@@ -12,7 +12,6 @@
 
   <tr>
     <th class="text-left">Label</th>
-      <th class="text-center">Count visits per day</th>
       <th class="text-center">Hourly daily distribution</th>
       <th class="text-center">Percent new visit</th>
       <th class="text-center">Visit bounce rate</th>
@@ -26,7 +25,6 @@
     <% @statistics.each do |statistic| %>
       <tr>
         <td class="text-left vert-align"><%= statistic.label %></td>
-        <td class="text-center vert-align"><%= statistic.count_visits_per_day %></td>
         <td class="text-center vert-align"> todo hourly daily distribution </td>
         <td class="text-center vert-align"><%= statistic.percent_new_visit %></td>
         <td class="text-center vert-align"><%= statistic.visit_bounce_rate %></td>
