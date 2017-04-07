@@ -51,6 +51,7 @@ class SeaAttack < ActiveRecord::Base
   validates :percent_local_page_advertiser, :presence => true, :numericality => {:only_integer => true,
                                                                                  :less_than_or_equal_to => 100}
 
+  validates :count_visits_per_day, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
   validate :cannot_be_in_the_past,
            :only_one_policy_for_a_sea_by_period
 

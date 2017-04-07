@@ -128,9 +128,8 @@ class Advert < ActiveRecord::Base
         :url_root => website.url_root,
         :website_id => website_id,
         :website_label => website.label,
-
-
     }
+    policy.merge!(custom_statistic.statistic.to_hash)
 
     logger.debug policy
     policy

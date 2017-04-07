@@ -52,17 +52,17 @@ class AdvertsController < ApplicationController
     @statistics = Statistic.all
     @advert = Advert.find(params[:id])
     @website = @advert.website
-    @statistic = @advert.custom_statistic if @advert.statistic_type == "custom"
+    @statistic = @advert.custom_statistic
     @advert.monday_start = Date.today + @advert.max_duration_scraping + 1 if @advert.monday_start - Date.today <= @advert.max_duration_scraping + 1
   end
 
   # POST /adverts
   # POST /adverts.json
   def create
-
     params[:advert][:website_id] = params[:website_selected]
     params[:advert][:count_weeks] = params[:count_weeks_selected]
     @advert = Advert.new(advert_params)
+    @advert.statistic_type = "custom"
     ok = @advert.save
     if ok and @advert.statistic_type == "custom"
       @statistic = @advert.build_custom_statistic({:statistic_id => params[:statistic_selected]})
@@ -131,12 +131,14 @@ class AdvertsController < ApplicationController
     params[:advert][:website_id] = params[:website_selected]
     params[:advert][:count_weeks] = params[:count_weeks_selected]
     @advert = Advert.find_by_id(params[:id])
+    @advert.statistic_type = "custom"
     ok = @advert.update(advert_params)
     if ok and @advert.statistic_type == "custom"
 
       unless @statistic = @advert.custom_statistic
         @statistic = @advert.build_custom_statistic({:statistic_id => params[:statistic_selected]})
-        ok = ok && @statistic.save
+
+        ok = ok && @statistic.save!
 
       else
         @statistic.update_attribute(:statistic_id, params[:statistic_selected])

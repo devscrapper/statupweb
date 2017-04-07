@@ -27,6 +27,14 @@
               </p>
 
               <p>
+                <%= label_tag "Select statistic activity" %>
+                <%= select_tag :statistic_selected,
+                               options_from_collection_for_select(@statistics, "id", "label", @statistic.nil? ? "0" : @statistic.statistic_id),
+                               class: "form-control",
+                               :include_blank => "Select one"%>
+              </p>
+
+              <p>
                 <%= f.label "How many visit per a day" %>
                 <%= f.hidden_field :count_visits_per_day, size: 3, class: "form-control" %>
 
@@ -36,7 +44,7 @@
                     <%= button_tag(type: 'button',
                                    :class => "btn btn-default #{@advert.count_visits_per_day.nil? or @advert.count_visits_per_day != i + 1 ? "" : "active" }",
                                    :id => "btn-#{i + 1}",
-                                   :onmousedown =>  "for(var j = 1; j <= #{btn_count} ;j++) {
+                                   :onmousedown => "for(var j = 1; j <= #{btn_count} ;j++) {
                                         $('#btn-' + j).attr('class', 'btn btn-default');
                                      }",
                                    :onclick => "$('#advert_count_visits_per_day').val(#{i + 1});  $('#btn-#{i + 1}').attr('class', 'btn btn-default active');") do
