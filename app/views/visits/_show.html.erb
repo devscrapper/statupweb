@@ -47,7 +47,7 @@
   <% if ["started", "success", "fail", "neverstarted", "overttl", "advertnotfound"].include?(state) %>
       <td class="text-left">
         <% visit.actions.each_with_index { |action, i| %>
-            <% if i + 1 <= visit.count_browsed_page
+            <% if i <= visit.count_browsed_page
                  class_name = "label label-success"
                else
                  # action F == click_on_advert
