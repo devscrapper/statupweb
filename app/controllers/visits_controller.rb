@@ -95,13 +95,17 @@ class VisitsController < ApplicationController
       if @visit.nil?
         format.json { render json: @visit, status: :not_found }
 
-      elsif @visit.update_attributes({:count_browsed_page => @visit.count_browsed_page + 1,
-                                      :actions => visit_params[:actions]})
-        format.json { render json: @visit, status: :created }
-
       else
-        format.json { render json: @visit.errors, status: :unprocessable_entity }
+        begin
+          @visit.update_attributes!({:count_browsed_page =>params[:index],
+                                     :actions => visit_params[:actions]})
+        rescue Exception => e
+          logger.debug e.message
+          format.json { render json: @visit.errors, status: :unprocessable_entity }
+        else
+          format.json { render json: @visit, status: :created }
 
+        end
       end
     end
   end
