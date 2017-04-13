@@ -56,16 +56,15 @@
                     end %>
 
               </td>
-              <td class="text-left vert-align">
-                <%= link_to advert.website.label, advert_path(advert.id) %>
-              </td>
+              <td class="text-left vert-align"><%= link_to advert.website.label, advert_path(advert.id) %></td>
               <td class="text-center vert-align"><%= advert.monday_start %></td>
               <td class="text-center vert-align"><%= advert.monday_start + advert.count_weeks * 7 -1 %></td>
               <td class="text-center vert-align"><%= advert.count_visits_per_day %></td>
               <td class="text-center vert-align">
                 <%= count_advert_click = advert.visits.select { |v|
                   v.count_browsed_page < 0 || v.actions.index("F").nil? ? false : v.count_browsed_page >= v.actions.index("F")
-                }.count %>(<%= (count_advert_click * 100.0 / advert.count_visits_per_day).to_i %>%)
+                }.count %>
+                (<%= (count_advert_click * 100.0 / (advert.count_visits_per_day * advert.count_weeks * 7)).round(2) %>%)
               </td>
               <td class="text-center vert-align">
                 <%= case advert.state
@@ -93,6 +92,7 @@
 
 
               <td class="text-center vert-align"><%= link_to 'Destroy', advert, class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+
             </tr>
         <% end %>
         </tbody>
