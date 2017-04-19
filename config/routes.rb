@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   match '/visits/delete', to: 'visits#delete', via: [:get], as: :delete_visit
   match '/visits/delete_all_by_state', to: 'visits#delete_all_by_state', via: [:get], as: :delete_all_by_state
   match '/visits/refresh', to: 'visits#refresh', via: [:get], as: :refresh_visit
+  match '/visits/restart', to: 'visits#restart', via: [:get], as: :restart_visit
   match '/visits/:visit_id/browsed_page', to: 'visits#browsed_page', via: [:patch], as: :browsed_page_visit
   match '/visits/:visit_id/started', to: 'visits#started', via: [:patch], as: :started_visit
   match '/seas/:id/publish', to: 'seas#publish', via: [:patch], as: :publish_sea

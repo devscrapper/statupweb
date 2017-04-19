@@ -11,10 +11,17 @@
                   remote: true,
                   data: {confirm: 'Are you sure?'}
         end %>
+    <%= if ["fail", "advertnotfound", "outoftime", "overttl"].include?(state)
+          link_to content_tag(:span, "", class: "glyphicon glyphicon-repeat"),
+                  restart_visit_path({:visit_id => visit.id_visit}),
+                  remote: true,
+                  data: {confirm: 'Are you sure?'}
+        end %>
     <%= if ["success", "fail", "advertnotfound", "outoftime", "overttl"].include?(state)
           link_to content_tag(:span, "", class: "glyphicon glyphicon-export"),
                   visit_log_path({:visit_id => visit.id})
         end %>
+
     <%= link_to content_tag(:span, "", class: "glyphicon glyphicon-trash"),
                 delete_visit_path({:visit_id => visit.id_visit, :policy_id => visit.policy_id,
                                    :policy_type => policy_type,
@@ -41,8 +48,8 @@
   <% end %>
   <% if ["started", "success", "fail", "neverstarted", "overttl", "advertnotfound"].include?(state) %>
       <td class="text-left"><%= (visit.end_time.nil? or visit.start_time.nil?) ?
-              "unknown" :
-              distance_of_time_in_words(visit.start_time, visit.end_time || Time.now, include_seconds: true) %></td>
+                                        "unknown" :
+                                        distance_of_time_in_words(visit.start_time, visit.end_time || Time.now, include_seconds: true) %></td>
   <% end %>
   <% if ["started", "success", "fail", "neverstarted", "overttl", "advertnotfound"].include?(state) %>
       <td class="text-left">

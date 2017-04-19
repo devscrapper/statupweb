@@ -148,6 +148,20 @@ class VisitsController < ApplicationController
     end
   end
 
+  def restart
+    begin
+      Scheduler::restart(params['visit_id'])
+
+    rescue Exception => e
+      @alert = "Scheduler not start execution visit #{params['visit_id']} : #{e.message}"
+    else
+      @notice = "Scheduler start execution visit #{params['visit_id']}"
+    ensure
+      select_visits
+
+      render :index
+    end
+  end
 
   def started
     @visit = Visit.find_by_id_visit(params[:visit_id])
