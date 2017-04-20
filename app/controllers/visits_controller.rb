@@ -149,7 +149,17 @@ class VisitsController < ApplicationController
   end
 
   def restart
+    #demande une nouvelle execution de la visit aupres du scheduler
     begin
+      #suppression de la log, des captchas, et pages en relation avec l'execution passée de la visit
+      @visit = Visit.find_by_id_visit(params[:visit_id])
+      @visit.pages.destroy_all
+      @visit.log.destroy!
+      @visit.captchas.destroy_all
+      #initialisation du nombre de page vu
+      @visit.update_attribute(:count_browsed_page, -1)
+
+      # execution du restart
       Scheduler::restart(params['visit_id'])
 
     rescue Exception => e
