@@ -43,11 +43,12 @@ class TrafficsController < ApplicationController
     @websites = Website.all
     @statistics = Statistic.all
     @traffic = Traffic.new
-    @traffic.advertising_percent  =0
+    @traffic.advertising_percent =0
     @traffic.change_bounce_visits_percent= 1
     @traffic.change_count_visits_percent=100
     @traffic.count_weeks=1
     @traffic.direct_medium_percent=100
+    @traffic.statistic_type="default"
     @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
   end
 
@@ -65,40 +66,41 @@ class TrafficsController < ApplicationController
   def create
 
     params[:traffic][:website_id] = params[:website_selected]
+    params[:traffic][:count_weeks] = params[:count_weeks_selected]
     @traffic = Traffic.new(traffic_params)
-       begin
-         @traffic.save!
-       rescue Exception => e
-         respond_to do |format|
-           format.html {
-             @websites = Website.all
-             @statistics = Statistic.all
-             @website = @traffic.website
-             redirect_to new_traffic_path, alert: e.message and return
-           }
-         end
-       end
-       if @traffic.statistic_type == "custom"
-         begin
-           @statistic = @traffic.create_custom_statistic!({:statistic_id => params[:statistic_selected],
-                                                              :policy_id => @traffic.id,
-                                                              :policy_type => @traffic.class.name})
-         rescue Exception => e
-           # on remet le type par defaut et on le sauve car si l'utilisateur s'en va san terminer la creation alors il manque une custom static et cela entraineenra une erruer dans index
-           @traffic.update_attribute(:statistic_type, "default")
+    begin
+      @traffic.save!
+    rescue Exception => e
+      respond_to do |format|
+        format.html {
+          @websites = Website.all
+          @statistics = Statistic.all
+          @website = @traffic.website
+          redirect_to new_traffic_path, alert: e.message and return
+        }
+      end
+    end
+    if @traffic.statistic_type == "custom"
+      begin
+        @statistic = @traffic.create_custom_statistic!({:statistic_id => params[:statistic_selected],
+                                                        :policy_id => @traffic.id,
+                                                        :policy_type => @traffic.class.name})
+      rescue Exception => e
+        # on remet le type par defaut et on le sauve car si l'utilisateur s'en va san terminer la creation alors il manque une custom static et cela entraineenra une erruer dans index
+        @traffic.update_attribute(:statistic_type, "default")
 
-           respond_to do |format|
-             format.html {
-               @websites = Website.all
-               @statistics = Statistic.all
-               @website = @traffic.website
-               @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
-               redirect_to edit_traffic_path(@traffic), alert: e.message and return
-             }
-           end
-         end
+        respond_to do |format|
+          format.html {
+            @websites = Website.all
+            @statistics = Statistic.all
+            @website = @traffic.website
+            @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
+            redirect_to edit_traffic_path(@traffic), alert: e.message and return
+          }
+        end
+      end
 
-       end
+    end
 
 
     render_after_create_ok_or_update_ok("Traffic n°#{@traffic.id} was successfully created.")
@@ -162,23 +164,47 @@ class TrafficsController < ApplicationController
   def update
     params[:traffic][:website_id] = params[:website_selected]
     @traffic = Traffic.find_by_id(params[:id])
-    ok = @traffic.update(traffic_params)
-    if ok and @traffic.statistic_type == "custom"
+    begin
+      @traffic.update!(traffic_params)
+    rescue Exception => e
+      respond_to do |format|
+        format.html {
+          @websites = Website.all
+          @statistics = Statistic.all
+          @website = @traffic.website
+          redirect_to edit_traffic_path(@traffic), alert: e.message and return
+        }
+      end
+    end
+    if @traffic.statistic_type == "custom"
+      begin
+        if @statistic = @traffic.custom_statistic.nil?
+          @statistic = @traffic.create_custom_statistic!({:statistic_id => params[:statistic_selected],
+                                                          :policy_id => @traffic.id,
+                                                          :policy_type => @traffic.class.name})
+        else
+          @statistic.update_attribute!(:statistic_id, params[:statistic_selected])
+        end
+      rescue Exception => e
+        # on remet le type par defaut et on le sauve car si l'utilisateur s'en va san terminer la creation alors il manque une custom static et cela entraineenra une erruer dans index
+        @traffic.update_attribute(:statistic_type, "default")
 
-      unless @statistic = @traffic.custom_statistic
-        @statistic = @traffic.build_custom_statistic({:statistic_id => params[:statistic_selected]})
-        ok = ok && @statistic.save
-
-      else
-        @statistic.update_attribute(:statistic_id, params[:statistic_selected])
-
+        respond_to do |format|
+          format.html {
+            @websites = Website.all
+            @statistics = Statistic.all
+            @website = @traffic.website
+            @traffic.monday_start = Traffic.next_monday(Date.today + @traffic.max_duration_scraping)
+            redirect_to edit_traffic_path(@traffic), alert: e.message and return
+          }
+        end
       end
 
-    else
-
-
+    else # statistic_type = ga ou default
+      @traffic.custom_statistic.delete unless @traffic.custom_statistic.nil?
     end
-    render_after_create_or_update(ok, "Traffic n°#{@traffic.id} was successfully update.")
+
+    render_after_create_ok_or_update_ok("Traffic n°#{@traffic.id} was successfully update.")
   end
 
 

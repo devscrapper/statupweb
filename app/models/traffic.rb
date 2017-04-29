@@ -12,12 +12,17 @@ class Traffic < ActiveRecord::Base
   validates :monday_start, :presence => true
   validates :state, :presence => true, inclusion: {in: %w(created published over), message: "%{value} is not a valid state"}
   validates :count_weeks, :presence => true, :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 52}
-  validates :change_count_visits_percent, :numericality => {:only_integer => true, :other_than => 0, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
+  validates :change_count_visits_percent,
+            :numericality => {:only_integer => true, :other_than => 0, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100},
+            unless: :custom?
+  validates :count_visits_per_day,
+            :numericality => {:only_integer => true, :greater_than => 0, :less_than_or_equal_to => 100},
+            if: :custom?
   validates :change_bounce_visits_percent, :numericality => {:only_integer => true, :greater_than_or_equal_to => -100, :less_than_or_equal_to => 100}
   validates :direct_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
   validates :organic_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
   validates :referral_medium_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
-  validates :advertising_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 10}
+  validates :advertising_percent, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
   validates :max_duration_scraping, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 1}
   validates :min_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => 10}
   validates :max_count_page_advertiser, :presence => true, :numericality => {:only_integer => true, :less_than_or_equal_to => 15}
@@ -46,6 +51,9 @@ class Traffic < ActiveRecord::Base
   # cette données est calculée à la volée à partir du Calednar de engine_bot et n'est jamais stockée
   attr_accessor :planed_dates
 
+  def custom?
+    statistic_type == "custom"
+  end
   def self.next_monday(date)
     today = Date.parse(date) if date.is_a?(String)
     today = date if date.is_a?(Date)
@@ -127,6 +135,8 @@ class Traffic < ActiveRecord::Base
     end
   end
 
+
+
   def self.terminate
     Traffic.where("state =?", "published").each { |policy|
       if Date.today > policy.monday_start + policy.count_weeks * DELAY_WEEK
@@ -142,6 +152,7 @@ class Traffic < ActiveRecord::Base
         :advertising_percent => advertising_percent, #à cause de la policy Traffic
         :advertisers => website.advertisers,
         :change_bounce_visits_percent => change_bounce_visits_percent, #à cause de la policy Traffic
+        :count_visits_per_day => count_visits_per_day,#à cause de la policy Traffic
         :change_count_visits_percent => change_count_visits_percent, #à cause de la policy Traffic
         :count_page => website.count_page, #à cause de la policy Traffic
         :count_weeks => count_weeks,
@@ -177,7 +188,7 @@ class Traffic < ActiveRecord::Base
     }
     case statistic_type
       when "default"
-        policy.merge!(:count_visits_per_day => 0)  # par defaut
+
       when "custom"
         policy.merge!(custom_statistic.statistic.to_hash)
       when "ga"

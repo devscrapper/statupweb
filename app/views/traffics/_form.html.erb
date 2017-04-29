@@ -1,7 +1,29 @@
 <%= javascript_include_tag 'moment' %> <!-- utiliser pour afficher le calendrier -->
 <%= javascript_include_tag 'bootstrap-datetimepicker.js' %> <!-- utiliser pour afficher le calendrier -->
 <script type="text/javascript">
+    function refresh_objective() {
+        $.ajax({
+            url: "/websites/" + website_selected.selectedIndex,
+            type: "GET",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                if (data.count_organic <= 0)
+                    traffic_organic_medium_percent.disabled = true;
+                else
+                    traffic_organic_medium_percent.disabled = false;
 
+                if (data.count_referral <= 0)
+                    traffic_referral_medium_percent.disabled = true;
+                else
+                    traffic_referral_medium_percent.disabled = false;
+            },
+            error: function (data) {
+                traffic_organic_medium_percent.disabled = true;
+                traffic_referral_medium_percent.disabled = true;
+            }
+        })
+    }
 
     function refresh_traffic_source() {
         $.ajax({
@@ -28,11 +50,33 @@
     }
     $(document).ready(function () {
         refresh_traffic_source();
+        if ($("#traffic_statistic_type_default").is(":checked")) {
+            $(".collapse_ga").hide();
+            $(".collapse_custom").hide();
+        }
+        if ($("#traffic_statistic_type_ga").is(":checked")) {
+            $(".collapse_ga").show();
+            $(".collapse_custom").hide();
+        }
+        if ($("#traffic_statistic_type_custom").is(":checked")) {
+            $(".collapse_ga").hide();
+            $(".collapse_custom").show();
+        }
     });
     $('select#website_selected').on('change', function () {
         refresh_traffic_source();
     })
     ;
+    $('.ap_slider_class').on("slide", function (evt) {
+        $("#advertising_percent").text('How many percent advert : ' + evt.value + '%');
+    });
+    $('.ap_slider_class').slider({
+        tooltip: 'none',
+        tooltip_position: 'bottom',
+        formatter: function (value) {
+            return value;
+        }
+    });
 </script>
 
 <%= form_for(@traffic) do |f| %>
@@ -53,10 +97,9 @@
         <div class="panel-heading"><b><%= label %></b></div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-4">
               <p>
-
-                <%= label_tag "Website" %>
+                <%= label_tag "Select target website" %>
                 <%= select_tag :website_selected,
                                options_from_collection_for_select(@websites, "id", "label", @website.nil? ? "0" : @website.id),
                                class: "form-control",
@@ -66,67 +109,84 @@
 
               <p>
 
-              <div class="panel panel-default">
-                <div class="panel-heading">Statistic</div>
-                <div class="panel-body">
-                  <p>
-                    <%= label_tag "Default" %>
-                    <%= f.radio_button :statistic_type, "default", :checked => true, onClick: "statistic_selected.disabled=true;" %>
-                    <%= label_tag "GA" %>
-                    <%= f.radio_button :statistic_type, "ga", onClick: "statistic_selected.disabled=true;" %>
-                    <%= label_tag "Custom" %>
-                    <%= f.radio_button :statistic_type, "custom", onClick: "statistic_selected.disabled=false;" %>
-                  </p>
 
-                  <p>
-                    <%= select_tag :statistic_selected,
-                                   options_from_collection_for_select(@statistics, "id", "label", @statistic.nil? ? "0" : @statistic.statistic_id),
-                                   class: "form-control",
-                                   :include_blank => "Select one",
-                                   :disabled => @traffic.statistic_type == "custom" ? false : true %>
-                  </p>
-                </div>
+                <%= label_tag "Select statistic activity" %>
+                <%= label_tag "Default", nil, class: "label label-info" %>
+                <%= f.radio_button :statistic_type,
+                                   "default",
+                                   :checked => @traffic.statistic_type == "default" ? true : false,
+
+                                   onClick: "$(\".collapse_ga\").hide();$(\".collapse_custom\").hide();" %>
+
+
+
+                <%= label_tag "Ga", nil, class: "label label-info" %>
+                <%= f.radio_button :statistic_type,
+                                   "ga",
+                                   :checked => @traffic.statistic_type == "ga" ? true : false,
+                                   onClick: "$(\".collapse_ga\").show();$(\".collapse_custom\").hide();" %>
+
+
+
+                <%= label_tag "Custom", nil, class: "label label-info" %>
+                <%= f.radio_button :statistic_type,
+                                   "custom",
+                                   :checked => @traffic.statistic_type == "custom" ? true : false,
+                                   onClick: "$(\".collapse_ga\").hide();$(\".collapse_custom\").show();" %>
+
+
+              <div class="collapse_ga" id="collapse_ga">
+                <%= f.label "Change visits (%)" %>
+                <%= f.number_field :change_count_visits_percent,
+                                   class: "form-control" %>
+                <%= f.label "Change Bounce visits (%)" %>
+                <%= f.number_field :change_bounce_visits_percent, class: "form-control" %>
               </div>
+
+              <div class="collapse_custom">
+                <%= f.label "Which custom activity" %>
+                <%= select_tag :statistic_selected,
+                               options_from_collection_for_select(@statistics, "id", "label", @statistic.nil? ? "0" : @statistic.statistic_id),
+                               class: "form-control",
+                               :include_blank => "Select one" %>
+                <%= f.label "How many visit per a day" %>
+                <%= f.number_field :count_visits_per_day,
+                                   size: 3,
+                                   class: "form-control" %>
+              </div>
+
+              </p>
+              <p>
+                <%= f.label "How many percent advert : #{@traffic.nil? ? "0" : @traffic.advertising_percent}%",
+                            id: :advertising_percent %>
+                <%= f.number_field :advertising_percent,
+                                   class: "form-control ap_slider_class",
+                                   data: {'slider-id' => 'apSlider',
+                                          'slider-min' => "0",
+                                          'slider-max' => "100",
+                                          'slider-step' => "10",
+                                          'slider-value' => @traffic.nil? ? "100" : @traffic.advertising_percent} %>
+              </p>
+
+              <p>
+                <%= f.label "Which start date" %>
+                <%= f.text_field :monday_start, class: "form-control" %>
+
+              </p>
+              <%= f.label "How many weeks delay" %>
+              <%= select_tag :count_weeks_selected,
+                             options_for_select({"One week" => "1",
+                                                 "Two weeks" => "2",
+                                                 "Three weeks" => "3",
+                                                 "One month" => "4",
+                                                 "Two monthes" => "8"},
+                                                @traffic.count_weeks.nil? ? "1" : @traffic.count_weeks),
+                             class: "form-control",
+                             :onclick => "$('#traffic_count_weeks').val($('#traffic_weeks_selected').val());" %>
               </p>
             </div>
 
-            <div class="col-lg-2">
-              <div class="panel panel-default">
-                <div class="panel-heading">Planification</div>
-                <div class="panel-body">
-                  <p>
-                    <%= f.label :monday_start %>
-                    <%= f.text_field :monday_start, class: "form-control" %>
 
-                  </p>
-
-                  <p>
-                    <%= f.label :count_weeks %><%= f.number_field :count_weeks, class: "form-control" %>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-2">
-              <div class="panel panel-default">
-                <div class="panel-heading">Objectives</div>
-                <div class="panel-body">
-                  <p>
-                    <%= f.label "Change visits (%)" %>
-                    <%= f.number_field :change_count_visits_percent, class: "form-control" %>
-                  </p>
-
-                  <p>
-                    <%= f.label "Change Bounce visits (%)" %>
-                    <%= f.number_field :change_bounce_visits_percent, class: "form-control" %>
-                  </p>
-
-                  <p>
-                    <%= f.label "Change Advertising (%)" %>
-                    <%= f.number_field :advertising_percent, class: "form-control" %>
-                  </p>
-                </div>
-              </div>
-            </div>
             <div class="col-lg-2">
               <div class="panel panel-default">
                 <div class="panel-heading">Traffic source</div>
@@ -227,17 +287,16 @@
                           <%= f.label :min_duration_page_advertiser %>
                           <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
                           <p>
-                            <%= f.label :percent_local_page_advertiser %>
-                            <%= f.number_field :percent_local_page_advertiser, class: "form-control" %>  </p>
+                            <%= f.label :max_duration_page_advertiser %>
+                            <%= f.number_field :max_duration_page_advertiser, class: "form-control" %>   </p>
+
                         </div>
                         <div class="col-lg-4">
                           <p>
-                            <%= f.label :min_duration_page_advertiser %>
-                            <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
+                            <%= f.label :percent_local_page_advertiser %>
+                            <%= f.number_field :percent_local_page_advertiser, class: "form-control" %>  </p>
 
-                          <p>
-                            <%= f.label :max_duration_page_advertiser %>
-                            <%= f.number_field :max_duration_page_advertiser, class: "form-control" %>   </p>
+
                         </div>
 
                       </div>
@@ -257,7 +316,7 @@
           <div class="row">
             <div class="col-lg-2">
               <div class="panel panel-default">
-                <div class="panel-heading">Execution mode</div>
+                <div class="panel-heading">Execution mode <span class="label label-warning">Expert</span></div>
                 <div class="panel-body">
                   <p>
                     <%= label_tag "Auto" %>

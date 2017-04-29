@@ -31,7 +31,7 @@
                 <%= select_tag :statistic_selected,
                                options_from_collection_for_select(@statistics, "id", "label", @statistic.nil? ? "0" : @statistic.statistic_id),
                                class: "form-control",
-                               :include_blank => "Select one"%>
+                               :include_blank => "Select one" %>
               </p>
 
               <p>
@@ -57,7 +57,8 @@
               </p>
 
               <p>
-                <%= f.label "Which start date" %><%= f.text_field :monday_start, class: "form-control", :disabled => false %>
+                <%= f.label "Which start date" %>
+                <%= f.text_field :monday_start, class: "form-control", :disabled => false %>
               </p>
 
               <p>
@@ -130,13 +131,6 @@
                             <%= f.number_field :max_count_page_advertiser, class: "form-control" %></p>
                         </div>
                         <div class="col-lg-4">
-                          <%= f.label :min_duration_page_advertiser %>
-                          <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
-                          <p>
-                            <%= f.label :percent_local_page_advertiser %>
-                            <%= f.number_field :percent_local_page_advertiser, class: "form-control" %>  </p>
-                        </div>
-                        <div class="col-lg-4">
                           <p>
                             <%= f.label :min_duration_page_advertiser %>
                             <%= f.number_field :min_duration_page_advertiser, class: "form-control" %>  </p>
@@ -144,6 +138,12 @@
                           <p>
                             <%= f.label :max_duration_page_advertiser %>
                             <%= f.number_field :max_duration_page_advertiser, class: "form-control" %>   </p>
+                        </div>
+                        <div class="col-lg-4">
+                          <p>
+                            <%= f.label :percent_local_page_advertiser %>
+                            <%= f.number_field :percent_local_page_advertiser, class: "form-control" %>  </p>
+
                         </div>
 
                       </div>
