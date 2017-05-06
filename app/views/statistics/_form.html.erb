@@ -169,7 +169,7 @@
                     <%= f.number_field :page_views_per_visit,
                                        data: {'slider-id' => 'pvpvSlider',
                                               'slider-min' => "1",
-                                              'slider-max' => "10",
+                                              'slider-max' => "25",
                                               'slider-step' => "1",
                                               'slider-value' => @statistic.nil? ? "0" : @statistic.page_views_per_visit},
                                        class: "form-control pvpv_slider_class" %>
