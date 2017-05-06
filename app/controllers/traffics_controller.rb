@@ -178,12 +178,12 @@ class TrafficsController < ApplicationController
     end
     if @traffic.statistic_type == "custom"
       begin
-        if @statistic = @traffic.custom_statistic.nil?
+        if (@statistic = @traffic.custom_statistic).nil?
           @statistic = @traffic.create_custom_statistic!({:statistic_id => params[:statistic_selected],
                                                           :policy_id => @traffic.id,
                                                           :policy_type => @traffic.class.name})
         else
-          @statistic.update_attribute!(:statistic_id, params[:statistic_selected])
+          @statistic.update_attributes!({:statistic_id => params[:statistic_selected]})
         end
       rescue Exception => e
         # on remet le type par defaut et on le sauve car si l'utilisateur s'en va san terminer la creation alors il manque une custom static et cela entraineenra une erruer dans index
